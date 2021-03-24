@@ -11,14 +11,12 @@ class Search extends React.Component {
     }
   
     componentDidMount() {
-       fetch("https://pvukdj3jak.execute-api.sa-east-1.amazonaws.com/dev/api/asepy/members/123456",{
+       fetch(" https://cors-anywhere.herokuapp.com/https://pvukdj3jak.execute-api.sa-east-1.amazonaws.com/dev/api/asepy/members/123456",{
         method: "GET",
         mode: "cors",
         headers: {
           "Authorization": `Bearer: none`,
           "Content-Type": "application/json",
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE'
         },
         })
         .then(res => res.json())
