@@ -1,23 +1,53 @@
-import logo from './logo.svg';
-import './App.css';
-
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  useParams
+} from "react-router-dom";
+import Search from './components/Search'
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <Router>
+      <div>
+        <nav>
+          <ul>
+            <li>
+              <Link to="/home">Home</Link>
+            </li>
+            <li>
+              <Link to="/show">Show Members</Link>
+            </li>
+            <li>
+              <Link to="/check">Check Member</Link>
+            </li>
+            <li>
+              <Link to="/register">Register Member</Link>
+            </li>
+          </ul>
+        </nav>
+
+        {/* A <Switch> looks through its children <Route>s and
+            renders the first one that matches the current URL. */}
+        <Switch>
+          <Route path="/show" component={Search}/>
+          <Route path="/check" children={<Child/>}/>
+          <Route path="/register" children={<Child/>}/>
+        </Switch>
+      </div>
+    </Router>
+  );
+}
+
+function Child() {
+  // We can use the `useParams` hook here to access
+  // the dynamic pieces of the URL.
+  let { id } = useParams();
+
+  return (
+    <div>
+      <h2>Prueba</h2>
     </div>
   );
 }
