@@ -6,7 +6,8 @@ import {
   Link,
   useParams
 } from "react-router-dom";
-import Search from './components/Search'
+import Search from './components/Search';
+import Formulario from './components/Forms'
 function App() {
   return (
     <Router>
@@ -31,7 +32,7 @@ function App() {
         {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
         <Switch>
-          <Route path="/show" component={Search}/>
+          <Route path="/show" children={<Formulario/>}/>
           <Route path="/check" children={<Child/>}/>
           <Route path="/register" children={<Child/>}/>
         </Switch>
@@ -39,6 +40,7 @@ function App() {
     </Router>
   );
 }
+
 
 function Child() {
   // We can use the `useParams` hook here to access
