@@ -8,6 +8,7 @@ import {
 } from "react-router-dom";
 import Search from './components/Search';
 import Formulario from './components/Forms'
+import Registrarse from './components/Register'
 function App() {
   return (
     <Router>
@@ -34,7 +35,7 @@ function App() {
         <Switch>
           <Route path="/show" children={<Formulario/>}/>
           <Route path="/check" children={<Child/>}/>
-          <Route path="/register" children={<Child/>}/>
+          <Route path="/register" children={<Registrarse/>}/>
         </Switch>
       </div>
     </Router>

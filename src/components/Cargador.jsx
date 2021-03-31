@@ -1,7 +1,7 @@
 import React, {Fragment, useContext, useEffect, useState} from "react";
-import checkMember from "../api/checkMember";
+import postMembers from "../api/postMembers";
 
-const Buscador = () =>
+const Cargador = () =>
 {
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
@@ -12,14 +12,7 @@ const Buscador = () =>
         if (event) {
           event.preventDefault();
         }
-        checkMember(data.cedula) 
-        .then(
-            (result) => {
-            
-              setIsLoaded(true);
-              setResult(result.data );
-            }
-        )
+        postMembers(data);
       }
     const handleInputChange = (event) => {
         event.persist();
@@ -30,4 +23,4 @@ const Buscador = () =>
     );
 }
 
-export default Buscador
+export default Cargador
