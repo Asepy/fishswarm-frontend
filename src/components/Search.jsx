@@ -12,7 +12,7 @@ const Search = (props) =>{
   // Declrar effects
   useEffect( () =>  {
     const memberId = props.cedula;
-    console.log(memberId + 'Llego la cedula')
+    console.log(cedula + 'Llego la cedula')
        checkMember(memberId)
         .then(
           (result) => {
