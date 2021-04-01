@@ -4,11 +4,11 @@ import {
   Switch,
   Route,
   Link,
-  useParams
+  useParams,
 } from "react-router-dom";
-import Search from './components/Search';
-import Formulario from './components/Forms'
-import Registrarse from './components/Register'
+import Search from "./components/Search";
+import Formulario from "./components/Forms";
+import Registrarse from "./components/Register";
 function App() {
   return (
     <>
@@ -30,31 +30,18 @@ function App() {
               </li>
             </ul>
           </nav>
-
-<<<<<<< HEAD
           {/* A <Switch> looks through its children <Route>s and
-              renders the first one that matches the current URL. */}
+            renders the first one that matches the current URL. */}
           <Switch>
             <Route path="/show" children={<Formulario />} />
-            <Route path="/check" />
-            <Route path="/register" />
+            <Route path="/check" children={<Child />} />
+            <Route path="/register" children={<Registrarse />} />
           </Switch>
         </div>
       </Router>
     </>
-=======
-        {/* A <Switch> looks through its children <Route>s and
-            renders the first one that matches the current URL. */}
-        <Switch>
-          <Route path="/show" children={<Formulario/>}/>
-          <Route path="/check" children={<Child/>}/>
-          <Route path="/register" children={<Registrarse/>}/>
-        </Switch>
-      </div>
-    </Router>
   );
 }
-
 
 function Child() {
   // We can use the `useParams` hook here to access
@@ -65,7 +52,6 @@ function Child() {
     <div>
       <h2>Prueba</h2>
     </div>
->>>>>>> 61eb901d74050694000d65bbed9f027930298dcb
   );
 }
 
