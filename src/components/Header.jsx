@@ -70,14 +70,3 @@ const Header = () => {
 };
 
 export default Header;
-
-// <React.Fragment>
-//   <AppBar position="static">
-//     <Toolbar>
-//       <Typography className={classes.logo} variant="h4" color="inherit">
-//         ASEPY
-//       </Typography>
-//       <div className={classes.toolbar}>{getMenuButtons()}</div>
-//     </Toolbar>
-//   </AppBar>
-// </React.Fragment>;
