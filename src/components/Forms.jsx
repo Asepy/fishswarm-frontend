@@ -24,7 +24,7 @@ const  Formulario = () =>
                     </br>
                     <button type='submit'>Buscar</button>                
                 </form>
-                <h3>{data.cedula} - {(result_json.found)?'Sos socio':''}</h3>
+                <h3>{data.cedula} - {(result_json.found)?'Sos socio':'No existe el socio'}</h3>
             </Fragment>
         )
     
