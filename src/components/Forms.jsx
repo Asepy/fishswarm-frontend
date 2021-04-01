@@ -1,36 +1,62 @@
-import React, {Fragment, useContext, useEffect, useState} from "react";
-import checkMember from "../api/checkMember";
-import Search from './Search';
-import Buscador from './Buscador';
+import React, { Fragment } from "react";
+import { Button, TextField, makeStyles } from "@material-ui/core";
+import Buscador from "./Buscador";
 
-const  Formulario = () =>
-{
-  
+// CSS
+const useStyles = makeStyles({
+  form: {
+    diplay: "flex",
+    alignItems: "baseline",
+    justifyContent: "space-evenly",
+  },
+  button: {
+    display: "block",
+  },
+  textfield: {
+    display: "block",
+  },
+});
 
-    
-    const {handleSubmit,handleInputChange,data,result_json} = Buscador();
-    
-        return(
-            <Fragment>
-                <h1> Formulario</h1>
-                <form onSubmit={handleSubmit}>
-                    <input
-                    placeholder='Cedula' 
-                    type='text'
-                    name='cedula'
-                    onChange={handleInputChange}
-                    value={data.cedula}></input>
-                    <br>
-                    </br>
-                    <button type='submit'>Buscar</button>                
-                </form>
-                <h3>{data.cedula} - {(result_json.found)?'Sos socio':'No existe el socio'}</h3>
-            </Fragment>
-        )
-    
-       
-    
-    
-}
+const Formulario = () => {
+  const classes = useStyles();
+  const { handleSubmit, handleInputChange, data, result_json } = Buscador();
+
+  return (
+    <Fragment>
+      <h1> Sos Socio de ASEPY?</h1>
+      <form className={classes.form} onSubmit={handleSubmit}>
+        <TextField
+          margin="normal"
+          label="Cedula"
+          name="cedula"
+          placeholder="Ingrese numero de C.I."
+          value={data.cedula || ""}
+          onChange={handleInputChange}
+          className={classes.textfield}
+        />
+        <TextField
+          margin="normal"
+          label="Fecha de Nacimiento"
+          name="dob"
+          placeholder="dd-mm-yyyy"
+          value={data.cedula || ""}
+          onChange={handleInputChange}
+          className={classes.textfield}
+        />
+        <Button
+          className={classes.button}
+          type="submit"
+          variant="contained"
+          color="primary"
+        >
+          Buscar
+        </Button>
+      </form>
+      <h3>
+        {data.cedula} - {result_json.found ? "Sos socio" : "No existe el socio"}
+      </h3>
+    </Fragment>
+  );
+};
 
 export default Formulario;

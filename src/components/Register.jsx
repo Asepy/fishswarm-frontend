@@ -1,42 +1,55 @@
-import React, {Fragment, useContext, useEffect, useState} from "react";
-import Cargador from './Cargador'
+import React, { Fragment } from "react";
+import { Button, TextField, makeStyles } from "@material-ui/core";
+import Cargador from "./Cargador";
 
+// CSS
+const useStyles = makeStyles({
+  form: {
+    diplay: "flex",
+    alignItems: "baseline",
+    justifyContent: "space-evenly",
+  },
+  button: {
+    display: "block",
+  },
+});
 
+const Registrarse = () => {
+  const classes = useStyles();
+  const { handleSubmit, handleInputChange, data } = Cargador();
 
-const  Registrarse = () =>
-{
-
-    const {handleSubmit,handleInputChange,data,result_json} = Cargador();
-    
-        return(
-            <Fragment>
-                <h1> Registrarse</h1>
-                <form onSubmit={handleSubmit}>
-                   <input
-                    placeholder='Nombre' 
-                    type='text'
-                    name='nombre'
-                    onChange={handleInputChange}
-                    value={data.nombre}></input>
-                    <br></br>
-                    
-                    <br></br>
-                    <input 
-                    placeholder='RUC' 
-                    type='text'
-                    name='documento'
-                    onChange={handleInputChange}
-                    value={data.documento}></input>
-                    
-                    <br></br> 
-                    <button type='submit'>Registrarse</button>              
-                </form>
-            </Fragment>
-        )
-    
-       
-    
-    
-}
+  return (
+    <Fragment>
+      <h1> Registrarse</h1>
+      <form className={classes.form} onSubmit={handleSubmit}>
+        <TextField
+          margin="normal"
+          label="Nombre y Apellido"
+          name="nombre"
+          placeholder="Juan Perez"
+          value={data.nombre || ""}
+          onChange={handleInputChange}
+        />
+        <br></br>
+        <TextField
+          margin="normal"
+          label="# de C.I."
+          name="documento"
+          placeholder="123456"
+          value={data.documento || ""}
+          onChange={handleInputChange}
+        />
+        <Button
+          className={classes.button}
+          type="submit"
+          variant="contained"
+          color="primary"
+        >
+          Registrarse
+        </Button>
+      </form>
+    </Fragment>
+  );
+};
 
 export default Registrarse;
