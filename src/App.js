@@ -1,52 +1,42 @@
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  useParams,
-} from "react-router-dom";
-import Search from "./components/Search";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { makeStyles } from "@material-ui/core/styles";
 import Formulario from "./components/Forms";
 import Registrarse from "./components/Register";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+
+// CSS
+const useStyles = makeStyles({
+  root: {
+    margin: 20,
+    padding: 20,
+    maxWidth: 400,
+  },
+});
+
 function App() {
+  const classes = useStyles();
   return (
-    <>
+    <React.Fragment>
       <Router>
-        <div>
-          <nav>
-            <ul>
-              <li>
-                <Link to="/home">Home</Link>
-              </li>
-              <li>
-                <Link to="/show">Show Members</Link>
-              </li>
-              <li>
-                <Link to="/check">Check Member</Link>
-              </li>
-              <li>
-                <Link to="/register">Register Member</Link>
-              </li>
-            </ul>
-          </nav>
-          {/* A <Switch> looks through its children <Route>s and
-            renders the first one that matches the current URL. */}
+        <Header />
+        <div className={classes.root}>
           <Switch>
-            <Route path="/show" children={<Formulario />} />
-            <Route path="/check" children={<Child />} />
-            <Route path="/register" children={<Registrarse />} />
+            <Route path="/soy-socio" component={Formulario} />
+            <Route path="/asociate" component={Registrarse} />
           </Switch>
         </div>
+        <Footer />
       </Router>
-    </>
+    </React.Fragment>
   );
 }
 
 function Child() {
   // We can use the `useParams` hook here to access
   // the dynamic pieces of the URL.
-  let { id } = useParams();
+  //let { id } = useParams();
 
   return (
     <div>

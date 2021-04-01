@@ -8,11 +8,15 @@ const Search = (props) => {
   const [data, setData] = useState(props.cedula);
 
   // Declrar effects
-<<<<<<< HEAD
-  useEffect(() => {
-    console.log(data + "Llego la cedula");
-    checkMember(data).then(
+  useEffect((props) => {
+    const memberId = props.cedula;
+    console.log(props.cedula + "Llego la cedula");
+    checkMember(memberId).then(
       (result) => {
+        // this.setState({
+        //   isLoaded: true,
+        //   data: JSON.stringify(result.data)
+        // });
         setIsLoaded(true);
         setData(result.data);
       },
@@ -20,39 +24,15 @@ const Search = (props) => {
       // un bloque catch() para que no interceptemos errores
       // de errores reales en los componentes.
       (error) => {
+        // this.setState({
+        //   isLoaded: true,
+        //   error
+        // });
         setIsLoaded(true);
         setError(error);
       }
     );
-  }, [data]);
-=======
-  useEffect( () =>  {
-    const memberId = props.cedula;
-    console.log(cedula + 'Llego la cedula')
-       checkMember(memberId)
-        .then(
-          (result) => {
-            // this.setState({
-            //   isLoaded: true,
-            //   data: JSON.stringify(result.data)             
-            // });
-            setIsLoaded(true);
-            setData(result.data );
-          },
-          // Nota: es importante manejar errores aquí y no en 
-          // un bloque catch() para que no interceptemos errores
-          // de errores reales en los componentes.
-          (error) => {
-            // this.setState({
-            //   isLoaded: true,
-            //   error
-            // });
-            setIsLoaded(true);
-            setError(error);
-          }
-        )
-  } , [] );
->>>>>>> 61eb901d74050694000d65bbed9f027930298dcb
+  }, []);
 
   if (error !== null) {
     return error.message;
