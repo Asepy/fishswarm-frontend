@@ -1,8 +1,9 @@
 import React from "react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import Formulario from "./components/Forms";
 import Registrarse from "./components/Register";
+import Membresias from "./components/Membresias";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 
@@ -24,24 +25,13 @@ function App() {
         <div className={classes.root}>
           <Switch>
             <Route path="/soy-socio" component={Formulario} />
-            <Route path="/asociate" component={Registrarse} />
+            <Route path="/asociate" component={Membresias} />
+            {/* <Route path="/asociate" component={Registrarse} /> */}
           </Switch>
         </div>
         <Footer />
       </Router>
     </React.Fragment>
-  );
-}
-
-function Child() {
-  // We can use the `useParams` hook here to access
-  // the dynamic pieces of the URL.
-  //let { id } = useParams();
-
-  return (
-    <div>
-      <h2>Prueba</h2>
-    </div>
   );
 }
 

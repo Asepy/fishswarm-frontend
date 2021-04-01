@@ -8,7 +8,9 @@ const useStyles = makeStyles({
     textAlign: "center",
     bottom: 0,
     width: "100%",
-    height: "2.5rem",
+  },
+  copyright: {
+    marginTop: "5%",
   },
 });
 
@@ -18,7 +20,7 @@ const Footer = () => {
 
   return (
     <footer className={classes.footer}>
-      <p>Copyright ⓒ {year}</p>
+      <p className={classes.copyright}>Copyright ⓒ {year}</p>
     </footer>
   );
 };
