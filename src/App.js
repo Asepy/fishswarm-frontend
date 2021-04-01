@@ -1,8 +1,4 @@
 import React from "react";
-<<<<<<< HEAD
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import Formulario from "./components/Formulario";
-=======
 import {
   BrowserRouter as Router,
   Switch,
@@ -13,7 +9,6 @@ import {
 import Search from './components/Search';
 import Formulario from './components/Forms'
 import Registrarse from './components/Register'
->>>>>>> 61eb901d74050694000d65bbed9f027930298dcb
 function App() {
   return (
     <>
