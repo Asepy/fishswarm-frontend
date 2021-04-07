@@ -25,7 +25,7 @@ function App() {
         <div className={classes.root}>
           <Switch>
             <Route path="/soy-socio" component={Formulario} />
-            <Route path="/asociate" component={Membresias} />
+            <Route path="/membresia" component={Membresias} />
             {/* <Route path="/asociate" component={Registrarse} /> */}
           </Switch>
         </div>
