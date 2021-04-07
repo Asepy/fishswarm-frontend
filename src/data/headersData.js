@@ -5,7 +5,7 @@ export const headersData = [
   },
   {
     label: "Asociate",
-    href: "/asociate",
+    href: "/membresia",
   },
   {
     label: "Soy Socio?",

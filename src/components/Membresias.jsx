@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { Typography, Button, makeStyles } from "@material-ui/core";
 import { Route, Link } from "react-router-dom";
 import { socioActivo } from "../data/socioActivo";
 import { socioPlus } from "../data/socioPlus";
+import Register from "../components/Register";
 
 const useStyle = makeStyles({
   beneficios: {
@@ -18,53 +19,57 @@ const useStyle = makeStyles({
 
 const Membresias = ({ match }) => {
   const classes = useStyle();
+  const [miembroActivo, setMiembroActivo] = useState(false);
 
   const serSocioActivoClick = () => {
-    console.log("Ser socio Activo");
-    return <Link to={`${match.url}/socio-activo`} />;
+    setMiembroActivo(true);
   };
 
-  return (
-    <React.Fragment>
-      <div className={classes.beneficios}>
-        <Typography variant="h4">Usuario Activo</Typography>
-        <ul>
-          {socioActivo.map((item) => {
-            return <li key={item.id}>{item.beneficio}</li>;
-          })}
-        </ul>
-      </div>
+  // Opcion de boton Socio Activo no seleccionada
+  if (!miembroActivo) {
+    return (
+      <React.Fragment>
+        <div className={classes.beneficios}>
+          <Typography variant="h4">Usuario Activo</Typography>
+          <ul>
+            {socioActivo.map((item) => {
+              return <li key={item.id}>{item.beneficio}</li>;
+            })}
+          </ul>
+        </div>
 
-      <Button
-        className={classes.button}
-        variant="outlined"
-        color="default"
-        onClick={serSocioActivoClick}
-      >
-        Quiero ser Socio Activo
-      </Button>
+        <Button
+          className={classes.button}
+          component={Link}
+          to={`${match.url}/socio-activo`}
+          variant="outlined"
+          color="default"
+          onClick={serSocioActivoClick}
+        >
+          Quiero ser Socio Activo
+        </Button>
 
-      <div className={classes.beneficios}>
-        <Typography variant="h4">Usuario Plus</Typography>
-        <ul>
-          {socioPlus.map((item) => {
-            return <li key={item.id}>{item.beneficio}</li>;
-          })}
-        </ul>
-      </div>
+        <div className={classes.beneficios}>
+          <Typography variant="h4">Usuario Plus</Typography>
+          <ul>
+            {socioPlus.map((item) => {
+              return <li key={item.id}>{item.beneficio}</li>;
+            })}
+          </ul>
+        </div>
 
-      <Button className={classes.button} variant="contained" color="primary">
-        Quiero ser Socio Plus
-      </Button>
-
-      <Route
-        path={`${match.path}/:tipoDeSocio`}
-        render={(props) => {
-          <div>{props.match.params.tipoDeSocio} category</div>;
-        }}
-      />
-    </React.Fragment>
-  );
+        <Button className={classes.button} variant="contained" color="primary">
+          Quiero ser Socio Plus
+        </Button>
+      </React.Fragment>
+    );
+  } else {
+    return (
+      <React.Fragment>
+        <Route path={`${match.path}/:tipoDeSocio`} component={Register} />
+      </React.Fragment>
+    );
+  }
 };
 
 export default Membresias;

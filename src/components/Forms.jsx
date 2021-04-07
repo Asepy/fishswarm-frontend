@@ -37,9 +37,9 @@ const Formulario = () => {
         <TextField
           margin="normal"
           label="Fecha de Nacimiento"
-          name="dob"
-          placeholder="dd-mm-yyyy"
-          value={data.cedula || ""}
+          name="birthdate"
+          placeholder="yyyy-mm-dd"
+          value={data.birthdate || ""}
           onChange={handleInputChange}
           className={classes.textfield}
         />
@@ -53,7 +53,8 @@ const Formulario = () => {
         </Button>
       </form>
       <h3>
-        {data.cedula} - {result_json.found ? "Sos socio" : "No existe el socio"}
+        {data.cedula} -{" "}
+        {result_json.found === "true" ? "Sos socio" : "No existe el socio"}
       </h3>
     </Fragment>
   );

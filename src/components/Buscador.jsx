@@ -12,7 +12,7 @@ const Buscador = () => {
       event.preventDefault();
     }
     console.log(data);
-    checkMember(data.cedula).then((result) => {
+    checkMember(data.cedula, data.birthdate).then((result) => {
       //setIsLoaded(true);
       setResult(result.data);
     });
