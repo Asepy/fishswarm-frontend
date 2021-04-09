@@ -24,10 +24,19 @@ const Registrarse = () => {
       <form className={classes.form} onSubmit={handleSubmit}>
         <TextField
           margin="normal"
-          label="Nombre y Apellido"
+          label="Nombre"
           name="nombre"
-          placeholder="Juan Perez"
-          value={data.nombre || ""}
+          placeholder="Juan"
+          value={data.name || ""}
+          onChange={handleInputChange}
+        />
+        <br></br>
+        <TextField
+          margin="normal"
+          label="Apellido"
+          name="apellido"
+          placeholder="Perez"
+          value={data.surname || ""}
           onChange={handleInputChange}
         />
         <br></br>
@@ -36,9 +45,25 @@ const Registrarse = () => {
           label="# de C.I."
           name="documento"
           placeholder="123456"
-          value={data.documento || ""}
+          value={data.document || ""}
           onChange={handleInputChange}
         />
+        <br></br>
+        <TextField
+          margin="normal"
+          label="Fecha de Nacimiento"
+          name="birthdate"
+          placeholder="yyyy-mm-dd"
+          value={data.birthdate || ""}
+          onChange={handleInputChange}
+        />
+        {/* <input
+          type="text"
+          name="birthdate"
+          placeholder="fecha de cumple"
+          style={{ display: "block", margin: "15px 20px" }}
+        /> */}
+
         <Button
           className={classes.button}
           type="submit"
