@@ -11,19 +11,27 @@ import { headersData } from "../data/headersData";
 
 // CSS
 const useStyles = makeStyles({
-  logo: {
-    fontWeight: 600,
-    color: "#FFFEFE",
-    textAlign: "left",
+  root: {
+    flexGrow: 1,
+  },
+  logo_img: {
+    maxWidth: "15%",
+    maxHeight: "15%",
   },
   menuButton: {
-    fontWeight: 700,
-    size: "14px",
-    marginLeft: "20px",
+    fontWeight: 400,
+    size: "18px",
+    marginLeft: "38px",
+    textDecorationLine: "none",
+    color: "black",
   },
   toolbar: {
     display: "flex",
     justifyContent: "space-between",
+  },
+  header: {
+    paddingRight: "79px",
+    paddingLeft: "118px",
   },
 });
 
@@ -32,8 +40,13 @@ const Header = () => {
 
   const displayToolbar = () => {
     return (
-      <Toolbar>
-        {asepyLogo} {getMenuButtons()}
+      <Toolbar className={classes.toolbar}>
+        <img
+          src="https://asepy.org/wp-content/uploads/2018/06/ASEPY-Logo.png"
+          alt="Asepy logo"
+          className={classes.logo_img}
+        />
+        <div>{getMenuButtons()}</div>
       </Toolbar>
     );
   };
@@ -47,24 +60,27 @@ const Header = () => {
   const getMenuButtons = () => {
     return headersData.map(({ label, href }) => {
       return (
-        <Button
+        <RouterLink
           {...{
             key: label,
             color: "inherit",
             to: href,
-            component: RouterLink,
           }}
           className={classes.menuButton}
         >
           {label}
-        </Button>
+        </RouterLink>
       );
     });
   };
 
   return (
     <React.Fragment>
-      <AppBar position="static">{displayToolbar()}</AppBar>
+      <div className={classes.root}>
+        <AppBar position="static" className={classes.header}>
+          {displayToolbar()}
+        </AppBar>
+      </div>
     </React.Fragment>
   );
 };

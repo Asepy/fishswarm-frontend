@@ -7,13 +7,25 @@ import Register from "../components/Register";
 
 const useStyle = makeStyles({
   beneficios: {
-    display: "inline-block",
+    display: "block grid",
     background: "#e8e4e1",
     border: ".5px solid #1b2021",
+    width: "40%",
+    height: "40%",
+  },
+  beneficiosImg: {
+    maxWidth: "100%",
+    height: "auto",
   },
   button: {
-    display: "block",
+    display: "inline-block",
     margin: "10px",
+  },
+  buttonPlus: {
+    display: "inline-block",
+    margin: "10px",
+    background: "#283593",
+    color: "white",
   },
 });
 
@@ -29,6 +41,12 @@ const Membresias = ({ match }) => {
   if (!miembroActivo) {
     return (
       <React.Fragment>
+        <div className={classes.beneficiosImg}>
+          <img
+            src="https://asepy.org/wp-content/uploads/2018/07/rawpixel-659488-unsplash-e1566833261245.jpg"
+            alt="Beneficios banner"
+          />
+        </div>
         <div className={classes.beneficios}>
           <Typography variant="h4">Usuario Activo</Typography>
           <ul>
@@ -58,7 +76,7 @@ const Membresias = ({ match }) => {
           </ul>
         </div>
 
-        <Button className={classes.button} variant="contained" color="primary">
+        <Button className={classes.buttonPlus} variant="contained">
           Quiero ser Socio Plus
         </Button>
       </React.Fragment>

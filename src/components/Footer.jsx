@@ -4,8 +4,9 @@ import { makeStyles } from "@material-ui/core/styles";
 // CSS
 const useStyles = makeStyles({
   footer: {
-    position: "absolute",
+    display: "block",
     textAlign: "center",
+    left: 0,
     bottom: 0,
     width: "100%",
   },
@@ -19,8 +20,10 @@ const Footer = () => {
   const classes = useStyles();
 
   return (
-    <footer className={classes.footer}>
-      <p className={classes.copyright}>Copyright ⓒ {year}</p>
+    <footer>
+      <div className={classes.footer}>
+        <p className={classes.copyright}>Copyright ⓒ {year}</p>
+      </div>
     </footer>
   );
 };
