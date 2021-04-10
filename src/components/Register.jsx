@@ -16,7 +16,7 @@ const useStyles = makeStyles({
 
 const Registrarse = () => {
   const classes = useStyles();
-  const { handleSubmit, handleInputChange, data } = Cargador();
+  const { handleSubmit, handleInputChange, data, result_json } = Cargador();
 
   return (
     <Fragment>
@@ -27,14 +27,14 @@ const Registrarse = () => {
           label="Nombre"
           name="nombre"
           placeholder="Juan"
-          value={data.name || ""}
+          value={data.nombre || ""}
           onChange={handleInputChange}
         />
         <br></br>
         <TextField
           margin="normal"
           label="Apellido"
-          name="apellido"
+          name="surname"
           placeholder="Perez"
           value={data.surname || ""}
           onChange={handleInputChange}
@@ -43,9 +43,9 @@ const Registrarse = () => {
         <TextField
           margin="normal"
           label="# de C.I."
-          name="documento"
+          name="document"
           placeholder="123456"
-          value={data.document || ""}
+          value={data.documento || ""}
           onChange={handleInputChange}
         />
         <br></br>
@@ -73,6 +73,9 @@ const Registrarse = () => {
           Registrarse
         </Button>
       </form>
+      <h3>
+        {result_json}
+      </h3>
     </Fragment>
   );
 };
