@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  AppBar,
-  Toolbar,
-  Typography,
-  makeStyles,
-  Button,
-} from "@material-ui/core";
+import { AppBar, Toolbar, makeStyles } from "@material-ui/core";
 import { Link as RouterLink } from "react-router-dom";
 import { headersData } from "../data/headersData";
 
@@ -50,12 +44,6 @@ const Header = () => {
       </Toolbar>
     );
   };
-
-  const asepyLogo = (
-    <Typography className={classes.logo} variant="h4" color="inherit">
-      ASEPY
-    </Typography>
-  );
 
   const getMenuButtons = () => {
     return headersData.map(({ label, href }) => {
