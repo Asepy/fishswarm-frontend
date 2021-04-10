@@ -6,6 +6,9 @@ import { socioPlus } from "../data/socioPlus";
 import Register from "../components/Register";
 
 const useStyle = makeStyles({
+  root: {
+    flexGrow: 1,
+  },
   beneficios: {
     display: "block grid",
     background: "#e8e4e1",
@@ -41,12 +44,6 @@ const Membresias = ({ match }) => {
   if (!miembroActivo) {
     return (
       <React.Fragment>
-        <div className={classes.beneficiosImg}>
-          <img
-            src="https://asepy.org/wp-content/uploads/2018/07/rawpixel-659488-unsplash-e1566833261245.jpg"
-            alt="Beneficios banner"
-          />
-        </div>
         <div className={classes.beneficios}>
           <Typography variant="h4">Usuario Activo</Typography>
           <ul>
