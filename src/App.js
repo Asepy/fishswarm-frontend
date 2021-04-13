@@ -9,6 +9,7 @@ import Formulario from "./components/Forms";
 import Membresias from "./components/Membresias";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import Register from "./components/Register";
 
 const theme = createMuiTheme({
   palette: {
@@ -27,7 +28,7 @@ function App() {
             <div>
               <Switch>
                 <Route path="/soy-socio" component={Formulario} />
-                <Route path="/membresia" component={Membresias} />
+                <Route path="/membresia" component={Register} />
                 {/* <Route path="/asociate" component={Registrarse} /> */}
               </Switch>
             </div>

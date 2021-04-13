@@ -6,7 +6,7 @@ export default function postMember(nuevoSocio,birthdate_changed) {
             name: nuevoSocio.nombre,
             document: nuevoSocio.documento,
             surname: nuevoSocio.surname,
-            birthdate: nuevoSocio.birthdate
+            birthdate: birthdate_changed
             }),
           headers: {
               "Authorization": `Bearer: none`,

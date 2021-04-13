@@ -82,7 +82,7 @@ const Registrarse = () => {
               className={classes.textfield}
             />
            
-            {/* <br></br>
+             <br></br>
             <br></br>
             <InputLabel id="demo-simple-select-label">Sexo</InputLabel>
               <Select
@@ -235,7 +235,7 @@ const Registrarse = () => {
               className={classes.textfield}
             />
             <br></br>
-            <br></br> */}
+            <br></br> 
             <Button
               className={classes.button}
               type="submit"
