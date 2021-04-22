@@ -65,7 +65,7 @@ const Header = () => {
   return (
     <React.Fragment>
       <div className={classes.root}>
-        <AppBar position="static" className={classes.header}>
+        <AppBar position="static" className={classes.header} color="secondary">
           {displayToolbar()}
         </AppBar>
       </div>
