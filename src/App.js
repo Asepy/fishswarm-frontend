@@ -1,54 +1,41 @@
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  useParams
-} from "react-router-dom";
-import Search from './components/Search'
+
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import ScopedCssBaseline from "@material-ui/core/ScopedCssBaseline";
+import { createMuiTheme } from "@material-ui/core/styles";
+import { ThemeProvider } from "@material-ui/styles";
+import Formulario from "./components/Forms";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import Register from "./components/Register";
+
+const theme = createMuiTheme({
+  palette: {
+    primary: { main: "#000000" },
+    secondary: { main: "#FFFFFF" },
+  },
+  shadows: ["none"],
+});
+
 function App() {
   return (
-    <Router>
-      <div>
-        <nav>
-          <ul>
-            <li>
-              <Link to="/home">Home</Link>
-            </li>
-            <li>
-              <Link to="/show">Show Members</Link>
-            </li>
-            <li>
-              <Link to="/check">Check Member</Link>
-            </li>
-            <li>
-              <Link to="/register">Register Member</Link>
-            </li>
-          </ul>
-        </nav>
-
-        {/* A <Switch> looks through its children <Route>s and
-            renders the first one that matches the current URL. */}
-        <Switch>
-          <Route path="/show" component={Search}/>
-          <Route path="/check" children={<Child/>}/>
-          <Route path="/register" children={<Child/>}/>
-        </Switch>
-      </div>
-    </Router>
-  );
-}
-
-function Child() {
-  // We can use the `useParams` hook here to access
-  // the dynamic pieces of the URL.
-  let { id } = useParams();
-
-  return (
-    <div>
-      <h2>Prueba</h2>
-    </div>
+    <React.Fragment>
+      <ScopedCssBaseline>
+        <ThemeProvider theme={theme}>
+          <Router>
+            <Header />
+            <div>
+              <Switch>
+                <Route path="/soy-socio" component={Formulario} />
+                <Route path="/membresia" component={Register} />
+                {/* <Route path="/asociate" component={Registrarse} /> */}
+              </Switch>
+            </div>
+            <Footer />
+          </Router>
+        </ThemeProvider>
+      </ScopedCssBaseline>
+    </React.Fragment>
   );
 }
 
