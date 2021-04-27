@@ -9,6 +9,7 @@ const DatePicker = ({
   onChange,
   isClearable = false,
   showPopperArrow = false,
+  placeholder,
   ...props
 }) => {
   return (
@@ -19,6 +20,7 @@ const DatePicker = ({
       onChange={onChange}
       isClearable={isClearable}
       showPopperArrow={showPopperArrow}
+      placeholderText={placeholder}
       {...props}
     />
   );
