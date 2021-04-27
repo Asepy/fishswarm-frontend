@@ -1,9 +1,10 @@
-import { useQuery } from "react-query";
+import React from "react";
 import formatDate from "./formatDate";
 
 async function getMemberFromApi({ document, birthdate }) {
+  const dateAsStr = formatDate(birthdate);
   const response = await fetch(
-    `/api/members/${document}?birthdate=${birthdate}`,
+    `/api/members/${document}?birthdate=${dateAsStr}`,
     {
       method: "GET",
       headers: {
@@ -18,16 +19,17 @@ async function getMemberFromApi({ document, birthdate }) {
   return response.json();
 }
 
-export default function useSearchMember({ document, birthdate }) {
-  return useQuery(
-    ["query-search-member", document],
-    () =>
-      getMemberFromApi({
-        document,
-        birthdate,
-      }),
-    {
-      enabled: Boolean(document),
+export default function useSearchMember({ document, birthdate }, options = {}) {
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [data, setData] = React.useState();
+  const refetch = async () => {
+    setIsLoading(true);
+    try {
+      const response = await getMemberFromApi({ document, birthdate });
+      setData(response);
+    } finally {
+      setIsLoading(false);
     }
-  );
+  };
+  return { isLoading, refetch, data };
 }

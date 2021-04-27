@@ -1,7 +1,7 @@
 import React from "react";
 import { Center, Heading, Stack, HStack } from "@chakra-ui/layout";
 import { Input } from "@chakra-ui/input";
-import { SearchIcon } from "@chakra-ui/icons";
+import { ArrowForwardIcon, SearchIcon } from "@chakra-ui/icons";
 import { Skeleton } from "@chakra-ui/skeleton";
 import Link from "next/link";
 import Container from "../components/ui/Container";
@@ -9,27 +9,19 @@ import BrandButton from "../components/ui/BrandButton";
 import useForm from "../utils/useForm";
 import useSearchMember from "../utils/useSearchMember";
 import WaitingSearch from "../components/ui/svg/WaitingSearch";
-import formatDate from "../utils/formatDate";
 import BirthDatePicker from "../components/ui/BirthDatePicker";
 import { Alert, AlertIcon } from "@chakra-ui/alert";
 import { Button } from "@chakra-ui/button";
 
 export default function searchMember() {
-  const [searchValues, setSearchValues] = React.useState({
-    document: "",
-    birthdate: "",
-  });
-  const { isLoading, data } = useSearchMember(searchValues);
   const { values, updateValue, updateValueByName } = useForm({
     document: "",
     birthdate: "",
   });
+  const { isLoading, data, refetch } = useSearchMember(values);
   const handleSearch = (e) => {
     e.preventDefault();
-    setSearchValues({
-      document: values.document,
-      birthdate: formatDate(values.birthdate),
-    });
+    refetch();
   };
   console.log({ data });
   return (
@@ -70,8 +62,8 @@ export default function searchMember() {
         </Center>
         <Skeleton isLoaded={!isLoading} height="400px">
           <Center>
-            {!data && !isLoading && <WaitingSearch />}
-            {data && !isLoading && <SearchResult result={data} />}
+            {(!data || allEmptyValues(values)) && <WaitingSearch />}
+            {data && <SearchResult result={data} />}
           </Center>
         </Skeleton>
       </Stack>
@@ -79,6 +71,9 @@ export default function searchMember() {
   );
 }
 
+function allEmptyValues(values) {
+  return !Object.values(values).some(Boolean);
+}
 function SearchResult({ result }) {
   const { found } = result.data;
   if (found === "true") {
@@ -98,7 +93,12 @@ function SearchResult({ result }) {
         Aún no estas registrado, puedes utilizar el botón de abajo para hacerlo
       </Alert>
       <Link _hover={undefined} href="/">
-        <Button size="md" bg="transparent" border="1px">
+        <Button
+          rightIcon={<ArrowForwardIcon />}
+          size="md"
+          bg="transparent"
+          border="1px"
+        >
           Registrarse
         </Button>
       </Link>
