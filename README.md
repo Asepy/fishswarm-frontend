@@ -16,7 +16,7 @@ npm install
 ## Uso en desarrollo
 
 ```sh
-npm run start
+npm run dev
 ```
 
 ## Correr tests
