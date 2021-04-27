@@ -1,6 +1,6 @@
 import React from "react";
 import { AppBar, Toolbar, makeStyles } from "@material-ui/core";
-import { Link as RouterLink } from "react-router-dom";
+import Link from "next/link";
 import { headersData } from "../data/headersData";
 
 // CSS
@@ -40,27 +40,34 @@ const Header = () => {
           alt="Asepy logo"
           className={classes.logo_img}
         />
-        <div>{getMenuButtons()}</div>
+        <div>
+          <Link href="/" className={classes.menuButton}>
+            <a>Asociáte</a>
+          </Link>
+          <Link href="/search-member" className={classes.menuButton}>
+            <a>¿Soy Socio?</a>
+          </Link>
+        </div>
       </Toolbar>
     );
   };
 
-  const getMenuButtons = () => {
-    return headersData.map(({ label, href }) => {
-      return (
-        <RouterLink
-          {...{
-            key: label,
-            color: "inherit",
-            to: href,
-          }}
-          className={classes.menuButton}
-        >
-          {label}
-        </RouterLink>
-      );
-    });
-  };
+  // const getMenuButtons = () => {
+  //   return headersData.map(({ label, href }) => {
+  //     return (
+  //       <RouterLink
+  //         {...{
+  //           key: label,
+  //           color: "inherit",
+  //           to: href,
+  //         }}
+  //         className={classes.menuButton}
+  //       >
+  //         {label}
+  //       </RouterLink>
+  //     );
+  //   });
+  // };
 
   return (
     <React.Fragment>
