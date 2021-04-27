@@ -3,7 +3,7 @@ export default function checkMember(
   birthDate = "1990-01-01"
 ) {
   return fetch(
-    `${process.env.REACT_APP_API_BASE}/${memberId}?birthdate=${birthDate}`,
+    `${process.env.NEXT_PUBLIC_API_BASE}/${memberId}?birthdate=${birthDate}`,
     {
       method: "GET",
       mode: "cors",
@@ -14,5 +14,3 @@ export default function checkMember(
     }
   ).then((res) => res.json());
 }
-
-
