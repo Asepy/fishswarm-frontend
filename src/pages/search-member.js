@@ -2,7 +2,7 @@ import React from "react";
 import { Center, Heading, Stack, HStack } from "@chakra-ui/layout";
 import { Input } from "@chakra-ui/input";
 import { ArrowForwardIcon, SearchIcon } from "@chakra-ui/icons";
-import { Skeleton } from "@chakra-ui/skeleton";
+import { Skeleton, SkeletonText } from "@chakra-ui/skeleton";
 import Link from "next/link";
 import Container from "../components/ui/Container";
 import BrandButton from "../components/ui/BrandButton";
@@ -60,12 +60,20 @@ export default function searchMember() {
             </HStack>
           </form>
         </Center>
-        <Skeleton isLoaded={!isLoading} height="400px">
+
+        <SkeletonText
+          isLoaded={!isLoading}
+          textAlign="center"
+          alignItems="center"
+          mt="4"
+          noOfLines={4}
+          spacing="4"
+        >
           <Center>
             {(!data || allEmptyValues(values)) && <WaitingSearch />}
             {data && <SearchResult result={data} />}
           </Center>
-        </Skeleton>
+        </SkeletonText>
       </Stack>
     </Container>
   );
