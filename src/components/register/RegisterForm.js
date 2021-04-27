@@ -22,6 +22,7 @@ import {
 import DatePicker from "../ui/DatePicker";
 import useForm from "../../utils/useForm";
 import useCreateMember from "../../utils/useCreateMember";
+import BrandButton from "../ui/BrandButton";
 
 export default function RegisterForm() {
   const toast = useToast();
@@ -312,15 +313,9 @@ export default function RegisterForm() {
             <Box my="8">
               <Divider></Divider>
             </Box>
-            <Button
-              mt="4"
-              colorScheme="blackAlpha"
-              size="lg"
-              type="submit"
-              isLoading={isLoading}
-            >
+            <BrandButton mt="4" size="lg" type="submit" isLoading={isLoading}>
               Registrarse
-            </Button>
+            </BrandButton>
           </Stack>
         </form>
       </GridItem>
