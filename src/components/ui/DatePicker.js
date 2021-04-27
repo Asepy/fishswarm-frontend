@@ -1,5 +1,8 @@
 import React from "react";
-import ReactDatePicker from "react-datepicker";
+import ReactDatePicker, { registerLocale } from "react-datepicker";
+
+import es from "date-fns/locale/es";
+registerLocale("es", es);
 
 const DatePicker = ({
   selectedDate,
@@ -10,6 +13,8 @@ const DatePicker = ({
 }) => {
   return (
     <ReactDatePicker
+      locale="es"
+      dateFormat="dd/MM/yyyy"
       selected={selectedDate}
       onChange={onChange}
       isClearable={isClearable}

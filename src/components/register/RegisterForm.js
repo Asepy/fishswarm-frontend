@@ -16,10 +16,9 @@ import {
   Box,
   Tag,
   TagLabel,
-  Button,
   useToast,
 } from "@chakra-ui/react";
-import DatePicker from "../ui/DatePicker";
+import BirthDatePicker from "../ui/BirthDatePicker";
 import useForm from "../../utils/useForm";
 import useCreateMember from "../../utils/useCreateMember";
 import BrandButton from "../ui/BrandButton";
@@ -55,6 +54,7 @@ export default function RegisterForm() {
         const errorMessage =
           error.message || "Ocurrió un error durante el registro.";
         toast({
+          position: "top",
           title: "Error durante el registro",
           description: errorMessage,
           status: "error",
@@ -64,6 +64,7 @@ export default function RegisterForm() {
       },
       onSuccess: () => {
         toast({
+          position: "top",
           title: "Registro creado",
           description: "Hemos registrado sus datos.",
           status: "success",
@@ -128,7 +129,7 @@ export default function RegisterForm() {
             </FormControl>
             <FormControl id="birthdate">
               <FormLabel htmlFor="birthdate">Fecha de Nacimiento</FormLabel>
-              <DatePicker
+              <BirthDatePicker
                 id="birthdate"
                 selectedDate={values.birthdate}
                 onChange={(date) => updateValueByName("birthdate", date)}
@@ -224,6 +225,20 @@ export default function RegisterForm() {
             </Heading>
           </HStack>
           <Stack spacing="24px" mt="8" pl="10">
+            <FormControl id="ruc">
+              <FormLabel>RUC</FormLabel>
+              <Input
+                type="text"
+                placeholder="7777777-3"
+                name="ruc"
+                value={values.ruc}
+                onChange={updateValue}
+                isRequired
+              />
+              <FormHelperText>
+                El único requisito para asociarte es contar con un RUC activo.
+              </FormHelperText>
+            </FormControl>
             <HStack spacing="4">
               <FormControl id="razonsocial">
                 <FormLabel>Razón Social</FormLabel>
@@ -244,19 +259,7 @@ export default function RegisterForm() {
                 />
               </FormControl>
             </HStack>
-            <FormControl id="ruc">
-              <FormLabel>RUC</FormLabel>
-              <Input
-                type="text"
-                placeholder="7777777-3"
-                name="ruc"
-                value={values.ruc}
-                onChange={updateValue}
-              />
-              <FormHelperText>
-                El único requisito para asociarte es contar con un RUC activo.
-              </FormHelperText>
-            </FormControl>
+
             <FormControl id="rubro">
               <FormLabel>Especifique el Rubro</FormLabel>
               <Input
