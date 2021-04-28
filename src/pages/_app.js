@@ -1,27 +1,18 @@
 import React from "react";
 import { ChakraProvider } from "@chakra-ui/react";
+import { QueryClient, QueryClientProvider } from "react-query";
 import Header from "../components/ui/Header";
-import { extendTheme } from "@chakra-ui/react";
-import "../styles/globals.css";
+import customTheme from "../styles/theme";
 import "react-datepicker/dist/react-datepicker.css";
 import "../styles/react-datepicker.css";
-
-import { QueryClient, QueryClientProvider } from "react-query";
 
 // Create a client
 const queryClient = new QueryClient();
 
-const theme = extendTheme({
-  fonts: {
-    heading: "Poppins",
-    body: "Poppins",
-  },
-});
-
 function MyApp({ Component, pageProps }) {
   return (
     <>
-      <ChakraProvider theme={theme}>
+      <ChakraProvider theme={customTheme}>
         <QueryClientProvider client={queryClient}>
           <Header></Header>
           <Component {...pageProps} />
