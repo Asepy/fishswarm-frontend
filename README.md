@@ -9,6 +9,21 @@
 
 ### 🏠 [Página oficial de Asepy](https://asepy.org/)
 
+## Configuración de entorno
+
+Luego de clonar se debe crear el archivo:
+
+```
+touch .env.local
+```
+
+Con el contenido
+
+```
+NEXT_PUBLIC_API_BASE=https://8bp0sfdy10.execute-api.sa-east-1.amazonaws.com/Prod/api
+NEXT_PUBLIC_API_KEY=<KEY DEL API>
+```
+
 ## Instalación
 
 ```sh
