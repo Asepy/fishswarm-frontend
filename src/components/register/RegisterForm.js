@@ -48,7 +48,6 @@ export default function RegisterForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log({ values });
     createMember(values, {
       onError: (error) => {
         const errorMessage =
@@ -87,9 +86,7 @@ export default function RegisterForm() {
             >
               <TagLabel>1</TagLabel>
             </Tag>
-            <Heading size="lg" mt="4">
-              Registro Personal
-            </Heading>
+            <Heading size="lg">Registro Personal</Heading>
           </HStack>
           <Stack spacing="24px" mt="8" pl="10">
             <HStack spacing="12px">

@@ -4,7 +4,7 @@ import RegisterForm from "../components/register/RegisterForm";
 
 export default function index() {
   return (
-    <Container mt="8">
+    <Container>
       <RegisterForm />
     </Container>
   );

@@ -25,41 +25,37 @@ export default function searchMember() {
   };
   console.log({ data });
   return (
-    <Container>
+    <Container centerContent>
       <Stack spacing="8">
-        <Center flexDirection="column">
-          <Heading size="md">
-            Ingresá tus datos para saber si ya sos socio
-          </Heading>
-        </Center>
-        <Center>
-          <form onSubmit={handleSearch}>
-            <HStack spacing="6">
-              <Input
-                value={values.document}
-                onChange={updateValue}
-                name="document"
-                placeholder="Cédula"
-                isRequired
-              ></Input>
-              <BirthDatePicker
-                name="birthdate"
-                placeholder="Fecha de Nacimiento"
-                selectedDate={values.birthdate}
-                onChange={(date) => updateValueByName("birthdate", date)}
-              ></BirthDatePicker>
-              <BrandButton
-                px="12"
-                onClick={handleSearch}
-                rightIcon={<SearchIcon />}
-                isLoading={isLoading}
-                type="submit"
-              >
-                Buscar
-              </BrandButton>
-            </HStack>
-          </form>
-        </Center>
+        <Heading size="md" textAlign="center">
+          Ingresá tus datos para saber si ya sos socio
+        </Heading>
+        <form onSubmit={handleSearch}>
+          <HStack spacing="6">
+            <Input
+              value={values.document}
+              onChange={updateValue}
+              name="document"
+              placeholder="Cédula"
+              isRequired
+            ></Input>
+            <BirthDatePicker
+              name="birthdate"
+              placeholder="Fecha de Nacimiento"
+              selectedDate={values.birthdate}
+              onChange={(date) => updateValueByName("birthdate", date)}
+            ></BirthDatePicker>
+            <BrandButton
+              px="12"
+              onClick={handleSearch}
+              rightIcon={<SearchIcon />}
+              isLoading={isLoading}
+              type="submit"
+            >
+              Buscar
+            </BrandButton>
+          </HStack>
+        </form>
 
         <SkeletonText
           isLoaded={!isLoading}
@@ -69,10 +65,8 @@ export default function searchMember() {
           noOfLines={4}
           spacing="4"
         >
-          <Center>
-            {(!data || allEmptyValues(values)) && <WaitingSearch />}
-            {data && <SearchResult result={data} />}
-          </Center>
+          {(!data || allEmptyValues(values)) && <WaitingSearch />}
+          {data && <SearchResult result={data} />}
         </SkeletonText>
       </Stack>
     </Container>
