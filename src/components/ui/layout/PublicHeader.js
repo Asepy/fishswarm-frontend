@@ -1,12 +1,12 @@
 import React from "react";
 import Link from "next/link";
-import { Flex, Box, Button, Stack, Text } from "@chakra-ui/react";
-import Container from "./Container";
+import { Flex, Button, Stack } from "@chakra-ui/react";
+import Container from "../Container";
 import { useRouter } from "next/router";
 import PropTypes from "prop-types";
-import Logo from "./Logo";
+import Logo from "../Logo";
 
-export default function Header() {
+export default function PublicHeader() {
   return (
     <>
       <Flex
