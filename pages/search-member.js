@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { Heading, Stack, HStack } from "@chakra-ui/layout";
+import { Heading, Stack, HStack, VStack, Text, Box } from "@chakra-ui/layout";
 import { Input } from "@chakra-ui/input";
 import { ArrowForwardIcon, SearchIcon } from "@chakra-ui/icons";
 import { SkeletonText } from "@chakra-ui/skeleton";
@@ -81,10 +81,24 @@ function SearchResult({ result }) {
   const { found } = result.data;
   if (found === "true") {
     return (
-      <Alert status="success">
-        <AlertIcon />
-        Ya estas registrado como miembro. ¡Felicidades!
-      </Alert>
+      <VStack spacing="8">
+        <Alert status="success">
+          <AlertIcon />
+          ¡Felicidades! Ya estás registrado como miembro.
+        </Alert>
+        <Text fontWeight="semibold" size="md" textAlign="center">
+          Podés consultar{" "}
+          <Box
+            as="a"
+            color="blue.400"
+            href="https://asepy.org/membresias/"
+            target="__blank"
+          >
+            nuestra página
+          </Box>{" "}
+          para saber los beneficions que tienen nuestros socios.
+        </Text>
+      </VStack>
     );
   }
   return (
