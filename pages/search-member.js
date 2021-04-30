@@ -1,18 +1,18 @@
 import React from "react";
+import Link from "next/link";
 import { Center, Heading, Stack, HStack } from "@chakra-ui/layout";
 import { Input } from "@chakra-ui/input";
 import { ArrowForwardIcon, SearchIcon } from "@chakra-ui/icons";
-import { Skeleton, SkeletonText } from "@chakra-ui/skeleton";
-import Link from "next/link";
-import Container from "../components/ui/Container";
-import BrandButton from "../components/ui/BrandButton";
-import useForm from "../utils/useForm";
-import useSearchMember from "../utils/useSearchMember";
-import WaitingSearch from "../components/ui/svg/WaitingSearch";
-import BirthDatePicker from "../components/ui/BirthDatePicker";
+import { SkeletonText } from "@chakra-ui/skeleton";
 import { Alert, AlertIcon } from "@chakra-ui/alert";
 import { Button } from "@chakra-ui/button";
-import PublicLayout from "../components/ui/layout/PublicLayout";
+import BirthDatePicker from "components/ui/BirthDatePicker";
+import Container from "components/ui/Container";
+import BrandButton from "components/ui/BrandButton";
+import WaitingSearch from "components/ui/svg/WaitingSearch";
+import PublicLayout from "components/ui/layout/PublicLayout";
+import useSearchMember from "utils/useSearchMember";
+import useForm from "utils/useForm";
 
 export default function searchMember() {
   const { values, updateValue, updateValueByName } = useForm({

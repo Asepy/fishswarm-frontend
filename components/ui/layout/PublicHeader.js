@@ -1,10 +1,10 @@
 import React from "react";
 import Link from "next/link";
-import { Flex, Button, Stack } from "@chakra-ui/react";
-import Container from "../Container";
-import { useRouter } from "next/router";
 import PropTypes from "prop-types";
-import Logo from "../Logo";
+import { useRouter } from "next/router";
+import { Flex, Button, Stack } from "@chakra-ui/react";
+import Container from "components/ui/Container";
+import Logo from "components/ui/Logo";
 
 export default function PublicHeader() {
   return (

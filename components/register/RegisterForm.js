@@ -18,10 +18,10 @@ import {
   TagLabel,
   useToast,
 } from "@chakra-ui/react";
-import BirthDatePicker from "../ui/BirthDatePicker";
-import useForm from "../../utils/useForm";
-import useCreateMember from "../../utils/useCreateMember";
-import BrandButton from "../ui/BrandButton";
+import BirthDatePicker from "components/ui/BirthDatePicker";
+import BrandButton from "components/ui/BrandButton";
+import useForm from "utils/useForm";
+import useCreateMember from "utils/useCreateMember";
 
 export default function RegisterForm() {
   const toast = useToast();
