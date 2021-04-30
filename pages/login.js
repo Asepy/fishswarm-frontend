@@ -1,42 +1,35 @@
+import { Flex, Heading, VStack } from "@chakra-ui/layout";
 import React from "react";
-import {
-  Box,
-  Flex,
-  FormControl,
-  Heading,
-  VStack,
-  Input,
-} from "@chakra-ui/react";
-import Logo from "../components/ui/Logo";
-import BrandButton from "../components/ui/BrandButton";
+import Logo from "components/ui/Logo";
 import { LockIcon } from "@chakra-ui/icons";
+import { Input } from "@chakra-ui/input";
+import BrandButton from "../components/ui/BrandButton";
 
 export default function login() {
   return (
     <Flex
-      flexDirection="column"
-      bg="gray.100"
-      minHeight="100%"
-      justifyContent="center"
+      bgColor="gray.100"
+      height="100%"
       alignItems="center"
+      justifyContent={"center"}
     >
-      <VStack bgColor="white" minW="400px" boxShadow="md" p="4" spacing="4">
-        <Box as="a" textAlign="center" href="asepy.org">
-          <Logo w="200px"></Logo>
-        </Box>
-        <LockIcon w="8" h="8" />
-        <Heading as="h1" size="md" textAlign="left">
+      <VStack
+        bgColor="white"
+        p={8}
+        borderRadius="lg"
+        borderWidth="thin"
+        boxShadow="md"
+        minW="400px"
+        spacing={4}
+      >
+        <Logo width="200px"></Logo>
+        <LockIcon color="gray.400" w={8} h={8}></LockIcon>
+        <Heading alignSelf="start" size="md">
           Acceso
         </Heading>
-        <FormControl>
-          <Input type="email" placeholder="Email"></Input>
-        </FormControl>
-        <FormControl>
-          <Input type="password" placeholder="Password"></Input>
-        </FormControl>
-        <BrandButton minW="100%" size="lg">
-          Ingresar
-        </BrandButton>
+        <Input variant="filled" type="email" placeholder="Email"></Input>
+        <Input variant="filled" type="password" placeholder="Password"></Input>
+        <BrandButton alignSelf="stretch">Ingresar</BrandButton>
       </VStack>
     </Flex>
   );
