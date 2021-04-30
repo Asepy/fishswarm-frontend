@@ -14,7 +14,6 @@ function searchMember({ document, birthdate }) {
 export default async function handler(req, res) {
   try {
     const { id: document, birthdate } = req.query;
-    // console.log("request", req);
     console.log("searching with", { document, birthdate });
     const response = await searchMember({ document, birthdate });
     const data = await response.json();

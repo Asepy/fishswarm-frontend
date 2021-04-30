@@ -19,7 +19,6 @@ function postMember(newMember) {
     ruc,
     cityId,
   };
-  console.log({ newMember });
   const body = JSON.stringify(requiredValues);
   console.log("sending", { body });
   return fetch(`${process.env.NEXT_PUBLIC_API_BASE}/members`, {
