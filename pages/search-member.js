@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { Center, Heading, Stack, HStack } from "@chakra-ui/layout";
+import { Heading, Stack, HStack } from "@chakra-ui/layout";
 import { Input } from "@chakra-ui/input";
 import { ArrowForwardIcon, SearchIcon } from "@chakra-ui/icons";
 import { SkeletonText } from "@chakra-ui/skeleton";
@@ -13,6 +13,7 @@ import WaitingSearch from "components/ui/svg/WaitingSearch";
 import PublicLayout from "components/ui/layout/PublicLayout";
 import useSearchMember from "utils/useSearchMember";
 import useForm from "utils/useForm";
+import allEmptyValues from "utils/allEmptyValues";
 
 export default function searchMember() {
   const { values, updateValue, updateValueByName } = useForm({
@@ -24,7 +25,7 @@ export default function searchMember() {
     e.preventDefault();
     refetch();
   };
-  console.log({ data });
+
   return (
     <PublicLayout>
       <Container centerContent>
@@ -76,19 +77,14 @@ export default function searchMember() {
   );
 }
 
-function allEmptyValues(values) {
-  return !Object.values(values).some(Boolean);
-}
 function SearchResult({ result }) {
   const { found } = result.data;
   if (found === "true") {
     return (
-      <Center>
-        <Alert status="success">
-          <AlertIcon />
-          Ya estas registrado como miembro. ¡Felicidades!
-        </Alert>
-      </Center>
+      <Alert status="success">
+        <AlertIcon />
+        Ya estas registrado como miembro. ¡Felicidades!
+      </Alert>
     );
   }
   return (
