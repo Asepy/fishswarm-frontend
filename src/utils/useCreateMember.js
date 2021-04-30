@@ -1,4 +1,4 @@
-import { useMutation } from "react-query";
+import React from "react";
 import formatDate from "./formatDate";
 
 async function postMemberToApi(newMember) {
@@ -21,5 +21,18 @@ async function postMemberToApi(newMember) {
 }
 
 export default function useCreateMember() {
-  return useMutation((newMember) => postMemberToApi(newMember));
+  const [isLoading, setIsLoading] = React.useState(false);
+  const mutate = async (values, options) => {
+    setIsLoading(true);
+    try {
+      const data = await postMemberToApi(values);
+      options.onSuccess(data);
+    } catch (error) {
+      options.onError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return { mutate, isLoading };
 }

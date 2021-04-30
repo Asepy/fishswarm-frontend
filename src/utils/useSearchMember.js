@@ -19,7 +19,7 @@ async function getMemberFromApi({ document, birthdate }) {
   return response.json();
 }
 
-export default function useSearchMember({ document, birthdate }, options = {}) {
+export default function useSearchMember({ document, birthdate }) {
   const [isLoading, setIsLoading] = React.useState(false);
   const [data, setData] = React.useState();
   const refetch = async () => {
