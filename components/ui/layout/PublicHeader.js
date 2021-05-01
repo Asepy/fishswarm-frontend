@@ -45,7 +45,7 @@ const MenuLinks = () => {
       <HeaderLink href="/">
         <a>Asociáte</a>
       </HeaderLink>
-      <HeaderLink _hover={undefined} href="/login">
+      <HeaderLink _hover={undefined} href="/app">
         <Button bg="transparent" border="1px">
           Ingresar
         </Button>
