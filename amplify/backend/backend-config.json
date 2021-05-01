@@ -1,0 +1,10 @@
+{
+  "auth": {
+    "fishswarmfrontendcb41e7e4": {
+      "service": "Cognito",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "customAuth": false
+    }
+  }
+}

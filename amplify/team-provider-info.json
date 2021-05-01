@@ -1,0 +1,20 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-fishswarmfrontend-dev-143640-authRole",
+      "UnauthRoleArn": "arn:aws:iam::005445150992:role/amplify-fishswarmfrontend-dev-143640-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::005445150992:role/amplify-fishswarmfrontend-dev-143640-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-fishswarmfrontend-dev-143640-deployment",
+      "UnauthRoleName": "amplify-fishswarmfrontend-dev-143640-unauthRole",
+      "StackName": "amplify-fishswarmfrontend-dev-143640",
+      "StackId": "arn:aws:cloudformation:us-east-1:005445150992:stack/amplify-fishswarmfrontend-dev-143640/2df0ba60-aaac-11eb-be0e-12146b70620f",
+      "AmplifyAppId": "d2iz26b0owwnet"
+    },
+    "categories": {
+      "auth": {
+        "fishswarmfrontendcb41e7e4": {}
+      }
+    }
+  }
+}
