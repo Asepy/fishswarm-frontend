@@ -21,6 +21,7 @@ import {
   MenuItem,
   Avatar,
   MenuDivider,
+  Heading,
 } from "@chakra-ui/react";
 import {
   HamburgerIcon,
@@ -100,13 +101,13 @@ export default function WithSubnavigation({ children }) {
             />
           </Flex>
           <Flex flex={{ base: 1 }} justify={{ base: "center", md: "start" }}>
-            <Text
+            <Heading
               textAlign={useBreakpointValue({ base: "center", md: "left" })}
-              fontFamily={"heading"}
               color={useColorModeValue("gray.800", "white")}
+              size="base"
             >
               Asepy FishSwarm
-            </Text>
+            </Heading>
 
             <Flex display={{ base: "none", md: "flex" }} ml={10}>
               <DesktopNav />
@@ -153,7 +154,7 @@ export default function WithSubnavigation({ children }) {
         </Collapse>
       </Box>
       <Box p={4}>{children}</Box>
-      {showLoadingModal && <LoadingModal text="Saliendo"></LoadingModal>}
+      {showLoadingModal && <LoadingModal text="Cerrando sesión"></LoadingModal>}
     </>
   );
 }
