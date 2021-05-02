@@ -31,25 +31,42 @@ import {
 
 import { Auth } from "aws-amplify";
 import Router from "next/router";
+import LoadingModal from "../LoadingModal";
 
 export default function WithSubnavigation({ children }) {
   const { isOpen, onToggle } = useDisclosure();
-  const [isSigningOut, setIsSigningOut] = React.useState(false);
+  const [user, setUser] = React.useState();
+  const [showLoadingModal, setShowLoadingModal] = React.useState(false);
+
+  React.useEffect(() => {
+    checkUser();
+  }, []);
+  async function checkUser() {
+    try {
+      const currentUser = await Auth.currentAuthenticatedUser();
+      setUser(currentUser);
+      console.log({ currentUser });
+    } catch (err) {
+      console.log({ err });
+    }
+  }
 
   const handleSignOut = () => {
-    setIsSigningOut(true);
+    setShowLoadingModal(true);
     setTimeout(() => {
       Auth.signOut()
         .then(() => {
-          console.log("success");
+          console.log("success signing out");
           Router.reload(window.location.pathname);
         })
         .catch((error) => {
           console.log("error signing out: ", error);
           setIsSigningOut(false);
+          setShowLoadingModal(false);
         });
     }, 2000);
   };
+
   return (
     <>
       <Box>
@@ -118,8 +135,11 @@ export default function WithSubnavigation({ children }) {
                   />
                 </MenuButton>
                 <MenuList>
-                  <MenuItem>Link 1</MenuItem>
-                  <MenuItem>Link 2</MenuItem>
+                  <MenuItem>
+                    <Text color="gray.500">
+                      {user && user.attributes.email}
+                    </Text>
+                  </MenuItem>
                   <MenuDivider />
                   <MenuItem onClick={handleSignOut}>Salir</MenuItem>
                 </MenuList>
@@ -133,6 +153,7 @@ export default function WithSubnavigation({ children }) {
         </Collapse>
       </Box>
       <Box p={4}>{children}</Box>
+      {showLoadingModal && <LoadingModal text="Saliendo"></LoadingModal>}
     </>
   );
 }
