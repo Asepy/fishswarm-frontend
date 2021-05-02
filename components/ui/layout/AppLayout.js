@@ -20,7 +20,7 @@ const Header = () => {
           console.log("error signing out: ", error);
           setIsSigningOut(false);
         });
-    }, 3000);
+    }, 2000);
   };
   return (
     <>

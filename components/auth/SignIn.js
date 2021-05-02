@@ -1,11 +1,17 @@
 import React from "react";
-import { Box, Flex, Heading, Text, VStack } from "@chakra-ui/layout";
+import { Box, Heading, Text } from "@chakra-ui/layout";
 import Logo from "components/ui/Logo";
 import { LockIcon } from "@chakra-ui/icons";
 import { Input } from "@chakra-ui/input";
 import BrandButton from "components/ui/BrandButton";
 
-export default function SignIn({ onChange, setUiState, signIn }) {
+export default function SignIn({
+  onChange,
+  setUiState,
+  signIn,
+  error,
+  isLoading,
+}) {
   return (
     <>
       <Logo width="200px"></Logo>
@@ -13,7 +19,7 @@ export default function SignIn({ onChange, setUiState, signIn }) {
       <Heading alignSelf="start" size="md">
         Acceso
       </Heading>
-      {/* {error && <Text color="red.500">{error.message}</Text>} */}
+      {error && <Text color="red.500">{error.message}</Text>}
       <Input
         name="email"
         variant="filled"
@@ -28,11 +34,7 @@ export default function SignIn({ onChange, setUiState, signIn }) {
         placeholder="Password"
         onChange={onChange}
       ></Input>
-      <BrandButton
-        onClick={signIn}
-        alignSelf="stretch"
-        // isLoading={isLoading}
-      >
+      <BrandButton onClick={signIn} alignSelf="stretch" isLoading={isLoading}>
         Ingresar
       </BrandButton>
       <Text mt="12" fontSize="sm">

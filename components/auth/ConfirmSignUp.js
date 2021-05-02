@@ -1,25 +1,29 @@
 import React from "react";
-import { Box, Flex, Heading, Text, VStack } from "@chakra-ui/layout";
+import { Box, Heading, Text } from "@chakra-ui/layout";
+import { FormControl, FormLabel } from "@chakra-ui/form-control";
 import Logo from "components/ui/Logo";
-import { ArrowForwardIcon } from "@chakra-ui/icons";
 import { Input } from "@chakra-ui/input";
 import BrandButton from "components/ui/BrandButton";
-import { FormControl } from "@chakra-ui/form-control";
 
-export default function ConfirmSignUp({ setUiState, onChange, confirmSignUp }) {
+export default function ConfirmSignUp({
+  setUiState,
+  onChange,
+  confirmSignUp,
+  isLoading,
+  error,
+}) {
   return (
     <>
       <Logo width="200px"></Logo>
       <Heading alignSelf="start" size="md">
         Confirmación de Registro
       </Heading>
-      {/* {error && <Text color="red.500">{error.message}</Text>} */}
+      {error && <Text color="red.500">{error.message}</Text>}
       <FormControl>
         <FormLabel>Código de Confirmación</FormLabel>
         <Input
-          name="email"
+          name="authCode"
           variant="filled"
-          type="email"
           placeholder="Código de Confirmación"
           onChange={onChange}
         ></Input>
@@ -27,7 +31,7 @@ export default function ConfirmSignUp({ setUiState, onChange, confirmSignUp }) {
       <BrandButton
         onClick={confirmSignUp}
         alignSelf="stretch"
-        // isLoading={isLoading}
+        isLoading={isLoading}
       >
         Continuar
       </BrandButton>

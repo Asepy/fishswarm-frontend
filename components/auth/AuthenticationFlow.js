@@ -17,6 +17,9 @@ function AuthenticationFlow(props) {
     authCode: "",
   });
   const { email, password, authCode } = formState;
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [error, setError] = React.useState();
+
   useEffect(() => {
     checkUser();
   }, []);
@@ -35,40 +38,69 @@ function AuthenticationFlow(props) {
   }
   async function signUp() {
     try {
+      setError(null);
+      setIsLoading(true);
       await Auth.signUp({ username: email, password, attributes: { email } });
       setUiState("confirmSignUp");
     } catch (err) {
       console.log({ err });
+      setError(err);
+    } finally {
+      setIsLoading(false);
     }
   }
   async function confirmSignUp() {
     try {
+      setError(null);
+      setIsLoading(true);
       await await Auth.confirmSignUp(email, authCode);
       await Auth.signIn(email, password);
       setUiState("signedIn");
     } catch (err) {
       console.log({ err });
+      setError(err);
+    } finally {
+      setIsLoading(false);
     }
   }
   async function signIn() {
     try {
+      setError(null);
+      setIsLoading(true);
       await Auth.signIn(email, password);
       setUiState("signedIn");
     } catch (err) {
       console.log({ err });
+      setError(err);
+    } finally {
+      setIsLoading(false);
     }
   }
   async function forgotPassword() {
     try {
+      setError(null);
+      setIsLoading(true);
       await Auth.forgotPassword(email);
       setUiState("forgotPasswordSubmit");
     } catch (err) {
       console.log({ err });
+      setError(error);
+    } finally {
+      setIsLoading(false);
     }
   }
   async function forgotPasswordSubmit() {
-    await Auth.forgotPasswordSubmit(email, authCode, password);
-    setUiState("signIn");
+    try {
+      setError(null);
+      setIsLoading(true);
+      await Auth.forgotPasswordSubmit(email, authCode, password);
+      setUiState("signIn");
+    } catch (err) {
+      console.log({ err });
+      setError(err);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   if (uiState === "signedIn") {
@@ -93,23 +125,39 @@ function AuthenticationFlow(props) {
             <Text fontWeight="bold">Cargando ...</Text>
           ))}
         {uiState === "signUp" && (
-          <SignUp setUiState={setUiState} onChange={onChange} signUp={signUp} />
+          <SignUp
+            setUiState={setUiState}
+            onChange={onChange}
+            signUp={signUp}
+            isLoading={isLoading}
+            error={error}
+          />
         )}
         {uiState === "confirmSignUp" && (
           <ConfirmSignUp
             setUiState={setUiState}
             onChange={onChange}
             confirmSignUp={confirmSignUp}
+            isLoading={isLoading}
+            error={error}
           />
         )}
         {uiState === "signIn" && (
-          <SignIn setUiState={setUiState} onChange={onChange} signIn={signIn} />
+          <SignIn
+            setUiState={setUiState}
+            onChange={onChange}
+            signIn={signIn}
+            isLoading={isLoading}
+            error={error}
+          />
         )}
         {uiState === "forgotPassword" && (
           <ForgotPassword
             setUiState={setUiState}
             onChange={onChange}
             forgotPassword={forgotPassword}
+            isLoading={isLoading}
+            error={error}
           />
         )}
         {uiState === "forgotPasswordSubmit" && (
@@ -117,6 +165,8 @@ function AuthenticationFlow(props) {
             setUiState={setUiState}
             onChange={onChange}
             forgotPasswordSubmit={forgotPasswordSubmit}
+            isLoading={isLoading}
+            error={error}
           />
         )}
       </VStack>
