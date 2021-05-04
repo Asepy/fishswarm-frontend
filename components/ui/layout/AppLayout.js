@@ -32,6 +32,7 @@ import {
 
 import { Auth } from "aws-amplify";
 import Router from "next/router";
+import NextLink from "next/link";
 import LoadingModal from "../LoadingModal";
 
 export default function WithSubnavigation({ children }) {
@@ -120,6 +121,22 @@ export default function WithSubnavigation({ children }) {
             direction={"row"}
             spacing={6}
           >
+            <NextLink href="/">
+              <Box
+                as="a"
+                p={2}
+                cursor="pointer"
+                fontSize={"sm"}
+                fontWeight={500}
+                color={useColorModeValue("gray.600", "gray.200")}
+                _hover={{
+                  textDecoration: "none",
+                  color: useColorModeValue("gray.800", "white"),
+                }}
+              >
+                Asociáte
+              </Box>
+            </NextLink>
             <Flex alignItems={"center"}>
               <Menu>
                 <MenuButton
