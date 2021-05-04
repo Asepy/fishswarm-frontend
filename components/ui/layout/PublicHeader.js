@@ -42,9 +42,12 @@ const MenuLinks = () => {
       <HeaderLink href="/search-member">
         <a>¿Soy Socio?</a>
       </HeaderLink>
-      <HeaderLink _hover={undefined} href="/">
+      <HeaderLink href="/">
+        <a>Asociáte</a>
+      </HeaderLink>
+      <HeaderLink _hover={undefined} href="/app">
         <Button bg="transparent" border="1px">
-          Registrarse
+          Ingresar
         </Button>
       </HeaderLink>
     </Stack>

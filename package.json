@@ -3,6 +3,7 @@
   "version": "0.2.0",
   "private": true,
   "dependencies": {
+    "@aws-amplify/ui-react": "^1.0.7",
     "@chakra-ui/icons": "^1.0.12",
     "@chakra-ui/react": "^1.6.0",
     "@date-io/luxon": "^1.3.13",
@@ -12,6 +13,8 @@
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
     "@testing-library/user-event": "^12.7.3",
+    "aws-amplify": "^3.3.27",
+    "basic-auth": "^2.0.1",
     "date-fns": "^2.20.1",
     "dayjs": "^1.10.4",
     "emotion-theming": "^11.0.0",
@@ -22,6 +25,7 @@
     "react": "^17.0.1",
     "react-datepicker": "^3.8.0",
     "react-dom": "^17.0.1",
+    "react-icons": "^4.2.0",
     "react-query": "^3.13.12",
     "web-vitals": "^1.1.0"
   },
