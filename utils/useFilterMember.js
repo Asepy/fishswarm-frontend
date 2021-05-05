@@ -1,14 +1,7 @@
 import React from "react";
 import { useQuery } from "react-query";
+import serialize from "./serialize";
 
-const serialize = (obj) => {
-  var str = [];
-  for (var p in obj)
-    if (obj.hasOwnProperty(p) && obj[p]) {
-      str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
-    }
-  return str.join("&");
-};
 async function filterMember({ page, name, document }) {
   const queryParams = serialize({ page, name, document });
   const response = await fetch(`/api/members/filter?${queryParams}`, {
