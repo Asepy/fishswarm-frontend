@@ -1,8 +1,17 @@
 import React from "react";
-import formatDate from "./formatDate";
+import { useQuery } from "react-query";
 
-async function filterMember() {
-  const response = await fetch(`/api/members/filter`, {
+const serialize = (obj) => {
+  var str = [];
+  for (var p in obj)
+    if (obj.hasOwnProperty(p) && obj[p]) {
+      str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+    }
+  return str.join("&");
+};
+async function filterMember({ page, name, document }) {
+  const queryParams = serialize({ page, name, document });
+  const response = await fetch(`/api/members/filter?${queryParams}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -15,21 +24,31 @@ async function filterMember() {
   return response.json();
 }
 
-export default function useSearchMember(options = {}) {
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [data, setData] = React.useState();
-  const [error, setError] = React.useState();
-  const refetch = async () => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const response = await filterMember();
-      setData(response);
-    } catch (error) {
-      setError(error);
-    } finally {
-      setIsLoading(false);
-    }
+export default function useFilterMember({ page }, options = {}) {
+  return useQuery(["query:filter-members", page], () => filterMember({ page }));
+}
+
+export function useFilterMemberPaginated(queryParams, options = {}) {
+  const [page, setPage] = React.useState(1);
+  const { name, document } = queryParams;
+  const { data, ...restQuery } = useQuery(
+    ["query:filter-members-paginated", page, name, document],
+    () => filterMember({ page, name, document }),
+    { keepPreviousData: true }
+  );
+
+  const hasMore = React.useMemo(() => page < data?.pageTotal, [data]);
+  const previousPage = () => setPage((old) => Math.max(old - 1, 0));
+  const nextPage = () => setPage((old) => (hasMore ? old + 1 : old));
+
+  console.log({ data });
+  return {
+    hasMore,
+    nextPage,
+    page,
+    setPage,
+    previousPage,
+    data,
+    ...restQuery,
   };
-  return { isLoading, refetch, data, error };
 }
