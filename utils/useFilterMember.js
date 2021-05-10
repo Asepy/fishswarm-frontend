@@ -30,7 +30,10 @@ export function useFilterMemberPaginated(queryParams, options = {}) {
     { keepPreviousData: true }
   );
 
-  const hasMore = React.useMemo(() => page < data?.pageTotal, [data]);
+  const hasMore = React.useMemo(
+    () => page < data?.pageTotal && data?.pageTotal < data?.total,
+    [data]
+  );
   const previousPage = () => setPage((old) => Math.max(old - 1, 0));
   const nextPage = () => setPage((old) => (hasMore ? old + 1 : old));
 
