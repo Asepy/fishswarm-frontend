@@ -1,9 +1,7 @@
 import React from "react";
-import { Box, Heading, Text } from "@chakra-ui/layout";
+import { Box, Button, Heading, Input, Text } from "@chakra-ui/react";
 import Logo from "components/ui/Logo";
 import { ArrowForwardIcon } from "@chakra-ui/icons";
-import { Input } from "@chakra-ui/input";
-import BrandButton from "components/ui/BrandButton";
 
 export default function SignUp({
   onChange,
@@ -33,14 +31,15 @@ export default function SignUp({
         placeholder="Password"
         onChange={onChange}
       ></Input>
-      <BrandButton
+      <Button
+        variant="primary"
         onClick={signUp}
         alignSelf="stretch"
         isLoading={isLoading}
         rightIcon={<ArrowForwardIcon />}
       >
         Continuar
-      </BrandButton>
+      </Button>
       <Text mt="12" fontSize="sm">
         ¿Ya tenés una cuenta?
         <Box

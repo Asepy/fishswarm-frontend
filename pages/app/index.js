@@ -3,6 +3,7 @@ import AppLayout from "components/ui/layout/AppLayout";
 import Container from "components/ui/Container";
 import AuthenticationFlow from "components/auth/AuthenticationFlow";
 import {
+  Button,
   Heading,
   SkeletonText,
   Table,
@@ -27,7 +28,6 @@ import {
   NumberIncrementStepper,
   NumberDecrementStepper,
   Flex,
-  Button,
   Input,
   HStack,
   InputGroup,
@@ -45,9 +45,7 @@ import {
   ArrowRightIcon,
   ArrowLeftIcon,
 } from "@chakra-ui/icons";
-import { AiOutlineFilter } from "react-icons/ai";
 import { BiFilterAlt } from "react-icons/bi";
-import BrandButton from "components/ui/BrandButton";
 
 function isNumeric(str) {
   if (typeof str != "string") return false; // we only process strings!
@@ -124,9 +122,15 @@ function MemberList() {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </InputGroup>
-          <BrandButton px={4} h="1.75rem" size="xs" onClick={handleFilter}>
+          <Button
+            variant="primary"
+            px={4}
+            h="1.75rem"
+            size="xs"
+            onClick={handleFilter}
+          >
             Listo
-          </BrandButton>
+          </Button>
           <Button
             variant="outline"
             px={4}

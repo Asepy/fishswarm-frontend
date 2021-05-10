@@ -1,9 +1,14 @@
 import React from "react";
-import { Box, Heading, Text } from "@chakra-ui/layout";
-import { FormControl, FormLabel } from "@chakra-ui/form-control";
+import {
+  Box,
+  Button,
+  FormControl,
+  FormLabel,
+  Input,
+  Heading,
+  Text,
+} from "@chakra-ui/react";
 import Logo from "components/ui/Logo";
-import { Input } from "@chakra-ui/input";
-import BrandButton from "components/ui/BrandButton";
 
 export default function ConfirmSignUp({
   setUiState,
@@ -28,13 +33,14 @@ export default function ConfirmSignUp({
           onChange={onChange}
         ></Input>
       </FormControl>
-      <BrandButton
+      <Button
+        variant="primary"
         onClick={confirmSignUp}
         alignSelf="stretch"
         isLoading={isLoading}
       >
         Continuar
-      </BrandButton>
+      </Button>
       <Text mt="12" fontSize="sm">
         <Box
           as="span"

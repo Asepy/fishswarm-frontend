@@ -1,14 +1,21 @@
 import React from "react";
 import Link from "next/link";
-import { Heading, Stack, HStack, VStack, Text, Box } from "@chakra-ui/layout";
-import { Input } from "@chakra-ui/input";
+import {
+  Alert,
+  AlertIcon,
+  Button,
+  SkeletonText,
+  Heading,
+  Input,
+  Stack,
+  HStack,
+  VStack,
+  Text,
+  Box,
+} from "@chakra-ui/react";
 import { ArrowForwardIcon, SearchIcon } from "@chakra-ui/icons";
-import { SkeletonText } from "@chakra-ui/skeleton";
-import { Alert, AlertIcon } from "@chakra-ui/alert";
-import { Button } from "@chakra-ui/button";
 import BirthDatePicker from "components/ui/BirthDatePicker";
 import Container from "components/ui/Container";
-import BrandButton from "components/ui/BrandButton";
 import WaitingSearch from "components/ui/svg/WaitingSearch";
 import PublicLayout from "components/ui/layout/PublicLayout";
 import useSearchMember from "utils/useSearchMember";
@@ -48,7 +55,8 @@ export default function searchMember() {
                 selectedDate={values.birthdate}
                 onChange={(date) => updateValueByName("birthdate", date)}
               ></BirthDatePicker>
-              <BrandButton
+              <Button
+                variant="primary"
                 px="12"
                 onClick={handleSearch}
                 rightIcon={<SearchIcon />}
@@ -56,7 +64,7 @@ export default function searchMember() {
                 type="submit"
               >
                 Buscar
-              </BrandButton>
+              </Button>
             </HStack>
           </form>
 

@@ -1,9 +1,7 @@
 import React from "react";
-import { Box, Divider, Heading, Text } from "@chakra-ui/layout";
-import Logo from "components/ui/Logo";
+import { Box, Button, Input, Divider, Heading, Text } from "@chakra-ui/react";
 import { LockIcon } from "@chakra-ui/icons";
-import { Input } from "@chakra-ui/input";
-import BrandButton from "components/ui/BrandButton";
+import Logo from "components/ui/Logo";
 import NextLink from "next/link";
 
 export default function SignIn({
@@ -35,9 +33,14 @@ export default function SignIn({
         placeholder="Password"
         onChange={onChange}
       ></Input>
-      <BrandButton onClick={signIn} alignSelf="stretch" isLoading={isLoading}>
+      <Button
+        variant="primary"
+        onClick={signIn}
+        alignSelf="stretch"
+        isLoading={isLoading}
+      >
         Ingresar
-      </BrandButton>
+      </Button>
       <Text fontSize="sm">
         ¿No tenés una cuenta?
         <Box

@@ -1,9 +1,9 @@
 import React from "react";
 
 import {
+  Button,
   FormControl,
   FormLabel,
-  FormErrorMessage,
   FormHelperText,
   Stack,
   Input,
@@ -19,7 +19,6 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import BirthDatePicker from "components/ui/BirthDatePicker";
-import BrandButton from "components/ui/BrandButton";
 import useForm from "utils/useForm";
 import useCreateMember from "utils/useCreateMember";
 
@@ -313,9 +312,15 @@ export default function RegisterForm() {
             <Box my="8">
               <Divider></Divider>
             </Box>
-            <BrandButton mt="4" size="lg" type="submit" isLoading={isLoading}>
+            <Button
+              variant="primary"
+              mt="4"
+              size="lg"
+              type="submit"
+              isLoading={isLoading}
+            >
               Registrarse
-            </BrandButton>
+            </Button>
           </Stack>
         </form>
       </GridItem>
