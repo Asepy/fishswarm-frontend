@@ -1,0 +1,17 @@
+{
+  "name": "48coljc-3wqqij",
+  "hash": "X+Po/vyue9KRsMk1M7TTx5UrH1S58CoLJih0ewzjCbU=",
+  "description": "Image Lambda@Edge for Next CloudFront distribution",
+  "memory": 512,
+  "timeout": 10,
+  "code": "/Users/rodrigovillalba/code/asepy/fishswarm-frontend/.serverless_nextjs/image-lambda",
+  "shims": [],
+  "handler": "index.handler",
+  "runtime": "nodejs12.x",
+  "env": {},
+  "role": {
+    "arn": "arn:aws:iam::005445150992:role/48coljc-6wbguq"
+  },
+  "arn": "arn:aws:lambda:us-east-1:005445150992:function:48coljc-3wqqij",
+  "region": "us-east-1"
+}
