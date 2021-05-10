@@ -1,1 +1,0 @@
-{"version":3,"pages404":true,"basePath":"","redirects":[],"headers":[],"dynamicRoutes":[{"page":"/api/members/[id]","regex":"^/api/members/([^/]+?)(?:/)?$","routeKeys":{"id":"id"},"namedRegex":"^/api/members/(?<id>[^/]+?)(?:/)?$"}],"dataRoutes":[],"rewrites":[]}
