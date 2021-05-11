@@ -5,7 +5,7 @@
 
 > Aplicación de registro y consulta de socios
 
-### 🔦 [Sitio de Demo](https://fishswarm-frontend.vercel.app/)
+### 🔦 [Sitio de Demo](https://d2l9p0wls5wn3c.cloudfront.net/)
 
 ### 🏠 [Página oficial de Asepy](https://asepy.org/)
 
