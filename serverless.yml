@@ -1,8 +1,8 @@
 asepyFishSwarm:
   component: "@sls-next/serverless-component@1.19.0"
   inputs:
-    cloudfront:
-      distributionId: ${env.CF_DISTRIBUTION_ID}
+    # cloudfront:
+    #   distributionId: ${env.CF_DISTRIBUTION_ID}
     env:
       NEXT_PUBLIC_API_BASE: ${env.NEXT_PUBLIC_API_BASE}
       NEXT_PUBLIC_API_KEY: ${env.NEXT_PUBLIC_API_KEY}
