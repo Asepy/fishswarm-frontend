@@ -16,7 +16,7 @@ import {
 import { ArrowForwardIcon, SearchIcon } from "@chakra-ui/icons";
 import BirthDatePicker from "components/ui/BirthDatePicker";
 import Container from "components/ui/Container";
-import WaitingSearch from "components/ui/svg/WaitingSearch";
+import WaitingSearchIcon from "components/ui/svg/WaitingSearchIcon";
 import PublicLayout from "components/ui/layout/PublicLayout";
 import useSearchMember from "utils/useSearchMember";
 import useForm from "utils/useForm";
@@ -76,7 +76,9 @@ export default function searchMember() {
             noOfLines={4}
             spacing="4"
           >
-            {(!data || allEmptyValues(values)) && <WaitingSearch />}
+            {(!data || allEmptyValues(values)) && (
+              <WaitingSearchIcon boxSize="xs" />
+            )}
             {data && <SearchResult result={data} />}
           </SkeletonText>
         </Stack>
