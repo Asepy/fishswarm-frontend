@@ -2,7 +2,7 @@ import React from "react";
 import {
   Button,
   Heading,
-  SkeletonText,
+  Skeleton,
   Table,
   Thead,
   Tbody,
@@ -28,6 +28,7 @@ import {
   Input,
   HStack,
   InputGroup,
+  Spinner,
 } from "@chakra-ui/react";
 
 import { FaEllipsisV } from "react-icons/fa";
@@ -46,6 +47,18 @@ import useFilterMember, {
 
 import isNumeric from "utils/isNumeric";
 
+const Loading = () => (
+  <Flex justify="center" flexWrap="wrap">
+    <Spinner
+      thickness="4px"
+      speed="0.65s"
+      emptyColor="gray.200"
+      color="blue.800"
+      size="xl"
+    />
+  </Flex>
+);
+
 export default function MemberList() {
   const [searchTerm, setSearchTerm] = React.useState();
   const [queryParams, setQueryParams] = React.useState({
@@ -55,7 +68,6 @@ export default function MemberList() {
   const {
     data,
     page,
-    isFetching,
     nextPage,
     previousPage,
     setPage,
@@ -74,13 +86,11 @@ export default function MemberList() {
   };
 
   const handleClear = () => {
+    setPage(1);
     setSearchTerm("");
     setQueryParams({ name: "", document: "" });
   };
 
-  //   if (status === "loading") {
-  //     return <SkeletonText noOfLines={4} spacing="4"></SkeletonText>;
-  //   }
   if (error) {
     return <Text color="red.500">{error.message}</Text>;
   }
@@ -93,7 +103,6 @@ export default function MemberList() {
           <InputGroup size="sm">
             <Input
               variant="filled"
-              // pr="4.5rem"
               type={"text"}
               placeholder="Nombre o cédula"
               value={searchTerm}
@@ -106,6 +115,7 @@ export default function MemberList() {
             h="1.75rem"
             size="xs"
             onClick={handleFilter}
+            isLoading={status === "loading"}
           >
             Listo
           </Button>
@@ -119,11 +129,15 @@ export default function MemberList() {
             Borrar
           </Button>
         </HStack>
-        {status === "loading" && (
-          <SkeletonText noOfLines={4} spacing="4"></SkeletonText>
-        )}
       </Flex>
-
+      {status === "loading" && (
+        <SkeletonTable
+          thickness="20px"
+          noOfLines={5}
+          spacing="6"
+          mt={4}
+        ></SkeletonTable>
+      )}
       <Table variant="simple" size="sm" mt={12}>
         <Thead>
           <Tr>
@@ -176,6 +190,15 @@ export default function MemberList() {
   );
 }
 
+function SkeletonTable({ noOfLines = 1, thickness = "20px", ...rest }) {
+  return (
+    <Stack {...rest}>
+      {Array.from({ length: noOfLines }, (_, index) => (
+        <Skeleton height={thickness} />
+      ))}
+    </Stack>
+  );
+}
 function FullPaginator({
   gotoPage = () => {},
   nextPage = () => {},
