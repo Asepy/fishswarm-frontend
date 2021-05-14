@@ -31,6 +31,7 @@ import {
   Spinner,
 } from "@chakra-ui/react";
 
+import { AiOutlineUserDelete } from "react-icons/ai";
 import { FaEllipsisV } from "react-icons/fa";
 import {
   DeleteIcon,
@@ -46,6 +47,8 @@ import useFilterMember, {
 } from "utils/useFilterMember";
 
 import isNumeric from "utils/isNumeric";
+import EditModal from "./EditModal";
+import DeactivateModal from "./DeactivateModal";
 
 const Loading = () => (
   <Flex justify="center" flexWrap="wrap">
@@ -75,6 +78,9 @@ export default function MemberList() {
     hasMore,
     status,
   } = useFilterMemberPaginated(queryParams);
+  const [showEditModal, setShowEditModal] = React.useState(false);
+  const [showDeactivateModal, setShowDeactivateModal] = React.useState(false);
+  const [associate, setAssociate] = React.useState();
 
   const handleFilter = () => {
     setPage(1);
@@ -89,6 +95,16 @@ export default function MemberList() {
     setPage(1);
     setSearchTerm("");
     setQueryParams({ name: "", document: "" });
+  };
+
+  const handleEdit = (member) => {
+    setShowEditModal(true);
+    setAssociate(member);
+  };
+
+  const handleDeactivate = (member) => {
+    setShowDeactivateModal(true);
+    setAssociate(member);
   };
 
   if (error) {
@@ -168,8 +184,8 @@ export default function MemberList() {
                     aria-label="Opciones"
                   ></MenuButton>
                   <MenuList>
-                    <MenuItem icon={<EditIcon></EditIcon>}>Editar</MenuItem>
-                    <MenuItem icon={<DeleteIcon />}>Eliminar</MenuItem>
+                    <MenuItem onClick={() => handleEdit(member)} icon={<EditIcon></EditIcon>}>Editar</MenuItem>
+                    <MenuItem onClick={() => handleDeactivate(member)} icon={<AiOutlineUserDelete />}>Desactivar</MenuItem>
                   </MenuList>
                 </Menu>
               </Td>
@@ -186,6 +202,11 @@ export default function MemberList() {
         pageTotal={data?.pageTotal}
         totalElements={data?.total}
       />
+      {showEditModal && <EditModal closeModal={() => setShowEditModal(false)}
+                                   member={associate}/>}
+      {showDeactivateModal && <DeactivateModal document={associate.national_id}
+                                               closeModal={() => setShowDeactivateModal(false)}
+                                               text="¿Está seguro que desea desactivar al usuario?"/>}
     </Stack>
   );
 }
