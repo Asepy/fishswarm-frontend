@@ -41,7 +41,7 @@ export default function searchMember() {
             Ingresá tus datos para saber si ya sos socio
           </Heading>
           <form onSubmit={handleSearch}>
-            <HStack spacing="6">
+            <FieldsStack>
               <Input
                 value={values.document}
                 onChange={updateValue}
@@ -62,24 +62,25 @@ export default function searchMember() {
                 rightIcon={<SearchIcon />}
                 isLoading={isLoading}
                 type="submit"
+                width={{ base: "full", md: "auto" }}
               >
                 Buscar
               </Button>
-            </HStack>
+            </FieldsStack>
           </form>
 
           <SkeletonText
             isLoaded={!isLoading}
             textAlign="center"
             alignItems="center"
-            mt="4"
+            mt="8"
             noOfLines={4}
             spacing="4"
           >
             {(!data || allEmptyValues(values)) && (
-              <WaitingSearchIcon boxSize="xs" />
+              <WaitingSearchIcon mt={6} boxSize={{ base: "14rem", md: "xs" }} />
             )}
-            {data && <SearchResult result={data} />}
+            {data && <SearchResult mt={6} result={data} />}
           </SkeletonText>
         </Stack>
       </Container>
@@ -87,11 +88,24 @@ export default function searchMember() {
   );
 }
 
-function SearchResult({ result }) {
+function FieldsStack({ children }) {
+  return (
+    <>
+      <HStack spacing={4} display={{ base: "none", md: "flex" }}>
+        {children}
+      </HStack>
+      <Stack spacing={4} display={{ md: "none" }}>
+        {children}
+      </Stack>
+    </>
+  );
+}
+
+function SearchResult({ result, ...rest }) {
   const { found } = result.data;
   if (found === "true") {
     return (
-      <VStack spacing="8">
+      <VStack spacing="8" {...rest}>
         <Alert status="success">
           <AlertIcon />
           ¡Felicidades! Ya estás registrado como miembro.
@@ -112,7 +126,7 @@ function SearchResult({ result }) {
     );
   }
   return (
-    <Stack spacing="8">
+    <Stack spacing="8" {...rest}>
       <Alert status="warning">
         <AlertIcon></AlertIcon>
         Aún no estas registrado, puedes utilizar el botón de abajo para hacerlo
