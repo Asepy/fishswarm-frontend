@@ -41,6 +41,7 @@ export default function RegisterForm() {
     empleados: 0,
     sitioweb: "",
     facturacion: "",
+    tarroMiel: "",
   });
 
   const handleSubmit = async (e) => {
@@ -72,6 +73,14 @@ export default function RegisterForm() {
   };
   return (
     <form onSubmit={handleSubmit}>
+      <Input
+        id="tarroMiel"
+        type="text"
+        name="tarroMiel"
+        value={values.tarroMiel}
+        onChange={updateValue}
+        display="none"
+      />
       <HStack spacing="4">
         <Tag size="md" borderRadius="full" variant="solid" colorScheme="green">
           <TagLabel>1</TagLabel>
