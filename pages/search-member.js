@@ -21,6 +21,7 @@ import PublicLayout from "components/ui/layout/PublicLayout";
 import useSearchMember from "utils/useSearchMember";
 import useForm from "utils/useForm";
 import allEmptyValues from "utils/allEmptyValues";
+import Seo from "components/ui/layout/Seo";
 
 export default function searchMember() {
   const { values, updateValue, updateValueByName } = useForm({
@@ -35,6 +36,7 @@ export default function searchMember() {
 
   return (
     <PublicLayout>
+      <Seo title="¿Soy Socio?"></Seo>
       <Container centerContent>
         <Stack spacing="8">
           <Heading size="md" textAlign="center">

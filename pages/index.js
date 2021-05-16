@@ -3,10 +3,12 @@ import { Grid, GridItem } from "@chakra-ui/layout";
 import Container from "components/ui/Container";
 import RegisterForm from "components/members/RegisterForm";
 import PublicLayout from "components/ui/layout/PublicLayout";
+import Seo from "components/ui/layout/Seo";
 
 export default function index() {
   return (
     <PublicLayout>
+      <Seo title="Registro de Socios"></Seo>
       <Container>
         <Grid
           templateColumns={{
