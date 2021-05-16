@@ -9,7 +9,7 @@ export default function Seo({ title, description = DEFAULT_DESC }) {
   const seoTitle = `${title} - A S E P Y`;
   return (
     <DefaultSeo
-      title={title}
+      title={seoTitle}
       description={description}
       openGraph={{
         type: "website",
