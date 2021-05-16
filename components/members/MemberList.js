@@ -149,8 +149,6 @@ export default function MemberList() {
         </Thead>
 
         <Tbody>
-          {/* {isFetching && <Spinner />} */}
-
           {data?.data.map((member) => (
             <Tr key={member.id_number}>
               <Td>
@@ -194,7 +192,7 @@ function SkeletonTable({ noOfLines = 1, thickness = "20px", ...rest }) {
   return (
     <Stack {...rest}>
       {Array.from({ length: noOfLines }, (_, index) => (
-        <Skeleton height={thickness} />
+        <Skeleton key={`${index}-${noOfLines}`} height={thickness} />
       ))}
     </Stack>
   );
