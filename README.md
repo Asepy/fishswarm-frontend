@@ -20,8 +20,9 @@ touch .env.local
 Con el contenido
 
 ```
-NEXT_PUBLIC_API_BASE=https://8bp0sfdy10.execute-api.sa-east-1.amazonaws.com/Prod/api
+NEXT_PUBLIC_API_BASE=<URL DEL BACKEND API>
 NEXT_PUBLIC_API_KEY=<KEY DEL API>
+NEXT_PUBLIC_SITE_URL=<URL DE ESTE SITIO> # para SEO
 ```
 
 ## Instalación
