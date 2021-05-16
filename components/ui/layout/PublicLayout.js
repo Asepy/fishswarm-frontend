@@ -1,14 +1,16 @@
 import React from "react";
-import Link from "next/link";
+import NextLink from "next/link";
 import PropTypes from "prop-types";
 import { useRouter } from "next/router";
 import {
   Flex,
+  Link as ChakraLink,
   Button,
   Stack,
   useDisclosure,
   IconButton,
   Collapse,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { CloseIcon, HamburgerIcon } from "@chakra-ui/icons";
 import Container from "components/ui/Container";
@@ -33,11 +35,7 @@ export default function PublicLayout({ children }) {
               <Logo w="160px" />
             </a>
             <DesktopNav></DesktopNav>
-            <Flex
-              // flex={{ base: 1, md: "auto" }}
-              ml={{ base: -2 }}
-              display={{ base: "flex", md: "none" }}
-            >
+            <Flex ml={{ base: -2 }} display={{ base: "flex", md: "none" }}>
               <IconButton
                 onClick={onToggle}
                 icon={
@@ -64,10 +62,10 @@ export default function PublicLayout({ children }) {
 
 function MobileNav() {
   return (
-    <Stack py={2} display={{ base: "flex", md: "none" }} alignItems="flex-end">
+    <Stack p={2} display={{ base: "flex", md: "none" }} alignItems="flex-end">
       <Stack alignItems="center" spacing={4}>
         <Flex
-          as={Link}
+          as={HeaderLink}
           href={"/search-member"}
           justify={"space-between"}
           align={"left"}
@@ -75,10 +73,10 @@ function MobileNav() {
             textDecoration: "none",
           }}
         >
-          <a>¿Ya Soy Socio?</a>
+          ¿Ya Soy Socio?
         </Flex>
         <Flex
-          as={Link}
+          as={HeaderLink}
           href={"/"}
           justify={"space-between"}
           align={"left"}
@@ -86,10 +84,10 @@ function MobileNav() {
             textDecoration: "none",
           }}
         >
-          <a>Asociáte</a>
+          Asociáte
         </Flex>
         <Flex
-          as={Link}
+          as={HeaderLink}
           href="/app"
           justify={"space-between"}
           align={"center"}
@@ -109,19 +107,15 @@ function MobileNav() {
 const DesktopNav = () => {
   return (
     <Stack
-      spacing={8}
+      spacing={4}
       align="center"
       justify={["center", "space-between", "flex-end", "flex-end"]}
       direction={["column", "row", "row", "row"]}
       display={{ base: "none", md: "flex" }}
       pt={[4, 4, 0, 0]}
     >
-      <HeaderLink href="/search-member">
-        <a>¿Soy Socio?</a>
-      </HeaderLink>
-      <HeaderLink href="/">
-        <a>Asociáte</a>
-      </HeaderLink>
+      <HeaderLink href="/search-member">¿Soy Socio?</HeaderLink>
+      <HeaderLink href="/">Asociáte</HeaderLink>
       <HeaderLink _hover={undefined} href="/app">
         <Button bg="transparent" border="1px">
           Ingresar
@@ -133,18 +127,25 @@ const DesktopNav = () => {
 
 // This saved my day :)
 // https://flaviocopes.com/nextjs-active-link/
-function HeaderLink({ href, children, _hover }) {
+function HeaderLink({ href, children, ...rest }) {
   const router = useRouter();
 
-  let className = children.props.className || "";
-  if (router.pathname === href) {
-    className = `${className} selected`;
-  }
-
+  const selected = router.pathname === href;
   return (
-    <Link href={href} _hover={_hover}>
-      {React.cloneElement(children, { className })}
-    </Link>
+    <NextLink passHref href={href}>
+      <ChakraLink
+        py="2"
+        px="4"
+        _hover={{
+          bg: useColorModeValue("gray.100", "gray.900"),
+        }}
+        borderRadius="md"
+        bg={selected ? useColorModeValue("gray.100", "gray.900") : "inherit"}
+        {...rest}
+      >
+        {children}
+      </ChakraLink>
+    </NextLink>
   );
 }
 
