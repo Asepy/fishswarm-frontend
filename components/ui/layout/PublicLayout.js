@@ -1,11 +1,9 @@
 import React from "react";
-import NextLink from "next/link";
 import PropTypes from "prop-types";
 import { useRouter } from "next/router";
+import { Link as NextChakraLink } from "@trevorblades/next-chakra-link";
 import {
   Flex,
-  Link as ChakraLink,
-  Button,
   Stack,
   useDisclosure,
   IconButton,
@@ -114,20 +112,19 @@ function HeaderLink({ href, children, ...rest }) {
 
   const selected = router.pathname === href;
   return (
-    <NextLink passHref href={href}>
-      <ChakraLink
-        py="2"
-        px="4"
-        _hover={{
-          bg: useColorModeValue("gray.100", "gray.900"),
-        }}
-        borderRadius="md"
-        bg={selected ? useColorModeValue("gray.100", "gray.900") : "inherit"}
-        {...rest}
-      >
-        {children}
-      </ChakraLink>
-    </NextLink>
+    <NextChakraLink
+      href={href}
+      py="2"
+      px="4"
+      _hover={{
+        bg: useColorModeValue("gray.100", "gray.900"),
+      }}
+      borderRadius="md"
+      bg={selected ? useColorModeValue("gray.100", "gray.900") : "inherit"}
+      {...rest}
+    >
+      {children}
+    </NextChakraLink>
   );
 }
 
