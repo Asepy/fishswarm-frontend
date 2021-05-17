@@ -66,17 +66,6 @@ function MobileNav() {
       <Stack alignItems="center" spacing={4}>
         <Flex
           as={HeaderLink}
-          href={"/search-member"}
-          justify={"space-between"}
-          align={"left"}
-          _hover={{
-            textDecoration: "none",
-          }}
-        >
-          ¿Ya Soy Socio?
-        </Flex>
-        <Flex
-          as={HeaderLink}
           href={"/"}
           justify={"space-between"}
           align={"left"}
@@ -88,16 +77,14 @@ function MobileNav() {
         </Flex>
         <Flex
           as={HeaderLink}
-          href="/app"
+          href={"/search-member"}
           justify={"space-between"}
-          align={"center"}
+          align={"left"}
           _hover={{
             textDecoration: "none",
           }}
         >
-          <Button bg="transparent" border="1px">
-            Ingresar
-          </Button>
+          ¿Ya Soy Socio?
         </Flex>
       </Stack>
     </Stack>
@@ -114,13 +101,8 @@ const DesktopNav = () => {
       display={{ base: "none", md: "flex" }}
       pt={[4, 4, 0, 0]}
     >
-      <HeaderLink href="/search-member">¿Soy Socio?</HeaderLink>
       <HeaderLink href="/">Asociáte</HeaderLink>
-      <HeaderLink _hover={undefined} href="/app">
-        <Button bg="transparent" border="1px">
-          Ingresar
-        </Button>
-      </HeaderLink>
+      <HeaderLink href="/search-member">¿Soy Socio?</HeaderLink>
     </Stack>
   );
 };

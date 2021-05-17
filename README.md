@@ -5,9 +5,9 @@
 
 > Aplicación de registro y consulta de socios
 
-### 🔦 [Sitio de Demo](https://d2l9p0wls5wn3c.cloudfront.net/)
+### 👩‍ [Sitio de Registro de Socios](https://d2l9p0wls5wn3c.cloudfront.net/)
 
-### 🏠 [Página oficial de Asepy](https://asepy.org/)
+### 📈 [Applicación Backoffice](https://d2l9p0wls5wn3c.cloudfront.net/app)
 
 ## Configuración de entorno
 
