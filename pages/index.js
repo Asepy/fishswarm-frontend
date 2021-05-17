@@ -8,7 +8,7 @@ import Seo from "components/ui/layout/Seo";
 export default function index() {
   return (
     <PublicLayout>
-      <Seo title="Registro de Socios"></Seo>
+      <Seo title="Asociáte"></Seo>
       <Container>
         <Grid
           templateColumns={{
