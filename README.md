@@ -7,7 +7,7 @@
 
 ### 👩‍ [Sitio de Registro de Socios](https://d2l9p0wls5wn3c.cloudfront.net/)
 
-### 📈 [Applicación Backoffice](https://d2l9p0wls5wn3c.cloudfront.net/app)
+### 📈 [Aplicación Backoffice](https://d2l9p0wls5wn3c.cloudfront.net/app)
 
 ## Configuración de entorno
 
