@@ -33,6 +33,11 @@ function postMember(newMember) {
 
 export default async function handler(req, res) {
   try {
+    if (req.body.tarroMiel) {
+      // Método de seguridad anti bots
+      // si este campo
+      return res.status(400).json({ message: "Error: 3421" });
+    }
     const response = await postMember(req.body);
     const data = await response.json();
     console.log("Response was:", data);
