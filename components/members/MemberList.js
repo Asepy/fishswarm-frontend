@@ -39,6 +39,7 @@ import useFilterMember, {
 
 import isNumeric from "utils/isNumeric";
 import SkeletonLines from "components/ui/SkeletonLines";
+import ErrorAlert from "components/ui/ErrorAlert";
 
 export default function MemberList() {
   const [searchTerm, setSearchTerm] = React.useState();
@@ -154,7 +155,7 @@ export default function MemberList() {
             hasMore={hasMore}
             pageTotal={data?.pageTotal}
             totalElements={data?.total}
-            px={2}
+            px={4}
           />
         </PageSection>
       </Stack>
@@ -168,7 +169,7 @@ function PageSection(props) {
 
 function MembersTable({ error, status, data }) {
   if (error) {
-    return <Text color="red.500">{error.message}</Text>;
+    return <ErrorAlert>{error.message}</ErrorAlert>;
   }
   if (status === "loading") {
     return (
