@@ -1,8 +1,7 @@
 import React from "react";
 import {
   Button,
-  Heading,
-  Skeleton,
+  Box,
   Table,
   Thead,
   Tbody,
@@ -15,38 +14,37 @@ import {
   MenuItem,
   MenuButton,
   IconButton,
-  Icon,
   Text,
-  Tooltip,
   Select,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
-  NumberIncrementStepper,
-  NumberDecrementStepper,
   Flex,
   Input,
-  HStack,
+  InputLeftElement,
+  InputRightElement,
   InputGroup,
-  Spinner,
+  HStack,
+  Tabs,
+  TabList,
+  Tab,
+  Tag,
+  Divider,
+  useRadio,
+  useRadioGroup,
 } from "@chakra-ui/react";
 
 import { AiOutlineUserDelete } from "react-icons/ai";
 import { FaEllipsisV } from "react-icons/fa";
-import {
-  DeleteIcon,
-  EditIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  ArrowRightIcon,
-  ArrowLeftIcon,
-} from "@chakra-ui/icons";
-import { BiFilterAlt } from "react-icons/bi";
+import { DeleteIcon, EditIcon, SearchIcon, CloseIcon } from "@chakra-ui/icons";
+
 import useFilterMember, {
   useFilterMemberPaginated,
 } from "utils/useFilterMember";
 
 import isNumeric from "utils/isNumeric";
+
+import SkeletonLines from "components/ui/SkeletonLines";
+import ErrorAlert from "components/ui/ErrorAlert";
+import getUIMemberStatus from "utils/getUIMemberStatus";
+import { formatISODate } from "utils/formatDate";
 import EditModal from "./EditModal";
 import DeactivateModal from "./DeactivateModal";
 
@@ -67,6 +65,7 @@ export default function MemberList() {
   const [queryParams, setQueryParams] = React.useState({
     name: "",
     document: "",
+    status: "pending",
   });
   const {
     data,
@@ -78,24 +77,122 @@ export default function MemberList() {
     hasMore,
     status,
   } = useFilterMemberPaginated(queryParams);
-  const [showEditModal, setShowEditModal] = React.useState(false);
-  const [showDeactivateModal, setShowDeactivateModal] = React.useState(false);
-  const [associate, setAssociate] = React.useState();
 
-  const handleFilter = () => {
-    setPage(1);
-    if (isNumeric(searchTerm)) {
-      setQueryParams((old) => ({ document: searchTerm }));
-    } else {
-      setQueryParams((old) => ({ name: searchTerm }));
+  const handleFilter = (event) => {
+    if (event.key === "Enter") {
+      setPage(1);
+      if (isNumeric(searchTerm)) {
+        setQueryParams((old) => ({ document: searchTerm }));
+      } else {
+        setQueryParams((old) => ({ name: searchTerm }));
+      }
     }
   };
 
   const handleClear = () => {
     setPage(1);
     setSearchTerm("");
-    setQueryParams({ name: "", document: "" });
+    setQueryParams({ name: "", document: "", status: "pending" });
   };
+
+  if (error) {
+    return <Text color="red.500">{error.message}</Text>;
+  }
+
+  return (
+    <>
+      <Tabs>
+        <TabList>
+          <Tab>Miembros</Tab>
+        </TabList>
+      </Tabs>
+      <Stack spacing={6} mt={4}>
+        <PageSection spacing={4} px={6}>
+          <Text fontSize="sm">Buscar Miembros</Text>
+          <InputGroup size="sm">
+            <InputLeftElement
+              pointerEvents="none"
+              children={<SearchIcon color="gray.300" />}
+            />
+            <Input
+              variant="outline"
+              type={"text"}
+              placeholder="Buscar por CI, Nombre, Apellido, Razón Social o RUC"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              onKeyDown={handleFilter}
+            />
+            <InputRightElement width="4.5rem">
+              {searchTerm ? (
+                <IconButton
+                  onClick={handleClear}
+                  size="xs"
+                  icon={<CloseIcon />}
+                />
+              ) : null}
+            </InputRightElement>
+          </InputGroup>
+          <HStack maxW="40%">
+            <Select size="xs" placeholder="Departamento">
+              <option value="" selected>
+                Departamento: Todos
+              </option>
+            </Select>
+            <Select size="xs" placeholder="Ciudad">
+              <option selected value="">
+                Ciudad: Todos
+              </option>
+            </Select>
+          </HStack>
+          <Divider></Divider>
+          <HStack justify="space-between">
+            <CardRadioGroup
+              name="status"
+              // defaultValue="pending"
+              options={[
+                { value: "pending", label: "Pendiente" },
+                { value: "active", label: "Activo" },
+                { value: "inactive", label: "Inactivo" },
+                { value: "conditional", label: "Condicional" },
+              ]}
+            />
+            <Button
+              variant="outline"
+              px={4}
+              h="1.75rem"
+              size="sm"
+              onClick={handleClear}
+            >
+              Limpiar
+            </Button>
+          </HStack>
+        </PageSection>
+        <PageSection boxShadow="md">
+          <MembersTable error={error} status={status} data={data} />
+          <SimplePaginator
+            gotoPage={(pageParam) => setPage(pageParam)}
+            nextPage={nextPage}
+            pageIndex={page}
+            previousPage={previousPage}
+            hasMore={hasMore}
+            pageTotal={data?.pageTotal}
+            totalElements={data?.total}
+            px={4}
+          />
+        </PageSection>
+      </Stack>
+    </>
+  );
+}
+
+function PageSection(props) {
+  return <Stack boxShadow="md" py={4} {...props} />;
+}
+
+function MembersTable({ error, status, data }) {
+  const [showEditModal, setShowEditModal] = React.useState(false);
+  const [showDeactivateModal, setShowDeactivateModal] = React.useState(false);
+  const [associate, setAssociate] = React.useState();
 
   const handleEdit = (member) => {
     setShowEditModal(true);
@@ -108,211 +205,93 @@ export default function MemberList() {
   };
 
   if (error) {
-    return <Text color="red.500">{error.message}</Text>;
+    return <ErrorAlert>{error.message}</ErrorAlert>;
   }
+  if (status === "loading") {
+    return (
+      <SkeletonLines
+        thickness="20px"
+        noOfLines={5}
+        spacing="6"
+        mt={4}
+      ></SkeletonLines>
+    );
+  }
+
   return (
-    <Stack mt={4} spacing={4}>
-      <Flex justifyContent="space-between">
-        <Heading size="md">Socios Registrados</Heading>
-        <HStack alignItems="center">
-          <Icon as={BiFilterAlt} w={6} h={6} color="gray.400" />
-          <InputGroup size="sm">
-            <Input
-              variant="filled"
-              type={"text"}
-              placeholder="Nombre o cédula"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </InputGroup>
-          <Button
-            variant="primary"
-            px={4}
-            h="1.75rem"
-            size="xs"
-            onClick={handleFilter}
-            isLoading={status === "loading"}
-          >
-            Listo
-          </Button>
-          <Button
-            variant="outline"
-            px={4}
-            h="1.75rem"
-            size="xs"
-            onClick={handleClear}
-          >
-            Borrar
-          </Button>
-        </HStack>
-      </Flex>
-      {status === "loading" && (
-        <SkeletonTable
-          thickness="20px"
-          noOfLines={5}
-          spacing="6"
-          mt={4}
-        ></SkeletonTable>
-      )}
-      <Table variant="simple" size="sm" mt={12}>
-        <Thead>
-          <Tr>
-            <Th>Nombre</Th>
-            <Th>E-mail</Th>
-            <Th isNumeric>Cédula</Th>
-            <Th textAlign="center">Opciones</Th>
+    <Table variant="simple" size="sm">
+      <Thead>
+        <Tr>
+          <Th>Nombre</Th>
+          <Th>E-mail</Th>
+          <Th isNumeric>Cédula de Identidad</Th>
+          <Th isNumeric>RUC</Th>
+          <Th>Ingresado El</Th>
+          <Th textAlign="center">Estado</Th>
+          <Th textAlign="center">Opciones</Th>
+        </Tr>
+      </Thead>
+
+      <Tbody>
+        {data?.data.map((member) => (
+          <Tr key={member.id_number}>
+            <Td>
+              {member.name} {member.surname}
+            </Td>
+            <Td>{member.mail_id}</Td>
+            <Td isNumeric>{member.national_id}</Td>
+            <Td isNumeric>{member.ruc}</Td>
+            <Td>{formatISODate(member.startDate)}</Td>
+            <Td textAlign="center">
+              <StatusCell status={member.status} />
+            </Td>
+            <Td textAlign="center">
+              <Menu matchWidth>
+                <MenuButton
+                  fontSize="12px"
+                  as={IconButton}
+                  icon={<FaEllipsisV />}
+                  variant="outline"
+                  aria-label="Opciones"
+                ></MenuButton>
+                <MenuList>
+                  <MenuItem onClick={() => handleEdit(member)} icon={<EditIcon></EditIcon>}>Editar</MenuItem>
+                  <MenuItem onClick={() => handleDeactivate(member)} icon={<AiOutlineUserDelete />}>Desactivar</MenuItem>
+                </MenuList>
+              </Menu>
+            </Td>
           </Tr>
-        </Thead>
-
-        <Tbody>
-          {data?.data.map((member) => (
-            <Tr key={member.id_number}>
-              <Td>
-                {member.name} {member.surname}
-              </Td>
-              <Td>{member.mail_id}</Td>
-              <Td isNumeric>{member.national_id}</Td>
-              <Td textAlign="center">
-                <Menu matchWidth>
-                  <MenuButton
-                    fontSize="12px"
-                    as={IconButton}
-                    icon={<FaEllipsisV />}
-                    variant="outline"
-                    aria-label="Opciones"
-                  ></MenuButton>
-                  <MenuList>
-                    <MenuItem onClick={() => handleEdit(member)} icon={<EditIcon></EditIcon>}>Editar</MenuItem>
-                    <MenuItem onClick={() => handleDeactivate(member)} icon={<AiOutlineUserDelete />}>Desactivar</MenuItem>
-                  </MenuList>
-                </Menu>
-              </Td>
-            </Tr>
-          ))}
-        </Tbody>
-      </Table>
-      <SimplePaginator
-        gotoPage={(pageParam) => setPage(pageParam)}
-        nextPage={nextPage}
-        pageIndex={page}
-        previousPage={previousPage}
-        hasMore={hasMore}
-        pageTotal={data?.pageTotal}
-        totalElements={data?.total}
-      />
-      {showEditModal && <EditModal closeModal={() => setShowEditModal(false)}
-                                   member={associate}/>}
-      {showDeactivateModal && <DeactivateModal document={associate.national_id}
-                                               closeModal={() => setShowDeactivateModal(false)}
-                                               text="¿Está seguro que desea desactivar al usuario?"/>}
-    </Stack>
+        ))}
+        { showEditModal && <EditModal closeModal={() => setShowEditModal(false)} member={associate}/> }
+        { showDeactivateModal && <DeactivateModal document={associate.national_id}
+                                                  closeModal={() => setShowDeactivateModal(false)}
+                                                  text="¿Está seguro que desea desactivar al usuario?"/>}
+      </Tbody>
+    </Table>
   );
 }
 
-function SkeletonTable({ noOfLines = 1, thickness = "20px", ...rest }) {
+function StatusCell({ status }) {
+  const uiStatus = getUIMemberStatus(status);
   return (
-    <Stack {...rest}>
-      {Array.from({ length: noOfLines }, (_, index) => (
-        <Skeleton key={`${index}-${noOfLines}`} height={thickness} />
-      ))}
-    </Stack>
-  );
-}
-function FullPaginator({
-  gotoPage = () => {},
-  nextPage = () => {},
-  pageIndex = 0,
-  pageTotal = 10,
-  previousPage = () => {},
-  hasMore = false,
-}) {
-  return (
-    <>
-      <Flex justifyContent="space-around" m={8} alignItems="center">
-        <Flex>
-          <Tooltip label="Primera página">
-            <IconButton
-              onClick={() => gotoPage(1)}
-              isDisabled={pageIndex === 1}
-              icon={<ArrowLeftIcon h={3} w={3} />}
-              mr={4}
-            />
-          </Tooltip>
-          <Tooltip label="Anterior">
-            <IconButton
-              onClick={previousPage}
-              isDisabled={pageIndex === 1}
-              icon={<ChevronLeftIcon h={6} w={6} />}
-            />
-          </Tooltip>
-        </Flex>
-
-        <Flex alignItems="center">
-          <Text flexShrink="0" mr={8}>
-            Página{" "}
-            <Text fontWeight="bold" as="span">
-              {pageIndex}
-            </Text>{" "}
-            de{" "}
-            <Text fontWeight="bold" as="span">
-              {pageTotal}
-            </Text>
-          </Text>
-          <Text flexShrink="0">Ir a página:</Text>{" "}
-          <NumberInput
-            ml={2}
-            mr={8}
-            w={28}
-            min={1}
-            max={pageTotal}
-            onChange={(value) => {
-              const page = value ? value : 1;
-              gotoPage(page);
-            }}
-            defaultValue={pageIndex}
-          >
-            <NumberInputField />
-            <NumberInputStepper>
-              <NumberIncrementStepper />
-              <NumberDecrementStepper />
-            </NumberInputStepper>
-          </NumberInput>
-        </Flex>
-
-        <Flex>
-          <Tooltip label="Siguiente Página">
-            <IconButton
-              onClick={nextPage}
-              isDisabled={!hasMore}
-              icon={<ChevronRightIcon h={6} w={6} />}
-            />
-          </Tooltip>
-          <Tooltip label="Última Página">
-            <IconButton
-              onClick={() => gotoPage(pageTotal)}
-              isDisabled={!hasMore}
-              icon={<ArrowRightIcon h={3} w={3} />}
-              ml={4}
-            />
-          </Tooltip>
-        </Flex>
-      </Flex>
-    </>
+    <Tag borderRadius="full" colorScheme={uiStatus.color}>
+      {uiStatus.label}
+    </Tag>
   );
 }
 
 function SimplePaginator({
-  gotoPage = () => {},
   nextPage = () => {},
   pageIndex = 0,
   pageTotal = 10,
   previousPage = () => {},
   hasMore = false,
   totalElements = 0,
+  ...rest
 }) {
   return (
     <>
-      <Flex justifyContent="space-between" m={8} alignItems="center">
+      <Flex justifyContent="space-between" m={8} alignItems="center" {...rest}>
         <Text flexShrink="0" mr={8}>
           <Text fontWeight="bold" as="span">
             {totalElements}
@@ -356,20 +335,64 @@ function SimplePaginator({
   );
 }
 
-function PageSizeSelector({ pageSize, setPageSize }) {
+// TODO: Move to another file when stable
+function CardRadioGroup({
+  options,
+  name,
+  defaultValue = "",
+  onChange = console.log,
+}) {
+  const { getRootProps, getRadioProps } = useRadioGroup({
+    name,
+    defaultValue,
+    onChange,
+  });
+
+  const group = getRootProps();
+
   return (
-    <Select
-      w={32}
-      value={pageSize}
-      onChange={(e) => {
-        setPageSize(Number(e.target.value));
-      }}
-    >
-      {[10, 20, 30, 40, 50].map((pageSize) => (
-        <option key={pageSize} value={pageSize}>
-          Mostrar {pageSize}
-        </option>
-      ))}
-    </Select>
+    <HStack {...group}>
+      {options.map(({ value, label }) => {
+        const radio = getRadioProps({ value });
+        return (
+          <RadioCard key={value} {...radio}>
+            {label}
+          </RadioCard>
+        );
+      })}
+    </HStack>
+  );
+}
+
+function RadioCard(props) {
+  const { getInputProps, getCheckboxProps } = useRadio(props);
+
+  const input = getInputProps();
+  const checkbox = getCheckboxProps();
+
+  return (
+    <Box as="label">
+      <input {...input} />
+      <Box
+        {...checkbox}
+        fontSize="xs"
+        cursor="pointer"
+        borderWidth="1px"
+        borderRadius="md"
+        boxShadow="md"
+        _checked={{
+          bg: "teal.400",
+          color: "white",
+          borderColor: "teal.400",
+        }}
+        _focus={{
+          boxShadow: "outline",
+        }}
+        px={2}
+        py={1}
+      >
+        {props.children}
+      </Box>
+    </Box>
   );
 }

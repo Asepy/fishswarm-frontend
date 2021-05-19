@@ -28,7 +28,7 @@ export default function DeactivateModal({ document, closeModal, text = "¿Está 
           title: "Error al desactivar al usuario.",
           description: errorMessage,
           status: "error",
-          duration: 7000,
+          duration: 5000,
           isClosable: true,
         });
       },
@@ -38,7 +38,7 @@ export default function DeactivateModal({ document, closeModal, text = "¿Está 
           title: "Usuario desactivado",
           description: "Se ha desactivado al socio con CI "+`${document}`,
           status: "success",
-          duration: 7000,
+          duration: 5000,
           isClosable: true,
         });
       },
