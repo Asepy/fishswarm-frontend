@@ -25,6 +25,7 @@ import {
   Tabs,
   TabList,
   Tab,
+  Tag,
   Divider,
   useRadio,
   useRadioGroup,
@@ -40,6 +41,8 @@ import useFilterMember, {
 import isNumeric from "utils/isNumeric";
 import SkeletonLines from "components/ui/SkeletonLines";
 import ErrorAlert from "components/ui/ErrorAlert";
+import getUIMemberStatus from "utils/getUIMemberStatus";
+import { formatISODate } from "utils/formatDate";
 
 export default function MemberList() {
   const [searchTerm, setSearchTerm] = React.useState();
@@ -125,7 +128,7 @@ export default function MemberList() {
           <HStack justify="space-between">
             <CardRadioGroup
               name="status"
-              defaultValue="pending"
+              // defaultValue="pending"
               options={[
                 { value: "pending", label: "Pendiente" },
                 { value: "active", label: "Activo" },
@@ -188,7 +191,10 @@ function MembersTable({ error, status, data }) {
         <Tr>
           <Th>Nombre</Th>
           <Th>E-mail</Th>
-          <Th isNumeric>Cédula</Th>
+          <Th isNumeric>Cédula de Identidad</Th>
+          <Th isNumeric>RUC</Th>
+          <Th>Ingresado El</Th>
+          <Th textAlign="center">Estado</Th>
           <Th textAlign="center">Opciones</Th>
         </Tr>
       </Thead>
@@ -201,6 +207,11 @@ function MembersTable({ error, status, data }) {
             </Td>
             <Td>{member.mail_id}</Td>
             <Td isNumeric>{member.national_id}</Td>
+            <Td isNumeric>{member.ruc}</Td>
+            <Td>{formatISODate(member.startDate)}</Td>
+            <Td textAlign="center">
+              <StatusCell status={member.status} />
+            </Td>
             <Td textAlign="center">
               <Menu matchWidth>
                 <MenuButton
@@ -220,6 +231,15 @@ function MembersTable({ error, status, data }) {
         ))}
       </Tbody>
     </Table>
+  );
+}
+
+function StatusCell({ status }) {
+  const uiStatus = getUIMemberStatus(status);
+  return (
+    <Tag borderRadius="full" colorScheme={uiStatus.color}>
+      {uiStatus.label}
+    </Tag>
   );
 }
 
