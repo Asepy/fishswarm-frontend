@@ -87,7 +87,7 @@ export default function EditModal({ closeModal, member }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    editMember(values, {
+    editMember({ document: member.national_id, values: values }, {
       onError: (error) => {
         console.log(error.message);
         const errorMessage = "Ocurrió un error al editar los datos del usuario.";

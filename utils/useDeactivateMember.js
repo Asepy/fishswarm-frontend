@@ -1,7 +1,7 @@
 import React from "react";
 
 async function deactivateMemberToApi(document) {
-  const response = await fetch(`/api/members/${document}`, {
+  const response = await fetch(`/api/deactivateMember?document=${document}`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",

@@ -1,13 +1,16 @@
 import React from "react";
 
-async function postMemberToApi(editMember) {
-  const response = await fetch(`/api/members/${editMember.national_id}`, {
+async function editMemberToApi(document, editMember) {
+  console.log("editMember :: "+JSON.stringify({
+    ...editMember
+  }));
+  const response = await fetch(`/api/editMember?document=${document}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      ...editMember,
+      ...editMember
     }),
   });
   if (!response.ok) {
@@ -19,10 +22,10 @@ async function postMemberToApi(editMember) {
 
 export default function useEditMember() {
   const [isLoading, setIsLoading] = React.useState(false);
-  const mutate = async (values, options) => {
+  const mutate = async ({ document, values }, options) => {
     setIsLoading(true);
     try {
-      const data = await postMemberToApi(values);
+      const data = await editMemberToApi(document, values);
       options.onSuccess(data);
     } catch (error) {
       options.onError(error);
