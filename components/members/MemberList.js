@@ -190,7 +190,6 @@ function MembersTable({ error, status, data }) {
       <Thead>
         <Tr>
           <Th>Nombre</Th>
-          <Th>E-mail</Th>
           <Th isNumeric>Cédula de Identidad</Th>
           <Th isNumeric>RUC</Th>
           <Th>Ingresado El</Th>
@@ -203,9 +202,15 @@ function MembersTable({ error, status, data }) {
         {data?.data.map((member) => (
           <Tr key={member.id_number}>
             <Td>
-              {member.name} {member.surname}
+              <Stack>
+                <span>
+                  {member.name} {member.surname}
+                </span>
+                <Box as="span" fontSize="xs" color="gray.500">
+                  {member.mail_id}
+                </Box>
+              </Stack>
             </Td>
-            <Td>{member.mail_id}</Td>
             <Td isNumeric>{member.national_id}</Td>
             <Td isNumeric>{member.ruc}</Td>
             <Td>{formatISODate(member.startDate)}</Td>
