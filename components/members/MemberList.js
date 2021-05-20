@@ -31,6 +31,7 @@ import {
   useRadioGroup,
 } from "@chakra-ui/react";
 
+import { AiOutlineUserDelete } from "react-icons/ai";
 import { FaEllipsisV } from "react-icons/fa";
 import { DeleteIcon, EditIcon, SearchIcon, CloseIcon } from "@chakra-ui/icons";
 
@@ -39,10 +40,25 @@ import useFilterMember, {
 } from "utils/useFilterMember";
 
 import isNumeric from "utils/isNumeric";
+
 import SkeletonLines from "components/ui/SkeletonLines";
 import ErrorAlert from "components/ui/ErrorAlert";
 import getUIMemberStatus from "utils/getUIMemberStatus";
 import { formatISODate } from "utils/formatDate";
+import EditModal from "./EditModal";
+import DeactivateModal from "./DeactivateModal";
+
+const Loading = () => (
+  <Flex justify="center" flexWrap="wrap">
+    <Spinner
+      thickness="4px"
+      speed="0.65s"
+      emptyColor="gray.200"
+      color="blue.800"
+      size="xl"
+    />
+  </Flex>
+);
 
 export default function MemberList() {
   const [searchTerm, setSearchTerm] = React.useState();
@@ -78,6 +94,10 @@ export default function MemberList() {
     setSearchTerm("");
     setQueryParams({ name: "", document: "", status: "pending" });
   };
+
+  if (error) {
+    return <Text color="red.500">{error.message}</Text>;
+  }
 
   return (
     <>
@@ -136,7 +156,6 @@ export default function MemberList() {
                 { value: "conditional", label: "Condicional" },
               ]}
             />
-
             <Button
               variant="outline"
               px={4}
@@ -171,6 +190,20 @@ function PageSection(props) {
 }
 
 function MembersTable({ error, status, data }) {
+  const [showEditModal, setShowEditModal] = React.useState(false);
+  const [showDeactivateModal, setShowDeactivateModal] = React.useState(false);
+  const [associate, setAssociate] = React.useState();
+
+  const handleEdit = (member) => {
+    setShowEditModal(true);
+    setAssociate(member);
+  };
+
+  const handleDeactivate = (member) => {
+    setShowDeactivateModal(true);
+    setAssociate(member);
+  };
+
   if (error) {
     return <ErrorAlert>{error.message}</ErrorAlert>;
   }
@@ -227,13 +260,17 @@ function MembersTable({ error, status, data }) {
                   aria-label="Opciones"
                 ></MenuButton>
                 <MenuList>
-                  <MenuItem icon={<EditIcon></EditIcon>}>Editar</MenuItem>
-                  <MenuItem icon={<DeleteIcon />}>Eliminar</MenuItem>
+                  <MenuItem onClick={() => handleEdit(member)} icon={<EditIcon></EditIcon>}>Editar</MenuItem>
+                  <MenuItem onClick={() => handleDeactivate(member)} icon={<AiOutlineUserDelete />}>Desactivar</MenuItem>
                 </MenuList>
               </Menu>
             </Td>
           </Tr>
         ))}
+        { showEditModal && <EditModal closeModal={() => setShowEditModal(false)} member={associate}/> }
+        { showDeactivateModal && <DeactivateModal document={associate.national_id}
+                                                  closeModal={() => setShowDeactivateModal(false)}
+                                                  text="¿Está seguro que desea desactivar al usuario?"/>}
       </Tbody>
     </Table>
   );
