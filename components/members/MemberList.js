@@ -260,17 +260,36 @@ function MembersTable({ error, status, data }) {
                   aria-label="Opciones"
                 ></MenuButton>
                 <MenuList>
-                  <MenuItem onClick={() => handleEdit(member)} icon={<EditIcon></EditIcon>}>Editar</MenuItem>
-                  <MenuItem onClick={() => handleDeactivate(member)} icon={<AiOutlineUserDelete />}>Desactivar</MenuItem>
+                  <MenuItem
+                    onClick={() => handleEdit(member)}
+                    icon={<EditIcon></EditIcon>}
+                  >
+                    Editar
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => handleDeactivate(member)}
+                    icon={<AiOutlineUserDelete />}
+                  >
+                    Desactivar
+                  </MenuItem>
                 </MenuList>
               </Menu>
             </Td>
           </Tr>
         ))}
-        { showEditModal && <EditModal closeModal={() => setShowEditModal(false)} member={associate}/> }
-        { showDeactivateModal && <DeactivateModal document={associate.national_id}
-                                                  closeModal={() => setShowDeactivateModal(false)}
-                                                  text="¿Está seguro que desea desactivar al usuario?"/>}
+        {showEditModal && (
+          <EditModal
+            closeModal={() => setShowEditModal(false)}
+            member={associate}
+          />
+        )}
+        {showDeactivateModal && (
+          <DeactivateModal
+            associate={associate}
+            closeModal={() => setShowDeactivateModal(false)}
+            text="¿Está seguro que desea desactivar al usuario?"
+          />
+        )}
       </Tbody>
     </Table>
   );
