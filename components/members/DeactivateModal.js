@@ -9,9 +9,7 @@ import {
   Button,
   Text, useToast
 } from "@chakra-ui/react";
-import useDeactivateMember from "../../utils/useDeactivateMember";
-import {Auth} from "aws-amplify";
-import Router from "next/router";
+import useDeactivateMember from "/utils/useDeactivateMember";
 
 export default function DeactivateModal({ document, closeModal, text = "¿Está seguro que desea desactivar al usuario?" }) {
   const toast = useToast();

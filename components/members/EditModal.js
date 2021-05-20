@@ -28,62 +28,24 @@ export default function EditModal({ closeModal, member }) {
   const toast = useToast();
   const { isLoading, mutate: editMember } = useEditMember();
 
-  const { values } = useForm({
-    name: "",
-    surname: "",
-    document: "",
-    birthdate: "",
-    sexo: "",
-    departamento: "",
-    city: "",
-    email: "",
-    cellphone: "",
-    razonsocial: "",
-    nfantasia: "",
-    ruc: "",
-    rubro: "",
-    empleados: 0,
-    sitioweb: "",
-    facturacion: "",
+  const { values, updateValue } = useForm({
+    name: member?.name || "",
+    surname: member?.surname || "",
+    document: member?.national_id || "",
+    birthdate: member?.birthdate || "",
+    sex: member?.sex || "",
+    departament: member?.department || "",
+    city: member?.city || "",
+    email: member?.mail_id || "",
+    cellphone: member?.cellphone || "",
+    businessName: member?.businessName || "",
+    fancyBusinessName: member?.fancyBusinessName || "",
+    ruc: member?.ruc || "",
+    sector: member?.sector || "",
+    numberEmployees: member?.numberEmployees || 0,
+    website: member?.website || "",
+    anualTurnover: member?.anualTurnover || ""
   });
-
-  const initialValues = {
-    name: member.name != undefined ? member.name : "",
-    surname: member.surname != undefined ? member.surname : "",
-    document: member.national_id != undefined ? member.national_id : "",
-    birthdate: member.birthdate != undefined ? member.birthdate : "",
-    sexo: member.sex != undefined ? member.sex : "",
-    departamento: member.department != undefined ? member.department : "",
-    city: member.city != undefined ? member.city : "",
-    email: member.mail_id != undefined ? member.mail_id : "",
-    cellphone: member.cellphone != undefined ? member.cellphone : "",
-    razonsocial: member.businessName != undefined ? member.businessName : "",
-    nfantasia: member.fancyBusinessName != undefined ? member.fancyBusinessName : "",
-    ruc: member.ruc != undefined ? member.ruc : "",
-    sector: member.sector != undefined ? member.sector : "",
-    empleados: member.numberEmployees != undefined ? member.numberEmployees : "",
-    sitioweb: member.website != undefined ? member.website : "",
-    facturacion: member.anualTurnover != undefined ? member.anualTurnover : "",
-  };
-
-  const setNewFormValues = (form) => {
-    values.name = form.name;
-    values.surname = form.surname;
-    values.email = form.email;
-    values.document = form.document;
-    values.birthdate = form.birthdate
-    values.sexo = form.sexo;
-    values.departamento = form.departamento;
-    values.city = form.city;
-    values.cellphone = form.cellphone;
-    values.razonsocial = form.razonsocial;
-    values.nfantasia = form.nfantasia;
-    values.ruc = form.ruc;
-    values.rubro = form.rubro;
-    values.empleados = form.empleados;
-    values.sitioweb = form.sitioweb;
-    values.facturacion = form.facturacion;
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -123,9 +85,9 @@ export default function EditModal({ closeModal, member }) {
         <ModalContent>
           <ModalCloseButton />
           <ModalBody p={7}>
-            <Formik initialValues={initialValues}>
+            <Formik initialValues={values}>
               {(props) => (
-                <Form name="form" onChange={() => setNewFormValues(props.values)}>
+                <Form name="form">
                     <HStack spacing="4">
                       <Heading size="lg">Registro Personal</Heading>
                     </HStack>
@@ -133,7 +95,7 @@ export default function EditModal({ closeModal, member }) {
                     <VStack>
                       <Field name="name">
                         {({ field, form }) => (
-                          <FormControl>
+                          <FormControl id={"name"} onChange={updateValue}>
                             <FormLabel>Nombres</FormLabel>
                             <Input {...field} id="name" isRequired={true}/>
                           </FormControl>
@@ -141,7 +103,7 @@ export default function EditModal({ closeModal, member }) {
                       </Field>
                       <Field name="surname">
                         {({ field, form }) => (
-                          <FormControl>
+                          <FormControl id={"surname"} onChange={updateValue}>
                             <FormLabel>Apellidos</FormLabel>
                             <Input {...field} id="surname" isRequired={true}/>
                           </FormControl>
@@ -149,7 +111,7 @@ export default function EditModal({ closeModal, member }) {
                       </Field>
                       <Field name="document">
                         {({ field, form}) => (
-                          <FormControl>
+                          <FormControl id={"document"} onChange={updateValue}>
                             <FormLabel>Cédula</FormLabel>
                             <Input {...field} id="document" isRequired={true}/>
                           </FormControl>
@@ -157,7 +119,7 @@ export default function EditModal({ closeModal, member }) {
                       </Field>
                       <Field name="birthdate">
                         {({ field, form}) => (
-                          <FormControl>
+                          <FormControl id={"birthdate"} onChange={updateValue}>
                             <FormLabel htmlFor="birthdate">Fecha de Nacimiento</FormLabel>
                             <BirthDatePicker
                                 {...field}
@@ -167,24 +129,24 @@ export default function EditModal({ closeModal, member }) {
                           </FormControl>
                         )}
                       </Field>
-                      <Field name="sexo">
+                      <Field name="sex">
                         {({ field, form}) => (
-                          <FormControl>
+                          <FormControl id={"sex"} onChange={updateValue}>
                             <FormLabel>Sexo</FormLabel>
                             <Select {...field}
-                                    id="sexo">
+                                    id="sex">
                               <option value="Masculino">Masculino</option>
                               <option value="Femenino">Femenino</option>
                             </Select>
                           </FormControl>
                         )}
                       </Field>
-                        <Field name="departamento">
+                        <Field name="departament">
                           {({ field, form}) => (
-                            <FormControl>
+                            <FormControl id={"department"} onChange={updateValue}>
                               <FormLabel>Departamento</FormLabel>
                               <Select {...field}
-                                      id="departamento">
+                                      id="departament">
                                 <option value={"Capital"}>Capital</option>
                                 <option value={"Concepción"}>Concepción</option>
                                 <option value={"San Pedro"}>Capital</option>
@@ -208,7 +170,7 @@ export default function EditModal({ closeModal, member }) {
                         </Field>
                         <Field name="city">
                           {({ field, form}) => (
-                            <FormControl>
+                            <FormControl id={"city"} onChange={updateValue}>
                               <FormLabel>Ciudad</FormLabel>
                               <Input {...field} id="city"/>
                             </FormControl>
@@ -216,7 +178,7 @@ export default function EditModal({ closeModal, member }) {
                         </Field>
                       <Field name="email">
                         {({ field, form}) => (
-                          <FormControl>
+                          <FormControl id={"email"} onChange={updateValue}>
                             <FormLabel>E-mail</FormLabel>
                             <Input {...field} type="email" id="email"/>
                           </FormControl>
@@ -224,7 +186,7 @@ export default function EditModal({ closeModal, member }) {
                       </Field>
                       <Field name="cellphone">
                         {({ field, form}) => (
-                          <FormControl>
+                          <FormControl id={"cellphone"} onChange={updateValue}>
                             <FormLabel>Celular</FormLabel>
                             <Input {...field} name="cellphone"/>
                           </FormControl>
@@ -242,7 +204,7 @@ export default function EditModal({ closeModal, member }) {
                     <VStack>
                       <Field name="ruc">
                         {({ field, form}) => (
-                          <FormControl id="ruc">
+                          <FormControl id={"ruc"} onChange={updateValue}>
                             <FormLabel>RUC</FormLabel>
                             <Input {...field} name="ruc" isRequired={true}/>
                             <FormHelperText>
@@ -252,47 +214,47 @@ export default function EditModal({ closeModal, member }) {
                         )}
                       </Field>
                       <HStack spacing="4">
-                        <Field name="razonsocial">
+                        <Field name="businessName">
                           {({ field, form}) => (
-                            <FormControl id="razonsocial">
+                            <FormControl id={"businessName"} onChange={updateValue}>
                               <FormLabel>Razón Social</FormLabel>
-                              <Input {...field} name="razonsocial"/>
+                              <Input {...field} name="businessName"/>
                             </FormControl>
                           )}
                         </Field>
-                        <Field name="nfantasia">
+                        <Field name="fancyBusinessName">
                           {({ field, form}) => (
-                            <FormControl id="nfantasia">
+                            <FormControl id={"fancyBusinessName"} onChange={updateValue}>
                               <FormLabel>Nombre de Fantasía</FormLabel>
-                              <Input {...field} name="nfantasia"/>
+                              <Input {...field} name="fancyBusinessName"/>
                             </FormControl>
                           )}
                         </Field>
                       </HStack>
-                      <Field name="rubro">
+                      <Field name="sector">
                         {({ field, form}) => (
-                          <FormControl>
+                          <FormControl id={"sector"} onChange={updateValue}>
                             <FormLabel>Especifique el Rubro</FormLabel>
-                            <Input {...field} name="rubro"/>
+                            <Input {...field} name="sector"/>
                           </FormControl>
                         )}
                       </Field>
-                      <Field name="empleados">
+                      <Field name="numberEmployees">
                         {({ field, form}) => (
-                          <FormControl>
+                          <FormControl id={"numberEmployees"} onChange={updateValue}>
                             <FormLabel>Cantidad de Empleados</FormLabel>
-                            <Input {...field} name="empleados"/>
+                            <Input {...field} name="numberEmployees"/>
                             <FormHelperText>
                               Cantidad de empleados (si no aplica: 0)
                             </FormHelperText>
                           </FormControl>
                         )}
                       </Field>
-                      <Field name="facturacion">
+                      <Field name="anualTurnover">
                         {({ field, form}) => (
-                          <FormControl >
+                          <FormControl id={"anualTurnover"} onChange={updateValue}>
                             <FormLabel>Facturación del 2010</FormLabel>
-                            <Select {...field} name="facturacion">
+                            <Select {...field} name="anualTurnover">
                               <option value={"Menor o igual a 650 millones Gs."}>
                                 Menor o igual a 650 millones Gs.
                               </option>
@@ -309,11 +271,11 @@ export default function EditModal({ closeModal, member }) {
                           </FormControl>
                         )}
                       </Field>
-                      <Field name="sitioweb">
+                      <Field name="website">
                         {({ field, form}) => (
-                          <FormControl>
+                          <FormControl onChange={updateValue}>
                             <FormLabel>Sitio web o redes sociales</FormLabel>
-                            <Input {...field} name="sitioweb"/>
+                            <Input {...field} name="website"/>
                           </FormControl>
                         )}
                       </Field>
