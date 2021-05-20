@@ -267,6 +267,7 @@ function MembersTable({ error, status, data }) {
                     Editar
                   </MenuItem>
                   <MenuItem
+                    isDisabled={member.status === "INACTIVE"}
                     onClick={() => handleDeactivate(member)}
                     icon={<AiOutlineUserDelete />}
                   >
