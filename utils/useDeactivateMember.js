@@ -2,8 +2,8 @@ import React from "react";
 import { useQueryClient } from "react-query";
 import { FILTER_MEMBER_PAGED_QUERY_ID } from "./useFilterMember";
 
-async function deactivateMemberToApi(document) {
-  const response = await fetch(`/api/deactivateMember?document=${document}`, {
+async function deactivateMemberToApi(idNumber) {
+  const response = await fetch(`/api/deactivateMember?idNumber=${idNumber}`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",

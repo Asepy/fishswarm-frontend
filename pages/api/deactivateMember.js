@@ -1,21 +1,18 @@
-function deactivateMember(document) {
-  return fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE}/members/${document}`,
-      {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          "X-Api-Key": `${process.env.NEXT_PUBLIC_API_KEY}`,
-        },
-      }
-  );
+function deactivateMember(idNumber) {
+  return fetch(`${process.env.NEXT_PUBLIC_API_BASE}/members/${idNumber}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      "X-Api-Key": `${process.env.NEXT_PUBLIC_API_KEY}`,
+    },
+  });
 }
 
 export default async function handler(req, res) {
   try {
-    const { document } = req.query;
-    console.log("Searching with: ", document);
-    const response = await deactivateMember(document);
+    const { idNumber } = req.query;
+    console.log("Searching with: ", idNumber);
+    const response = await deactivateMember(idNumber);
     const data = await response.json();
     console.log("Response was:", data);
     const { success, message = "" } = data;
