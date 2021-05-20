@@ -1,5 +1,5 @@
 import React from "react";
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 import serialize from "./serialize";
 
 async function filterMember({ page, name, document }) {
@@ -17,15 +17,18 @@ async function filterMember({ page, name, document }) {
   return response.json();
 }
 
+export const FILTER_MEMBER_QUERY_ID = "query:filter-members";
+export const FILTER_MEMBER_PAGED_QUERY_ID = "query:filter-members-paginated";
+
 export default function useFilterMember({ page }, options = {}) {
-  return useQuery(["query:filter-members", page], () => filterMember({ page }));
+  return useQuery([FILTER_MEMBER_QUERY_ID, page], () => filterMember({ page }));
 }
 
 export function useFilterMemberPaginated(queryParams, options = {}) {
   const [page, setPage] = React.useState(1);
   const { name, document } = queryParams;
   const { data, ...restQuery } = useQuery(
-    ["query:filter-members-paginated", page, name, document],
+    [FILTER_MEMBER_PAGED_QUERY_ID, page, name, document],
     () => filterMember({ page, name, document }),
     { keepPreviousData: true }
   );
