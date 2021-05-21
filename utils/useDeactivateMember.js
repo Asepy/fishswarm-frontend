@@ -1,13 +1,13 @@
-import React from "react";
-import { useQueryClient } from "react-query";
-import { FILTER_MEMBER_PAGED_QUERY_ID } from "./useFilterMember";
+import React from 'react';
+import { useQueryClient } from 'react-query';
+import { FILTER_MEMBER_PAGED_QUERY_ID } from './useFilterMember';
 
 async function deactivateMemberToApi(idNumber) {
   const response = await fetch(`/api/deactivateMember?idNumber=${idNumber}`, {
-    method: "DELETE",
+    method: 'DELETE',
     headers: {
-      "Content-Type": "application/json",
-    },
+      'Content-Type': 'application/json'
+    }
   });
   if (!response.ok) {
     const errorJson = await response.json();
