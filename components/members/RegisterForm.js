@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 
 import {
   Button,
@@ -23,7 +23,14 @@ import useCreateMember from "utils/useCreateMember";
 export default function RegisterForm() {
   const toast = useToast();
   const { isLoading, mutate: createMember } = useCreateMember();
-
+  const [ requiredFields ] = useState(['name', 'surname', 'document', 'email', 'cellphone', 'birthdate', 'ruc']);
+  const [ isValidName, setIsValidName ] = useState(true);
+  const [ isValidSurname, setIsValidSurname ] = useState(true);
+  const [ isValidBirthdate, setIsValidBirthdate ] = useState(true);
+  const [ isValidCellphone, setIsValidCellphone ] = useState(true);
+  const [ isValidEmail, setIsValidEmail ] = useState(true);
+  const [ isValidDocument, setIsValidDocument ] = useState(true);
+  const [ isValidRuc, setIsValidRuc ] = useState(true);
   const { values, updateValue, updateValueByName } = useForm({
     name: "",
     surname: "",
@@ -46,31 +53,75 @@ export default function RegisterForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    createMember(values, {
-      onError: (error) => {
-        const errorMessage =
-          error.message || "Ocurrió un error durante el registro.";
-        toast({
-          position: "top",
-          title: "Error durante el registro",
-          description: errorMessage,
-          status: "error",
-          duration: 9000,
-          isClosable: true,
-        });
-      },
-      onSuccess: () => {
-        toast({
-          position: "top",
-          title: "Registro creado",
-          description: "Hemos registrado sus datos.",
-          status: "success",
-          duration: 9000,
-          isClosable: true,
-        });
-      },
-    });
+    checkFields();
+    if (isValidName && isValidSurname && isValidCellphone &&
+        isValidDocument && isValidBirthdate && isValidRuc && isValidEmail)
+    {
+      createMember(values, {
+        onError: (error) => {
+          const errorMessage =
+              error.message || "Ocurrió un error durante el registro.";
+          toast({
+            position: "top",
+            title: "Error durante el registro",
+            description: errorMessage,
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+        },
+        onSuccess: () => {
+          toast({
+            position: "top",
+            title: "Registro creado",
+            description: "Hemos registrado sus datos.",
+            status: "success",
+            duration: 9000,
+            isClosable: true,
+          });
+        },
+      });
+    }
   };
+
+  const checkFields = () => {
+    requiredFields.map((field) => {
+      for (const [key, value] of Object.entries(values)) {
+        if (key === field && value === "") {
+          console.log("It's empty");
+          switch (field) {
+            case 'name': setIsValidName(false); break;
+            case 'surname': setIsValidSurname(false); break;
+            case 'birthdate': setIsValidBirthdate(false); break;
+            case 'document': setIsValidDocument(false); break;
+            case 'email': setIsValidEmail(false); break;
+            case 'cellphone': setIsValidCellphone(false);
+            console.log("isValidCellphone :: ", isValidCellphone); break;
+            case 'ruc': setIsValidRuc(false); break;
+            default: break;
+          }
+        } else if (key === field && value !== "") {
+          console.log("It's ok now :D");
+          switch (field) {
+            case 'name': setIsValidName(true); break;
+            case 'surname': setIsValidSurname(true); break;
+            case 'birthdate': setIsValidBirthdate(true); break;
+            case 'document': setIsValidDocument(true); break;
+            case 'email': setIsValidEmail(true); break;
+            case 'cellphone': setIsValidCellphone(true); console.log("isValidCellphone :: ", isValidCellphone);
+            break;
+            case 'ruc': setIsValidRuc(true); break;
+            default: break;
+          }
+        }
+      }
+    })
+
+    console.log("isValidName && isValidSurname && isValidCellphone && \n" +
+        "        isValidDocument && isValidBirthdate && isValidRuc && isValidEmail ",
+        isValidName, isValidSurname, isValidCellphone, isValidDocument, isValidBirthdate, isValidRuc, isValidEmail)
+  }
+
   return (
     <form onSubmit={handleSubmit}>
       <Input
@@ -97,7 +148,7 @@ export default function RegisterForm() {
               name="name"
               value={values.name}
               onChange={updateValue}
-              isRequired
+              className={isValidName ? null : 'invalidField'}
             />
           </FormControl>
           <FormControl id="surname" ml={{ md: 4 }} mt={{ base: 4, md: 0 }}>
@@ -108,7 +159,7 @@ export default function RegisterForm() {
               name="surname"
               value={values.surname}
               onChange={updateValue}
-              isRequired
+              className={isValidSurname ? null : 'invalidField'}
             />
           </FormControl>
         </Box>
@@ -120,17 +171,17 @@ export default function RegisterForm() {
             name="document"
             value={values.document}
             onChange={updateValue}
-            isRequired
+            className={isValidDocument ? null : 'invalidField'}
           />
         </FormControl>
         <FormControl id="birthdate">
           <FormLabel htmlFor="birthdate">Fecha de Nacimiento</FormLabel>
-          <BirthDatePicker
-            id="birthdate"
-            selectedDate={values.birthdate}
-            onChange={(date) => updateValueByName("birthdate", date)}
-            isRequired
-          />
+            <BirthDatePicker
+              id="birthdate"
+              selectedDate={values.birthdate}
+              onChange={(date) => updateValueByName("birthdate", date)}
+              className={isValidBirthdate ? null : 'invalidField'}
+            />
         </FormControl>
         <FormControl id="sexo">
           <FormLabel>Sexo</FormLabel>
@@ -191,6 +242,7 @@ export default function RegisterForm() {
             name="email"
             value={values.email}
             onChange={updateValue}
+            className={isValidEmail ? null : 'invalidField'}
           />
         </FormControl>
         <FormControl id="cellphone">
@@ -201,6 +253,7 @@ export default function RegisterForm() {
             name="cellphone"
             value={values.cellphone}
             onChange={updateValue}
+            className={isValidCellphone ? null : 'invalidField'}
           />
         </FormControl>
         <Divider></Divider>
@@ -222,7 +275,7 @@ export default function RegisterForm() {
             name="ruc"
             value={values.ruc}
             onChange={updateValue}
-            isRequired
+            className={isValidRuc ? null : 'invalidField'}
           />
           <FormHelperText>
             El único requisito para asociarte es contar con un RUC activo.
