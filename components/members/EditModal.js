@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {
   Modal,
   ModalOverlay,
@@ -18,15 +18,22 @@ import {
   FormHelperText,
   Divider,
   Box, useToast
-} from "@chakra-ui/react";
-import useForm from "../../utils/useForm";
-import {Form, Formik, Field} from "formik";
-import BirthDatePicker from "components/ui/BirthDatePicker";
-import useEditMember from "../../utils/useEditMember";
+} from '@chakra-ui/react';
+import useForm from '../../utils/useForm';
+import {Form, Formik, Field} from 'formik';
+import BirthDatePicker from 'components/ui/BirthDatePicker';
+import useEditMember from '../../utils/useEditMember';
 
 export default function EditModal({ closeModal, member }) {
   const toast = useToast();
   const { isLoading, mutate: editMember } = useEditMember();
+  const [ isValidName, setIsValidName ] = useState(true);
+  const [ isValidSurname, setIsValidSurname ] = useState(true);
+  const [ isValidBirthdate, setIsValidBirthdate ] = useState(true);
+  const [ isValidCellphone, setIsValidCellphone ] = useState(true);
+  const [ isValidEmail, setIsValidEmail ] = useState(true);
+  const [ isValidDocument, setIsValidDocument ] = useState(true);
+  const [ isValidRuc, setIsValidRuc ] = useState(true);
 
   const { values, updateValue } = useForm({
     name: member?.name || "",
@@ -46,37 +53,87 @@ export default function EditModal({ closeModal, member }) {
     website: member?.website || "",
     anualTurnover: member?.anualTurnover || ""
   });
+  let isFieldValid = true;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    editMember({ document: member.national_id, values: values }, {
-      onError: (error) => {
-        console.log(error.message);
-        const errorMessage = "Ocurrió un error al editar los datos del usuario.";
-        toast({
-          position: "top",
-          title: "Error al editar los datos del usuario.",
-          description: errorMessage,
-          status: "error",
-          duration: 7000,
-          isClosable: true,
-        });
-      },
-      onSuccess: () => {
-        toast({
-          position: "top",
-          title: "Datos modificados correctamente",
-          description: "Se ha modificado correctamente los datos del usuario " + `${member.national_id}`,
-          status: "success",
-          duration: 7000,
-          isClosable: true,
-        });
-      },
-    });
-    setTimeout(() => {
-      closeModal();
-    }, 5000);
+    const isValid = checkFields();
+    if (isValid) {
+      editMember({ document: member.national_id, values: values }, {
+        onError: (error) => {
+          console.log(error.message);
+          const errorMessage = "Ocurrió un error al editar los datos del usuario.";
+          toast({
+            position: "top",
+            title: "Error al editar los datos del usuario.",
+            description: errorMessage,
+            status: "error",
+            duration: 7000,
+            isClosable: true,
+          });
+        },
+        onSuccess: () => {
+          toast({
+            position: "top",
+            title: "Datos modificados correctamente",
+            description: "Se ha modificado correctamente los datos del usuario " + `${member.national_id}`,
+            status: "success",
+            duration: 7000,
+            isClosable: true,
+          });
+          setTimeout(() => {
+            closeModal();
+          }, 5000);
+        },
+      });
+    }
   };
+
+  const checkFields = () => {
+    if (values.name === "" || values.name === undefined) {
+      setIsValidName(false);
+      isFieldValid = false;
+    } else {
+      setIsValidName(true);
+    }
+    if (values.surname === "" || values.surname === undefined) {
+      setIsValidSurname(false);
+      isFieldValid = false;
+    } else {
+      setIsValidSurname(true);
+    }
+    if (values.birthdate === "" || values.birthdate === undefined) {
+      setIsValidBirthdate(false);
+      isFieldValid = false;
+    } else {
+      setIsValidBirthdate(true);
+    }
+    if (values.document === "" || values.document === undefined) {
+      setIsValidDocument(false);
+      isFieldValid = false;
+    } else {
+      setIsValidDocument(true);
+    }
+    if (values.cellphone === "" || values.cellphone === undefined) {
+      setIsValidCellphone(false);
+      isFieldValid = false;
+    } else {
+      setIsValidCellphone(true);
+    }
+    if (values.ruc === "" || values.ruc === undefined) {
+      setIsValidRuc(false);
+      isFieldValid = false;
+    } else {
+      setIsValidRuc(true);
+    }
+    if (values.email === "" || values.email === undefined) {
+      setIsValidEmail(false);
+      isFieldValid = false;
+    } else {
+      setIsValidEmail(true);
+    }
+    return isFieldValid;
+  }
 
   return (
     <>
@@ -97,7 +154,10 @@ export default function EditModal({ closeModal, member }) {
                         {({ field, form }) => (
                           <FormControl id={"name"} onChange={updateValue}>
                             <FormLabel>Nombres</FormLabel>
-                            <Input {...field} id="name" isRequired={true}/>
+                            <Input {...field}
+                                   id="name"
+                                   isRequired={true}
+                                   className={isValidName ? null : 'invalidField'}/>
                           </FormControl>
                         )}
                       </Field>
@@ -105,7 +165,10 @@ export default function EditModal({ closeModal, member }) {
                         {({ field, form }) => (
                           <FormControl id={"surname"} onChange={updateValue}>
                             <FormLabel>Apellidos</FormLabel>
-                            <Input {...field} id="surname" isRequired={true}/>
+                            <Input {...field}
+                                   id="surname"
+                                   isRequired={true}
+                                   className={isValidSurname ? null : 'invalidField'}/>
                           </FormControl>
                         )}
                       </Field>
@@ -113,7 +176,10 @@ export default function EditModal({ closeModal, member }) {
                         {({ field, form}) => (
                           <FormControl id={"document"} onChange={updateValue}>
                             <FormLabel>Cédula</FormLabel>
-                            <Input {...field} id="document" isRequired={true}/>
+                            <Input {...field}
+                                   id="document"
+                                   isRequired={true}
+                                   className={isValidDocument ? null : 'invalidField'}/>
                           </FormControl>
                         )}
                       </Field>
@@ -125,6 +191,7 @@ export default function EditModal({ closeModal, member }) {
                                 {...field}
                                 id="birthdate"
                                 isRequired={true}
+                                className={isValidBirthdate ? null : 'invalidField'}
                             />
                           </FormControl>
                         )}
@@ -180,7 +247,10 @@ export default function EditModal({ closeModal, member }) {
                         {({ field, form}) => (
                           <FormControl id={"email"} onChange={updateValue}>
                             <FormLabel>E-mail</FormLabel>
-                            <Input {...field} type="email" id="email"/>
+                            <Input {...field}
+                                   type="email"
+                                   id="email"
+                                   className={isValidEmail ? null : 'invalidField'}/>
                           </FormControl>
                         )}
                       </Field>
@@ -188,7 +258,9 @@ export default function EditModal({ closeModal, member }) {
                         {({ field, form}) => (
                           <FormControl id={"cellphone"} onChange={updateValue}>
                             <FormLabel>Celular</FormLabel>
-                            <Input {...field} name="cellphone"/>
+                            <Input {...field}
+                                   name="cellphone"
+                                   className={isValidCellphone ? null : 'invalidField'}/>
                           </FormControl>
                         )}
                       </Field>
@@ -206,7 +278,10 @@ export default function EditModal({ closeModal, member }) {
                         {({ field, form}) => (
                           <FormControl id={"ruc"} onChange={updateValue}>
                             <FormLabel>RUC</FormLabel>
-                            <Input {...field} name="ruc" isRequired={true}/>
+                            <Input {...field}
+                                   name="ruc"
+                                   isRequired={true}
+                                   className={isValidRuc ? null : 'invalidField'}/>
                             <FormHelperText>
                               El único requisito para asociarte es contar con un RUC activo.
                             </FormHelperText>
