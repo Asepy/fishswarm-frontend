@@ -23,7 +23,6 @@ import useCreateMember from "utils/useCreateMember";
 export default function RegisterForm() {
   const toast = useToast();
   const { isLoading, mutate: createMember } = useCreateMember();
-  const [ requiredFields ] = useState(['name', 'surname', 'document', 'email', 'cellphone', 'birthdate', 'ruc']);
   const [ isValidName, setIsValidName ] = useState(true);
   const [ isValidSurname, setIsValidSurname ] = useState(true);
   const [ isValidBirthdate, setIsValidBirthdate ] = useState(true);
@@ -31,7 +30,7 @@ export default function RegisterForm() {
   const [ isValidEmail, setIsValidEmail ] = useState(true);
   const [ isValidDocument, setIsValidDocument ] = useState(true);
   const [ isValidRuc, setIsValidRuc ] = useState(true);
-  const { values, updateValue, updateValueByName } = useForm({
+  const { values, resetValues, updateValue, updateValueByName } = useForm({
     name: "",
     surname: "",
     document: "",
@@ -50,17 +49,34 @@ export default function RegisterForm() {
     facturacion: "",
     tarroMiel: "",
   });
+  const initialState = {
+    name: "",
+    surname: "",
+    document: "",
+    birthdate: "",
+    sexo: "",
+    departamento: "",
+    city: "",
+    email: "",
+    cellphone: "",
+    razonsocial: "",
+    nfantasia: "",
+    ruc: "",
+    rubro: "",
+    empleados: 0,
+    sitioweb: "",
+    facturacion: "",
+    tarroMiel: "",
+  };
+  let isFieldValid = true;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    checkFields();
-    if (isValidName && isValidSurname && isValidCellphone &&
-        isValidDocument && isValidBirthdate && isValidRuc && isValidEmail)
-    {
+    const isValid = checkFields();
+    if (isValid) {
       createMember(values, {
         onError: (error) => {
-          const errorMessage =
-              error.message || "Ocurrió un error durante el registro.";
+          const errorMessage = error.message || "Ocurrió un error durante el registro.";
           toast({
             position: "top",
             title: "Error durante el registro",
@@ -81,45 +97,59 @@ export default function RegisterForm() {
           });
         },
       });
+      handleFormReset();
     }
   };
 
   const checkFields = () => {
-    requiredFields.map((field) => {
-      for (const [key, value] of Object.entries(values)) {
-        if (key === field && value === "") {
-          console.log("It's empty");
-          switch (field) {
-            case 'name': setIsValidName(false); break;
-            case 'surname': setIsValidSurname(false); break;
-            case 'birthdate': setIsValidBirthdate(false); break;
-            case 'document': setIsValidDocument(false); break;
-            case 'email': setIsValidEmail(false); break;
-            case 'cellphone': setIsValidCellphone(false);
-            console.log("isValidCellphone :: ", isValidCellphone); break;
-            case 'ruc': setIsValidRuc(false); break;
-            default: break;
-          }
-        } else if (key === field && value !== "") {
-          console.log("It's ok now :D");
-          switch (field) {
-            case 'name': setIsValidName(true); break;
-            case 'surname': setIsValidSurname(true); break;
-            case 'birthdate': setIsValidBirthdate(true); break;
-            case 'document': setIsValidDocument(true); break;
-            case 'email': setIsValidEmail(true); break;
-            case 'cellphone': setIsValidCellphone(true); console.log("isValidCellphone :: ", isValidCellphone);
-            break;
-            case 'ruc': setIsValidRuc(true); break;
-            default: break;
-          }
-        }
-      }
-    })
+    if (values.name === "" || values.name === undefined) {
+      setIsValidName(false);
+      isFieldValid = false;
+    } else {
+      setIsValidName(true);
+    }
+    if (values.surname === "" || values.surname === undefined) {
+      setIsValidSurname(false);
+      isFieldValid = false;
+    } else {
+      setIsValidSurname(true);
+    }
+    if (values.birthdate === "" || values.birthdate === undefined) {
+      setIsValidBirthdate(false);
+      isFieldValid = false;
+    } else {
+      setIsValidBirthdate(true);
+    }
+    if (values.document === "" || values.document === undefined) {
+      setIsValidDocument(false);
+      isFieldValid = false;
+    } else {
+      setIsValidDocument(true);
+    }
+    if (values.cellphone === "" || values.cellphone === undefined) {
+      setIsValidCellphone(false);
+      isFieldValid = false;
+    } else {
+      setIsValidCellphone(true);
+    }
+    if (values.ruc === "" || values.ruc === undefined) {
+      setIsValidRuc(false);
+      isFieldValid = false;
+    } else {
+      setIsValidRuc(true);
+    }
+    if (values.email === "" || values.email === undefined) {
+      setIsValidEmail(false);
+      isFieldValid = false;
+    } else {
+      setIsValidEmail(true);
+    }
+    return isFieldValid;
+  }
 
-    console.log("isValidName && isValidSurname && isValidCellphone && \n" +
-        "        isValidDocument && isValidBirthdate && isValidRuc && isValidEmail ",
-        isValidName, isValidSurname, isValidCellphone, isValidDocument, isValidBirthdate, isValidRuc, isValidEmail)
+  const handleFormReset = () => {
+    isFieldValid = true;
+    resetValues(initialState);
   }
 
   return (
@@ -195,7 +225,6 @@ export default function RegisterForm() {
             <option value="Femenino">Femenino</option>
           </Select>
         </FormControl>
-
         <Box display={{ md: "flex" }}>
           <FormControl id="departmento">
             <FormLabel>Departamento</FormLabel>
