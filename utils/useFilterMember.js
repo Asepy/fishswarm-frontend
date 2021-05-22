@@ -1,14 +1,14 @@
-import React from "react";
-import { useQuery } from "react-query";
-import serialize from "./serialize";
+import React from 'react';
+import { useQuery, useQueryClient } from 'react-query';
+import serialize from './serialize';
 
 async function filterMember({ page, name, document }) {
   const queryParams = serialize({ page, name, document });
   const response = await fetch(`/api/members/filter?${queryParams}`, {
-    method: "GET",
+    method: 'GET',
     headers: {
-      "Content-Type": "application/json",
-    },
+      'Content-Type': 'application/json'
+    }
   });
   if (!response.ok) {
     const errorJson = await response.json();
@@ -17,15 +17,18 @@ async function filterMember({ page, name, document }) {
   return response.json();
 }
 
+export const FILTER_MEMBER_QUERY_ID = 'query:filter-members';
+export const FILTER_MEMBER_PAGED_QUERY_ID = 'query:filter-members-paginated';
+
 export default function useFilterMember({ page }, options = {}) {
-  return useQuery(["query:filter-members", page], () => filterMember({ page }));
+  return useQuery([FILTER_MEMBER_QUERY_ID, page], () => filterMember({ page }));
 }
 
 export function useFilterMemberPaginated(queryParams, options = {}) {
   const [page, setPage] = React.useState(1);
   const { name, document } = queryParams;
   const { data, ...restQuery } = useQuery(
-    ["query:filter-members-paginated", page, name, document],
+    [FILTER_MEMBER_PAGED_QUERY_ID, page, name, document],
     () => filterMember({ page, name, document }),
     { keepPreviousData: true }
   );
@@ -45,6 +48,6 @@ export function useFilterMemberPaginated(queryParams, options = {}) {
     setPage,
     previousPage,
     data,
-    ...restQuery,
+    ...restQuery
   };
 }

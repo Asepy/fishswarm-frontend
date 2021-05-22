@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Modal,
   ModalOverlay,
@@ -7,43 +7,48 @@ import {
   ModalFooter,
   VStack,
   Button,
-  Text, useToast
-} from "@chakra-ui/react";
-import useDeactivateMember from "/utils/useDeactivateMember";
+  Text,
+  useToast
+} from '@chakra-ui/react';
+import useDeactivateMember from '/utils/useDeactivateMember';
 
-export default function DeactivateModal({ document, closeModal, text = "¿Está seguro que desea desactivar al usuario?" }) {
+export default function DeactivateModal({
+  associate,
+  closeModal,
+  text = '¿Está seguro que desea desactivar al usuario?'
+}) {
   const toast = useToast();
-  const [content, setContent] = React.useState(text);
+  const [content] = React.useState(text);
   const { isLoading, mutate: deactivateMember } = useDeactivateMember();
 
   const handleDeactivate = async (e) => {
     e.preventDefault();
-    deactivateMember(document, {
+    deactivateMember(associate.id_number, {
       onError: (error) => {
-        const errorMessage = error.message || "Ocurrió un error al desactivar al usuario.";
+        const errorMessage =
+          error.message || 'Ocurrió un error al desactivar al usuario.';
         toast({
-          position: "top",
-          title: "Error al desactivar al usuario.",
+          position: 'top',
+          title: 'Error al desactivar al usuario.',
           description: errorMessage,
-          status: "error",
+          status: 'error',
           duration: 5000,
-          isClosable: true,
+          isClosable: true
         });
       },
       onSuccess: () => {
         toast({
-          position: "top",
-          title: "Usuario desactivado",
-          description: "Se ha desactivado al socio con CI "+`${document}`,
-          status: "success",
+          position: 'top',
+          title: 'Usuario desactivado',
+          description:
+            'Se ha desactivado al socio con CI ' + `${associate.national_id}`,
+          status: 'success',
           duration: 5000,
-          isClosable: true,
+          isClosable: true
         });
-      },
+        closeModal();
+      }
     });
-    setTimeout(() => {
-      closeModal();
-    }, 5000);
   };
 
   return (
@@ -59,14 +64,13 @@ export default function DeactivateModal({ document, closeModal, text = "¿Está 
             </VStack>
           </ModalBody>
           <ModalFooter>
-            <Button variant={"outline"}
-                    mr={3}
-                    onClick={closeModal}>
+            <Button variant={'outline'} mr={3} onClick={closeModal}>
               Cancelar
             </Button>
-            <Button colorScheme={"red"}
-                    onClick={handleDeactivate}
-                    isLoading={isLoading}>
+            <Button
+              colorScheme={'red'}
+              onClick={handleDeactivate}
+              isLoading={isLoading}>
               Desactivar
             </Button>
           </ModalFooter>

@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Button,
   Box,
@@ -28,25 +28,25 @@ import {
   Tag,
   Divider,
   useRadio,
-  useRadioGroup,
-} from "@chakra-ui/react";
+  useRadioGroup
+} from '@chakra-ui/react';
 
-import { AiOutlineUserDelete } from "react-icons/ai";
-import { FaEllipsisV } from "react-icons/fa";
-import { DeleteIcon, EditIcon, SearchIcon, CloseIcon } from "@chakra-ui/icons";
+import { AiOutlineUserDelete } from 'react-icons/ai';
+import { FaEllipsisV } from 'react-icons/fa';
+import { DeleteIcon, EditIcon, SearchIcon, CloseIcon } from '@chakra-ui/icons';
 
 import useFilterMember, {
-  useFilterMemberPaginated,
-} from "utils/useFilterMember";
+  useFilterMemberPaginated
+} from 'utils/useFilterMember';
 
-import isNumeric from "utils/isNumeric";
+import isNumeric from 'utils/isNumeric';
 
-import SkeletonLines from "components/ui/SkeletonLines";
-import ErrorAlert from "components/ui/ErrorAlert";
-import getUIMemberStatus from "utils/getUIMemberStatus";
-import { formatISODate } from "utils/formatDate";
-import EditModal from "./EditModal";
-import DeactivateModal from "./DeactivateModal";
+import SkeletonLines from 'components/ui/SkeletonLines';
+import ErrorAlert from 'components/ui/ErrorAlert';
+import getUIMemberStatus from 'utils/getUIMemberStatus';
+import { formatISODate } from 'utils/formatDate';
+import EditModal from './EditModal';
+import DeactivateModal from './DeactivateModal';
 
 const Loading = () => (
   <Flex justify="center" flexWrap="wrap">
@@ -63,9 +63,9 @@ const Loading = () => (
 export default function MemberList() {
   const [searchTerm, setSearchTerm] = React.useState();
   const [queryParams, setQueryParams] = React.useState({
-    name: "",
-    document: "",
-    status: "pending",
+    name: '',
+    document: '',
+    status: 'pending'
   });
   const {
     data,
@@ -75,11 +75,11 @@ export default function MemberList() {
     setPage,
     error,
     hasMore,
-    status,
+    status
   } = useFilterMemberPaginated(queryParams);
 
   const handleFilter = (event) => {
-    if (event.key === "Enter") {
+    if (event.key === 'Enter') {
       setPage(1);
       if (isNumeric(searchTerm)) {
         setQueryParams((old) => ({ document: searchTerm }));
@@ -91,8 +91,8 @@ export default function MemberList() {
 
   const handleClear = () => {
     setPage(1);
-    setSearchTerm("");
-    setQueryParams({ name: "", document: "", status: "pending" });
+    setSearchTerm('');
+    setQueryParams({ name: '', document: '', status: 'pending' });
   };
 
   if (error) {
@@ -116,7 +116,7 @@ export default function MemberList() {
             />
             <Input
               variant="outline"
-              type={"text"}
+              type={'text'}
               placeholder="Buscar por CI, Nombre, Apellido, Razón Social o RUC"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -150,10 +150,10 @@ export default function MemberList() {
               name="status"
               // defaultValue="pending"
               options={[
-                { value: "pending", label: "Pendiente" },
-                { value: "active", label: "Activo" },
-                { value: "inactive", label: "Inactivo" },
-                { value: "conditional", label: "Condicional" },
+                { value: 'pending', label: 'Pendiente' },
+                { value: 'active', label: 'Activo' },
+                { value: 'inactive', label: 'Inactivo' },
+                { value: 'conditional', label: 'Condicional' }
               ]}
             />
             <Button
@@ -161,8 +161,7 @@ export default function MemberList() {
               px={4}
               h="1.75rem"
               size="sm"
-              onClick={handleClear}
-            >
+              onClick={handleClear}>
               Limpiar
             </Button>
           </HStack>
@@ -207,14 +206,13 @@ function MembersTable({ error, status, data }) {
   if (error) {
     return <ErrorAlert>{error.message}</ErrorAlert>;
   }
-  if (status === "loading") {
+  if (status === 'loading') {
     return (
       <SkeletonLines
         thickness="20px"
         noOfLines={5}
         spacing="6"
-        mt={4}
-      ></SkeletonLines>
+        mt={4}></SkeletonLines>
     );
   }
 
@@ -257,20 +255,37 @@ function MembersTable({ error, status, data }) {
                   as={IconButton}
                   icon={<FaEllipsisV />}
                   variant="outline"
-                  aria-label="Opciones"
-                ></MenuButton>
+                  aria-label="Opciones"></MenuButton>
                 <MenuList>
-                  <MenuItem onClick={() => handleEdit(member)} icon={<EditIcon></EditIcon>}>Editar</MenuItem>
-                  <MenuItem onClick={() => handleDeactivate(member)} icon={<AiOutlineUserDelete />}>Desactivar</MenuItem>
+                  <MenuItem
+                    onClick={() => handleEdit(member)}
+                    icon={<EditIcon></EditIcon>}>
+                    Editar
+                  </MenuItem>
+                  <MenuItem
+                    isDisabled={member.status === 'INACTIVE'}
+                    onClick={() => handleDeactivate(member)}
+                    icon={<AiOutlineUserDelete />}>
+                    Desactivar
+                  </MenuItem>
                 </MenuList>
               </Menu>
             </Td>
           </Tr>
         ))}
-        { showEditModal && <EditModal closeModal={() => setShowEditModal(false)} member={associate}/> }
-        { showDeactivateModal && <DeactivateModal document={associate.national_id}
-                                                  closeModal={() => setShowDeactivateModal(false)}
-                                                  text="¿Está seguro que desea desactivar al usuario?"/>}
+        {showEditModal && (
+          <EditModal
+            closeModal={() => setShowEditModal(false)}
+            member={associate}
+          />
+        )}
+        {showDeactivateModal && (
+          <DeactivateModal
+            associate={associate}
+            closeModal={() => setShowDeactivateModal(false)}
+            text="¿Está seguro que desea desactivar al usuario?"
+          />
+        )}
       </Tbody>
     </Table>
   );
@@ -300,16 +315,16 @@ function SimplePaginator({
         <Text flexShrink="0" mr={8}>
           <Text fontWeight="bold" as="span">
             {totalElements}
-          </Text>{" "}
+          </Text>{' '}
           resultados
         </Text>
         <Flex alignItems="center">
           <Text flexShrink="0" mr={8}>
-            Página{" "}
+            Página{' '}
             <Text fontWeight="bold" as="span">
               {pageIndex}
-            </Text>{" "}
-            de{" "}
+            </Text>{' '}
+            de{' '}
             <Text fontWeight="bold" as="span">
               {!hasMore ? pageIndex : pageTotal}
             </Text>
@@ -321,8 +336,7 @@ function SimplePaginator({
             onClick={previousPage}
             isDisabled={pageIndex === 1}
             size="sm"
-            variant="outline"
-          >
+            variant="outline">
             Anterior
           </Button>
           <Button
@@ -330,8 +344,7 @@ function SimplePaginator({
             isDisabled={!hasMore}
             ml={2}
             size="sm"
-            variant="outline"
-          >
+            variant="outline">
             Siguiente
           </Button>
         </Flex>
@@ -344,13 +357,13 @@ function SimplePaginator({
 function CardRadioGroup({
   options,
   name,
-  defaultValue = "",
-  onChange = console.log,
+  defaultValue = '',
+  onChange = console.log
 }) {
   const { getRootProps, getRadioProps } = useRadioGroup({
     name,
     defaultValue,
-    onChange,
+    onChange
   });
 
   const group = getRootProps();
@@ -386,16 +399,15 @@ function RadioCard(props) {
         borderRadius="md"
         boxShadow="md"
         _checked={{
-          bg: "teal.400",
-          color: "white",
-          borderColor: "teal.400",
+          bg: 'teal.400',
+          color: 'white',
+          borderColor: 'teal.400'
         }}
         _focus={{
-          boxShadow: "outline",
+          boxShadow: 'outline'
         }}
         px={2}
-        py={1}
-      >
+        py={1}>
         {props.children}
       </Box>
     </Box>
