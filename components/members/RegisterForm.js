@@ -14,13 +14,13 @@ import {
   Box,
   Tag,
   TagLabel,
-  useToast,
+  useToast
 } from "@chakra-ui/react";
 import BirthDatePicker from "components/ui/BirthDatePicker";
 import useForm from "utils/useForm";
 import useCreateMember from "utils/useCreateMember";
 
-export default function RegisterForm() {
+export default function RegisterForm(props) {
   const toast = useToast();
   const { isLoading, mutate: createMember } = useCreateMember();
 
@@ -41,22 +41,24 @@ export default function RegisterForm() {
     empleados: 0,
     sitioweb: "",
     facturacion: "",
-    tarroMiel: "",
+    tarroMiel: ""
   });
+  const [cities, setCities] = React.useState([]);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     createMember(values, {
       onError: (error) => {
         const errorMessage =
           error.message || "Ocurrió un error durante el registro.";
+        console.error({ errorMessage });
         toast({
           position: "top",
           title: "Error durante el registro",
           description: errorMessage,
           status: "error",
           duration: 9000,
-          isClosable: true,
+          isClosable: true
         });
       },
       onSuccess: () => {
@@ -66,11 +68,17 @@ export default function RegisterForm() {
           description: "Hemos registrado sus datos.",
           status: "success",
           duration: 9000,
-          isClosable: true,
+          isClosable: true
         });
-      },
+      }
     });
   };
+  const onChangeDepartment = (e) => {
+    updateValue(e);
+    const selectedDep = e.target.value;
+    setCities(props.citiesByDep[selectedDep]);
+  };
+  const { departments = [] } = props;
   return (
     <form onSubmit={handleSubmit}>
       <Input
@@ -138,8 +146,7 @@ export default function RegisterForm() {
             placeholder="Sexo"
             name="sexo"
             value={values.sexo}
-            onChange={updateValue}
-          >
+            onChange={updateValue}>
             <option value="Masculino">Masculino</option>
             <option value="Femenino">Femenino</option>
           </Select>
@@ -152,35 +159,23 @@ export default function RegisterForm() {
               placeholder="Seleccione departmento"
               name="departamento"
               value={values.departamento}
-              onChange={updateValue}
-            >
-              <option value={"Capital"}>Capital</option>
-              <option value={"Concepción"}>Concepción</option>
-              <option value={"San Pedro"}>Capital</option>
-              <option value={"Coordillera"}>Coordillera</option>
-              <option value={"Guairá"}>Guairá</option>
-              <option value={"Caaguazú"}>Caaguazú</option>
-              <option value={"Caazapá"}>Caazapá</option>
-              <option value={"Itapúa"}>Itapúa</option>
-              <option value={"Misiones"}>Misiones</option>
-              <option value={"Paraguarí"}>Paraguarí</option>
-              <option value={"Alto Paraná"}>Alto Paraná</option>
-              <option value={"Central"}>Central</option>
-              <option value={"Ñeembucú"}>Ñeembucú</option>
-              <option value={"Amambay"}>Amambay</option>
-              <option value={"Canindeyú"}>Canindeyú</option>
-              <option value={"Pdte. Hayes"}>Pdte. Hayes</option>
-              <option value={"Alto Paraguay"}>Alto Paraguay</option>
+              onChange={onChangeDepartment}>
+              {departments.map((d) => (
+                <option key={d.id} value={d.id}>
+                  {d.name}
+                </option>
+              ))}
             </Select>
           </FormControl>
           <FormControl id="city" ml={{ md: 4 }} mt={{ base: 4, md: 0 }}>
             <FormLabel>Ciudad</FormLabel>
-            <Input
-              type="text"
-              name="city"
-              value={values.city}
-              onChange={updateValue}
-            />
+            <Select name="cityId" value={values.city} onChange={updateValue}>
+              {cities.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.name}
+                </option>
+              ))}
+            </Select>
           </FormControl>
         </Box>
         <FormControl id="email">
@@ -276,8 +271,7 @@ export default function RegisterForm() {
           <Select
             name="facturacion"
             value={values.facturacion}
-            onChange={updateValue}
-          >
+            onChange={updateValue}>
             <option value={"Menor o igual a 650 millones Gs."}>
               Menor o igual a 650 millones Gs.
             </option>
@@ -310,8 +304,7 @@ export default function RegisterForm() {
           mt="4"
           size="lg"
           type="submit"
-          isLoading={isLoading}
-        >
+          isLoading={isLoading}>
           Registrarse
         </Button>
       </Stack>
