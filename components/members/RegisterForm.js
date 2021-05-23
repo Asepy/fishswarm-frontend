@@ -19,6 +19,7 @@ import {
 import BirthDatePicker from "components/ui/BirthDatePicker";
 import useForm from "utils/useForm";
 import useCreateMember from "utils/useCreateMember";
+import useCitiesByDep from "utils/useCitiesByDep";
 
 export default function RegisterForm(props) {
   const toast = useToast();
@@ -43,7 +44,10 @@ export default function RegisterForm(props) {
     facturacion: "",
     tarroMiel: ""
   });
-  const [cities, setCities] = React.useState([]);
+  const [selectedDepId, setSelectedDepId] = React.useState();
+  const { data: cities } = useCitiesByDep({
+    depId: selectedDepId
+  });
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -75,8 +79,8 @@ export default function RegisterForm(props) {
   };
   const onChangeDepartment = (e) => {
     updateValue(e);
-    const selectedDep = e.target.value;
-    setCities(props.citiesByDep[selectedDep]);
+    const depId = e.target.value;
+    setSelectedDepId(depId);
   };
   const { departments = [] } = props;
   return (
@@ -167,10 +171,18 @@ export default function RegisterForm(props) {
               ))}
             </Select>
           </FormControl>
-          <FormControl id="city" ml={{ md: 4 }} mt={{ base: 4, md: 0 }}>
+          <FormControl
+            isDisabled={!cities || cities.length === 0}
+            id="city"
+            ml={{ md: 4 }}
+            mt={{ base: 4, md: 0 }}>
             <FormLabel>Ciudad</FormLabel>
-            <Select name="cityId" value={values.city} onChange={updateValue}>
-              {cities.map((c) => (
+            <Select
+              placeholder="Seleccione ciudad"
+              name="cityId"
+              value={values.cityId}
+              onChange={updateValue}>
+              {cities?.map((c) => (
                 <option key={c.id} value={c.id}>
                   {c.name}
                 </option>
