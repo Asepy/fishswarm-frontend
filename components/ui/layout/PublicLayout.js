@@ -1,18 +1,18 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { useRouter } from "next/router";
-import { Link as NextChakraLink } from "@trevorblades/next-chakra-link";
 import {
   Flex,
   Stack,
   useDisclosure,
   IconButton,
   Collapse,
-  useColorModeValue,
+  useColorModeValue
 } from "@chakra-ui/react";
 import { CloseIcon, HamburgerIcon } from "@chakra-ui/icons";
 import Container from "components/ui/Container";
 import Logo from "components/ui/Logo";
+import InternalLink from "../InternalLink";
 
 export default function PublicLayout({ children }) {
   const { isOpen, onToggle } = useDisclosure();
@@ -25,8 +25,7 @@ export default function PublicLayout({ children }) {
         justify="center"
         align="center"
         py={6}
-        backgroundColor="screencase"
-      >
+        backgroundColor="screencase">
         <Container>
           <Flex justify="space-between">
             <a href="https://asepy.org">
@@ -68,9 +67,8 @@ function MobileNav() {
           justify={"space-between"}
           align={"left"}
           _hover={{
-            textDecoration: "none",
-          }}
-        >
+            textDecoration: "none"
+          }}>
           Asociáte
         </Flex>
         <Flex
@@ -79,9 +77,8 @@ function MobileNav() {
           justify={"space-between"}
           align={"left"}
           _hover={{
-            textDecoration: "none",
-          }}
-        >
+            textDecoration: "none"
+          }}>
           ¿Ya Soy Socio?
         </Flex>
       </Stack>
@@ -97,8 +94,7 @@ const DesktopNav = () => {
       justify={["center", "space-between", "flex-end", "flex-end"]}
       direction={["column", "row", "row", "row"]}
       display={{ base: "none", md: "flex" }}
-      pt={[4, 4, 0, 0]}
-    >
+      pt={[4, 4, 0, 0]}>
       <HeaderLink href="/">Asociáte</HeaderLink>
       <HeaderLink href="/search-member">¿Soy Socio?</HeaderLink>
     </Stack>
@@ -112,23 +108,22 @@ function HeaderLink({ href, children, ...rest }) {
 
   const selected = router.pathname === href;
   return (
-    <NextChakraLink
+    <InternalLink
       href={href}
       py="2"
       px="4"
       _hover={{
-        bg: useColorModeValue("gray.100", "gray.900"),
+        bg: useColorModeValue("gray.100", "gray.900")
       }}
       borderRadius="md"
       bg={selected ? useColorModeValue("gray.100", "gray.900") : "inherit"}
-      {...rest}
-    >
+      {...rest}>
       {children}
-    </NextChakraLink>
+    </InternalLink>
   );
 }
 
 HeaderLink.propTypes = {
   href: PropTypes.string.isRequired,
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node.isRequired
 };
