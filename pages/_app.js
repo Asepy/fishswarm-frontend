@@ -1,11 +1,10 @@
-import React from "react";
-import Head from "next/head";
-import { ChakraProvider } from "@chakra-ui/react";
-import { QueryClient, QueryClientProvider } from "react-query";
-import customTheme from "styles/theme";
-import "react-datepicker/dist/react-datepicker.css";
-import "styles/react-datepicker.css";
-import "components/members/RegisterForm.css";
+import React from 'react';
+import Head from 'next/head';
+import { ChakraProvider } from '@chakra-ui/react';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import customTheme from 'styles/theme';
+import 'react-datepicker/dist/react-datepicker.css';
+import 'styles/react-datepicker.css';
 
 // Create a client
 const queryClient = new QueryClient();
