@@ -1,17 +1,16 @@
-import React from "react";
-import formatDate from "./formatDate";
+import React from 'react';
 
 async function postMemberToApi(newMember) {
-  const response = await fetch("/api/createMember", {
-    method: "POST",
+  const response = await fetch('/api/createMember', {
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json'
     },
     body: JSON.stringify({
       ...newMember,
       cityId: 1, // TODO en duro por ahora
-      birthdate: formatDate(newMember.birthdate),
-    }),
+      birthdate: newMember.birthdate
+    })
   });
   if (!response.ok) {
     const errorJson = await response.json();

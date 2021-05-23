@@ -24,9 +24,7 @@ import {
 import useForm from '../../utils/useForm';
 import { Form, Formik, Field } from 'formik';
 import * as Yup from 'yup';
-import BirthDatePicker from 'components/ui/BirthDatePicker';
 import useEditMember from '../../utils/useEditMember';
-import { parse, isDate } from 'date-fns';
 
 export default function EditModal({ closeModal, member }) {
   const toast = useToast();
@@ -173,11 +171,7 @@ export default function EditModal({ closeModal, member }) {
                             <FormLabel htmlFor="birthdate">
                               Fecha de Nacimiento
                             </FormLabel>
-                            <BirthDatePicker
-                              dateFormat="yyyy-MM-dd"
-                              id="birthdate"
-                              onChange={() => parseS}
-                            />
+                            <Input {...field} id="birthdate" type="date" />
                             <FormErrorMessage>
                               {form.errors.birthdate}
                             </FormErrorMessage>
@@ -288,24 +282,22 @@ export default function EditModal({ closeModal, member }) {
                           </FormControl>
                         )}
                       </Field>
-                      <HStack spacing="4">
-                        <Field name="businessName">
-                          {({ field, form }) => (
-                            <FormControl id={'businessName'}>
-                              <FormLabel>Razón Social</FormLabel>
-                              <Input {...field} name="businessName" />
-                            </FormControl>
-                          )}
-                        </Field>
-                        <Field name="fancyBusinessName">
-                          {({ field, form }) => (
-                            <FormControl id={'fancyBusinessName'}>
-                              <FormLabel>Nombre de Fantasía</FormLabel>
-                              <Input {...field} name="fancyBusinessName" />
-                            </FormControl>
-                          )}
-                        </Field>
-                      </HStack>
+                      <Field name="businessName">
+                        {({ field, form }) => (
+                          <FormControl id={'businessName'}>
+                            <FormLabel>Razón Social</FormLabel>
+                            <Input {...field} name="businessName" />
+                          </FormControl>
+                        )}
+                      </Field>
+                      <Field name="fancyBusinessName">
+                        {({ field, form }) => (
+                          <FormControl id={'fancyBusinessName'}>
+                            <FormLabel>Nombre de Fantasía</FormLabel>
+                            <Input {...field} name="fancyBusinessName" />
+                          </FormControl>
+                        )}
+                      </Field>
                       <Field name="sector">
                         {({ field, form }) => (
                           <FormControl id={'sector'}>
@@ -364,10 +356,10 @@ export default function EditModal({ closeModal, member }) {
                     </VStack>
                   </Stack>
                   <ModalFooter>
-                    <Button variant={'outline'} mr={3} onClick={closeModal}>
+                    <Button variant="outline" mr={3} onClick={closeModal}>
                       Cancelar
                     </Button>
-                    <Button type={'submit'} variant="primary">
+                    <Button type="submit" variant="primary">
                       Editar
                     </Button>
                   </ModalFooter>
