@@ -28,44 +28,30 @@ import {
   Tag,
   Divider,
   useRadio,
-  useRadioGroup,
+  useRadioGroup
 } from "@chakra-ui/react";
 
 import { AiOutlineUserDelete } from "react-icons/ai";
 import { FaEllipsisV } from "react-icons/fa";
-import { DeleteIcon, EditIcon, SearchIcon, CloseIcon } from "@chakra-ui/icons";
+import { EditIcon, SearchIcon, CloseIcon } from "@chakra-ui/icons";
 
-import useFilterMember, {
-  useFilterMemberPaginated,
-} from "utils/useFilterMember";
-
-import isNumeric from "utils/isNumeric";
+import { useFilterMemberPaginated } from "utils/useFilterMember";
 
 import SkeletonLines from "components/ui/SkeletonLines";
 import ErrorAlert from "components/ui/ErrorAlert";
+import EditModal from "./EditModal";
+import isNumeric from "utils/isNumeric";
+import DeactivateModal from "./DeactivateModal";
 import getUIMemberStatus from "utils/getUIMemberStatus";
 import { formatISODate } from "utils/formatDate";
-import EditModal from "./EditModal";
-import DeactivateModal from "./DeactivateModal";
-
-const Loading = () => (
-  <Flex justify="center" flexWrap="wrap">
-    <Spinner
-      thickness="4px"
-      speed="0.65s"
-      emptyColor="gray.200"
-      color="blue.800"
-      size="xl"
-    />
-  </Flex>
-);
+import useDepartments from "utils/useDepartments";
 
 export default function MemberList() {
   const [searchTerm, setSearchTerm] = React.useState();
   const [queryParams, setQueryParams] = React.useState({
     name: "",
     document: "",
-    status: "pending",
+    status: "pending"
   });
   const {
     data,
@@ -75,16 +61,17 @@ export default function MemberList() {
     setPage,
     error,
     hasMore,
-    status,
+    status
   } = useFilterMemberPaginated(queryParams);
+  const { departmentResult, citiesResult, updateDepartment } = useDepartments();
 
   const handleFilter = (event) => {
     if (event.key === "Enter") {
       setPage(1);
       if (isNumeric(searchTerm)) {
-        setQueryParams((old) => ({ document: searchTerm }));
+        setQueryParams(() => ({ document: searchTerm }));
       } else {
-        setQueryParams((old) => ({ name: searchTerm }));
+        setQueryParams(() => ({ name: searchTerm }));
       }
     }
   };
@@ -95,9 +82,8 @@ export default function MemberList() {
     setQueryParams({ name: "", document: "", status: "pending" });
   };
 
-  if (error) {
-    return <Text color="red.500">{error.message}</Text>;
-  }
+  const { data: departments, status: departmentStatus } = departmentResult;
+  const { data: cities, status: citiesStatus } = citiesResult;
 
   return (
     <>
@@ -110,10 +96,9 @@ export default function MemberList() {
         <PageSection spacing={4} px={6}>
           <Text fontSize="sm">Buscar Miembros</Text>
           <InputGroup size="sm">
-            <InputLeftElement
-              pointerEvents="none"
-              children={<SearchIcon color="gray.300" />}
-            />
+            <InputLeftElement pointerEvents="none">
+              <SearchIcon color="gray.300" />
+            </InputLeftElement>
             <Input
               variant="outline"
               type={"text"}
@@ -133,27 +118,45 @@ export default function MemberList() {
             </InputRightElement>
           </InputGroup>
           <HStack maxW="40%">
-            <Select size="xs" placeholder="Departamento">
-              <option value="" selected>
-                Departamento: Todos
-              </option>
+            <Select
+              size="xs"
+              placeholder={
+                departmentStatus === "loading"
+                  ? "Cargando..."
+                  : "Departamento: Todos"
+              }
+              isDisabled={!departments}
+              onChange={updateDepartment}
+            >
+              {departments?.map((d) => (
+                <option key={d.id} value={d.id}>
+                  {d.name}
+                </option>
+              ))}
             </Select>
-            <Select size="xs" placeholder="Ciudad">
-              <option selected value="">
-                Ciudad: Todos
-              </option>
+            <Select
+              size="xs"
+              placeholder={
+                citiesStatus === "loading" ? "Cargando..." : "Ciudad: Todos"
+              }
+              isDisabled={!cities}
+            >
+              {cities?.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.name}
+                </option>
+              ))}
             </Select>
           </HStack>
           <Divider></Divider>
           <HStack justify="space-between">
             <CardRadioGroup
               name="status"
-              // defaultValue="pending"
               options={[
                 { value: "pending", label: "Pendiente" },
                 { value: "active", label: "Activo" },
                 { value: "inactive", label: "Inactivo" },
-                { value: "conditional", label: "Condicional" },
+                { value: "conditional", label: "Condicional" }
               ]}
             />
             <Button
@@ -365,12 +368,12 @@ function CardRadioGroup({
   options,
   name,
   defaultValue = "",
-  onChange = console.log,
+  onChange = () => {}
 }) {
   const { getRootProps, getRadioProps } = useRadioGroup({
     name,
     defaultValue,
-    onChange,
+    onChange
   });
 
   const group = getRootProps();
@@ -408,10 +411,10 @@ function RadioCard(props) {
         _checked={{
           bg: "teal.400",
           color: "white",
-          borderColor: "teal.400",
+          borderColor: "teal.400"
         }}
         _focus={{
-          boxShadow: "outline",
+          boxShadow: "outline"
         }}
         px={2}
         py={1}

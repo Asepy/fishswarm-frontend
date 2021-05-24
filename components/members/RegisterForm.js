@@ -15,12 +15,14 @@ import {
   Tag,
   TagLabel,
   useToast,
+  Spinner
 } from "@chakra-ui/react";
 import BirthDatePicker from "components/ui/BirthDatePicker";
 import useForm from "utils/useForm";
 import useCreateMember from "utils/useCreateMember";
+import useDepartments from "utils/useDepartments";
 
-export default function RegisterForm() {
+export default function RegisterForm(props) {
   const toast = useToast();
   const { isLoading, mutate: createMember } = useCreateMember();
 
@@ -41,22 +43,29 @@ export default function RegisterForm() {
     empleados: 0,
     sitioweb: "",
     facturacion: "",
-    tarroMiel: "",
+    tarroMiel: ""
   });
+  const { citiesResult, updateDepartment } = useDepartments(
+    {
+      enabled: false
+    },
+    { staleTime: Infinity }
+  );
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     createMember(values, {
       onError: (error) => {
         const errorMessage =
           error.message || "Ocurrió un error durante el registro.";
+        console.error({ errorMessage });
         toast({
           position: "top",
           title: "Error durante el registro",
           description: errorMessage,
           status: "error",
           duration: 9000,
-          isClosable: true,
+          isClosable: true
         });
       },
       onSuccess: () => {
@@ -66,11 +75,17 @@ export default function RegisterForm() {
           description: "Hemos registrado sus datos.",
           status: "success",
           duration: 9000,
-          isClosable: true,
+          isClosable: true
         });
-      },
+      }
     });
   };
+  const onChangeDepartment = (e) => {
+    updateValue(e);
+    updateDepartment(e);
+  };
+  const { departments = [] } = props;
+  const { data: cities, status: citiesStatus } = citiesResult;
   return (
     <form onSubmit={handleSubmit}>
       <Input
@@ -152,35 +167,36 @@ export default function RegisterForm() {
               placeholder="Seleccione departmento"
               name="departamento"
               value={values.departamento}
-              onChange={updateValue}
+              onChange={onChangeDepartment}
             >
-              <option value={"Capital"}>Capital</option>
-              <option value={"Concepción"}>Concepción</option>
-              <option value={"San Pedro"}>Capital</option>
-              <option value={"Coordillera"}>Coordillera</option>
-              <option value={"Guairá"}>Guairá</option>
-              <option value={"Caaguazú"}>Caaguazú</option>
-              <option value={"Caazapá"}>Caazapá</option>
-              <option value={"Itapúa"}>Itapúa</option>
-              <option value={"Misiones"}>Misiones</option>
-              <option value={"Paraguarí"}>Paraguarí</option>
-              <option value={"Alto Paraná"}>Alto Paraná</option>
-              <option value={"Central"}>Central</option>
-              <option value={"Ñeembucú"}>Ñeembucú</option>
-              <option value={"Amambay"}>Amambay</option>
-              <option value={"Canindeyú"}>Canindeyú</option>
-              <option value={"Pdte. Hayes"}>Pdte. Hayes</option>
-              <option value={"Alto Paraguay"}>Alto Paraguay</option>
+              {departments.map((d) => (
+                <option key={d.id} value={d.id}>
+                  {d.name}
+                </option>
+              ))}
             </Select>
           </FormControl>
-          <FormControl id="city" ml={{ md: 4 }} mt={{ base: 4, md: 0 }}>
+          <FormControl
+            isDisabled={!cities || cities.length === 0}
+            id="cityId"
+            ml={{ md: 4 }}
+            mt={{ base: 4, md: 0 }}
+          >
             <FormLabel>Ciudad</FormLabel>
-            <Input
-              type="text"
-              name="city"
-              value={values.city}
+            <Select
+              placeholder={
+                citiesStatus === "loading" ? "Cargando..." : "Seleccione ciudad"
+              }
+              name="cityId"
+              value={values.cityId}
               onChange={updateValue}
-            />
+            >
+              {cities?.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.name}
+                </option>
+              ))}
+            </Select>
           </FormControl>
         </Box>
         <FormControl id="email">

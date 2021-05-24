@@ -1,14 +1,6 @@
 function postMember(newMember) {
-  const {
-    name,
-    document,
-    surname,
-    birthdate,
-    cellphone,
-    email,
-    ruc,
-    cityId = 1,
-  } = newMember;
+  const { name, document, surname, birthdate, cellphone, email, ruc, cityId } =
+    newMember;
   const requiredValues = {
     name,
     document,
@@ -17,7 +9,7 @@ function postMember(newMember) {
     cellphone,
     email,
     ruc,
-    cityId,
+    cityId
   };
   const body = JSON.stringify(requiredValues);
   console.log("sending", { body });
@@ -25,9 +17,9 @@ function postMember(newMember) {
     body,
     headers: {
       "Content-Type": "application/json",
-      "X-Api-Key": `${process.env.NEXT_PUBLIC_API_KEY}`,
+      "X-Api-Key": `${process.env.NEXT_PUBLIC_API_KEY}`
     },
-    method: "POST",
+    method: "POST"
   });
 }
 
