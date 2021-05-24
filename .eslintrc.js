@@ -2,14 +2,14 @@ module.exports = {
   root: true, // Make sure eslint picks up the config at the root of the directory
   parserOptions: {
     ecmaVersion: 2020, // Use the latest ecmascript standard
-    sourceType: 'module', // Allows using import/export statements
+    sourceType: "module", // Allows using import/export statements
     ecmaFeatures: {
       jsx: true // Enable JSX since we're using React
     }
   },
   settings: {
     react: {
-      version: 'detect' // Automatically detect the react version
+      version: "detect" // Automatically detect the react version
     }
   },
   env: {
@@ -18,14 +18,14 @@ module.exports = {
     node: true // Enables Node.js global variables and Node.js scoping.
   },
   extends: [
-    'eslint:recommended',
-    'plugin:react/recommended',
-    'plugin:prettier/recommended' // Make this the last element so prettier config overrides other formatting rules
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:prettier/recommended" // Make this the last element so prettier config overrides other formatting rules
   ],
   rules: {
-    'prettier/prettier': ['error', {}, { usePrettierrc: true }], // Use our .prettierrc file as source
-    'no-console': ['error', { allow: ['warn', 'error'] }],
-    'react/react-in-jsx-scope': 'off',
-    'react/prop-types': 'off'
+    "prettier/prettier": ["error", {}, { usePrettierrc: true }], // Use our .prettierrc file as source
+    "no-console": ["error", { allow: ["warn", "error"] }],
+    "react/react-in-jsx-scope": "off",
+    "react/prop-types": "off"
   }
 };

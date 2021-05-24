@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 import {
   Button,
@@ -15,68 +15,78 @@ import {
   Tag,
   TagLabel,
   useToast,
+  Spinner,
   FormErrorMessage
-} from '@chakra-ui/react';
-import useCreateMember from 'utils/useCreateMember';
-import { Field, Form, Formik } from 'formik';
-import * as Yup from 'yup';
+} from "@chakra-ui/react";
+import useCreateMember from "utils/useCreateMember";
+import { Field, Form, Formik } from "formik";
+import * as Yup from "yup";
+import useDepartments from "utils/useDepartments";
 
-export default function RegisterForm() {
+export default function RegisterForm(props) {
   const toast = useToast();
   const { isLoading, mutate: createMember } = useCreateMember();
   const initialState = {
-    name: '',
-    surname: '',
-    document: '',
-    birthdate: '',
-    sexo: '',
-    departamento: '',
-    city: '',
-    email: '',
-    cellphone: '',
-    razonsocial: '',
-    nfantasia: '',
-    ruc: '',
-    rubro: '',
+    name: "",
+    surname: "",
+    document: "",
+    birthdate: "",
+    sexo: "",
+    departamento: "",
+    city: "",
+    email: "",
+    cellphone: "",
+    razonsocial: "",
+    nfantasia: "",
+    ruc: "",
+    rubro: "",
     empleados: 0,
-    sitioweb: '',
-    facturacion: '',
-    tarroMiel: ''
+    sitioweb: "",
+    facturacion: "",
+    tarroMiel: ""
   };
 
   const CreateMemberSchema = Yup.object().shape({
-    name: Yup.string().required('El nombre es requerido'),
-    surname: Yup.string().required('El apellido es requerido'),
+    name: Yup.string().required("El nombre es requerido"),
+    surname: Yup.string().required("El apellido es requerido"),
     email: Yup.string()
-      .email('Email inválido')
-      .required('El email es requerido'),
-    birthdate: Yup.string().required('La fecha de nacimiento es requerida'),
-    document: Yup.string().required('La cédula es requerida'),
-    cellphone: Yup.string().required('El número de celular es requerido'),
-    ruc: Yup.string().required('El RUC es requerido')
+      .email("Email inválido")
+      .required("El email es requerido"),
+    birthdate: Yup.string().required("La fecha de nacimiento es requerida"),
+    document: Yup.string().required("La cédula es requerida"),
+    cellphone: Yup.string().required("El número de celular es requerido"),
+    ruc: Yup.string().required("El RUC es requerido")
   });
+
+  const { citiesResult, updateDepartment } = useDepartments(
+    {
+      enabled: false
+    },
+    { staleTime: Infinity }
+  );
 
   const handleSubmit = async (e) => {
     createMember(e, {
       onError: (error) => {
         console.log(error.message);
         const errorMessage =
-          error.message || 'Ocurrió un error durante el registro.';
+          error.message || "Ocurrió un error durante el registro.";
+        console.error({ errorMessage });
         toast({
-          position: 'top',
-          title: 'Error durante el registro',
+          position: "top",
+          title: "Error durante el registro",
           description: errorMessage,
-          status: 'error',
+          status: "error",
           duration: 9000,
           isClosable: true
         });
       },
       onSuccess: () => {
         toast({
-          position: 'top',
-          title: 'Registro creado',
-          description: 'Hemos registrado sus datos.',
-          status: 'success',
+          position: "top",
+          title: "Registro creado",
+          description: "Hemos registrado sus datos.",
+          status: "success",
           duration: 9000,
           isClosable: true
         });
@@ -84,11 +94,19 @@ export default function RegisterForm() {
     });
   };
 
+  const onChangeDepartment = (e) => {
+    updateDepartment(e);
+  };
+
+  const { departments = [] } = props;
+  const { data: cities, status: citiesStatus } = citiesResult;
+
   return (
     <Formik
       initialValues={initialState}
       validationSchema={CreateMemberSchema}
-      onSubmit={(values) => handleSubmit(values)}>
+      onSubmit={(values) => handleSubmit(values)}
+    >
       {(props) => (
         <Form name="form">
           <HStack spacing="4">
@@ -96,23 +114,26 @@ export default function RegisterForm() {
               size="md"
               borderRadius="full"
               variant="solid"
-              colorScheme="green">
+              colorScheme="green"
+            >
               <TagLabel>1</TagLabel>
             </Tag>
-            <Heading fontSize={{ base: 'lg', md: 'xl' }}>
+            <Heading fontSize={{ base: "lg", md: "xl" }}>
               Registro Personal
             </Heading>
           </HStack>
           <Stack
-            spacing={{ base: '12px', md: '24px' }}
+            spacing={{ base: "12px", md: "24px" }}
             my={8}
-            pl={{ md: '10' }}>
-            <Box display={{ md: 'flex' }}>
+            pl={{ md: "10" }}
+          >
+            <Box display={{ md: "flex" }}>
               <Field name="name">
                 {({ field, form }) => (
                   <FormControl
                     id="name"
-                    isInvalid={form.errors.name && form.touched.name}>
+                    isInvalid={form.errors.name && form.touched.name}
+                  >
                     <FormLabel>Nombres</FormLabel>
                     <Input type="text" placeholder="Juan José" {...field} />
                     <FormErrorMessage>{form.errors.name}</FormErrorMessage>
@@ -125,7 +146,8 @@ export default function RegisterForm() {
                     id="surname"
                     ml={{ md: 4 }}
                     mt={{ base: 4, md: 0 }}
-                    isInvalid={form.errors.surname && form.touched.surname}>
+                    isInvalid={form.errors.surname && form.touched.surname}
+                  >
                     <FormLabel>Apellidos</FormLabel>
                     <Input
                       type="text"
@@ -142,7 +164,8 @@ export default function RegisterForm() {
               {({ field, form }) => (
                 <FormControl
                   id="document"
-                  isInvalid={form.errors.document && form.touched.document}>
+                  isInvalid={form.errors.document && form.touched.document}
+                >
                   <FormLabel>Cédula</FormLabel>
                   <Input
                     type="text"
@@ -158,7 +181,8 @@ export default function RegisterForm() {
               {({ field, form }) => (
                 <FormControl
                   id="birthdate"
-                  isInvalid={form.errors.birthdate && form.touched.birthdate}>
+                  isInvalid={form.errors.birthdate && form.touched.birthdate}
+                >
                   <FormLabel htmlFor="birthdate">Fecha de Nacimiento</FormLabel>
                   <Input id="birthdate" type="date" {...field} />
                   <FormErrorMessage>{form.errors.birthdate}</FormErrorMessage>
@@ -176,7 +200,7 @@ export default function RegisterForm() {
                 </FormControl>
               )}
             </Field>
-            <Box display={{ md: 'flex' }}>
+            <Box display={{ md: "flex" }}>
               <Field name="departamento">
                 {({ field, form }) => (
                   <FormControl id="departmento">
@@ -184,33 +208,40 @@ export default function RegisterForm() {
                     <Select
                       placeholder="Seleccione departmento"
                       name="departamento"
-                      {...field}>
-                      <option value={'Capital'}>Capital</option>
-                      <option value={'Concepción'}>Concepción</option>
-                      <option value={'San Pedro'}>Capital</option>
-                      <option value={'Coordillera'}>Coordillera</option>
-                      <option value={'Guairá'}>Guairá</option>
-                      <option value={'Caaguazú'}>Caaguazú</option>
-                      <option value={'Caazapá'}>Caazapá</option>
-                      <option value={'Itapúa'}>Itapúa</option>
-                      <option value={'Misiones'}>Misiones</option>
-                      <option value={'Paraguarí'}>Paraguarí</option>
-                      <option value={'Alto Paraná'}>Alto Paraná</option>
-                      <option value={'Central'}>Central</option>
-                      <option value={'Ñeembucú'}>Ñeembucú</option>
-                      <option value={'Amambay'}>Amambay</option>
-                      <option value={'Canindeyú'}>Canindeyú</option>
-                      <option value={'Pdte. Hayes'}>Pdte. Hayes</option>
-                      <option value={'Alto Paraguay'}>Alto Paraguay</option>
+                      {...field}
+                      onChange={onChangeDepartment}
+                    >
+                      {departments.map((d) => (
+                        <option key={d.id} value={d.id}>
+                          {d.name}
+                        </option>
+                      ))}
                     </Select>
                   </FormControl>
                 )}
               </Field>
-              <Field name="city">
+              <Field name="cityId">
                 {({ field, form }) => (
-                  <FormControl id="city" ml={{ md: 4 }} mt={{ base: 4, md: 0 }}>
+                  <FormControl
+                    id="cityId"
+                    ml={{ md: 4 }}
+                    mt={{ base: 4, md: 0 }}
+                  >
                     <FormLabel>Ciudad</FormLabel>
-                    <Input type="text" name="city" />
+                    <Select
+                      placeholder={
+                        citiesStatus === "loading"
+                          ? "Cargando..."
+                          : "Seleccione ciudad"
+                      }
+                      name="cityId"
+                    >
+                      {cities?.map((c) => (
+                        <option key={c.id} value={c.id}>
+                          {c.name}
+                        </option>
+                      ))}
+                    </Select>
                   </FormControl>
                 )}
               </Field>
@@ -219,7 +250,8 @@ export default function RegisterForm() {
               {({ field, form }) => (
                 <FormControl
                   id="email"
-                  isInvalid={form.errors.email && form.touched.email}>
+                  isInvalid={form.errors.email && form.touched.email}
+                >
                   <FormLabel>E-mail</FormLabel>
                   <Input
                     type="email"
@@ -235,7 +267,8 @@ export default function RegisterForm() {
               {({ field, form }) => (
                 <FormControl
                   id="cellphone"
-                  isInvalid={form.errors.cellphone && form.touched.cellphone}>
+                  isInvalid={form.errors.cellphone && form.touched.cellphone}
+                >
                   <FormLabel>Celular</FormLabel>
                   <Input
                     type="text"
@@ -254,22 +287,25 @@ export default function RegisterForm() {
               size="md"
               borderRadius="full"
               variant="solid"
-              colorScheme="green">
+              colorScheme="green"
+            >
               <TagLabel>2</TagLabel>
             </Tag>
-            <Heading fontSize={{ base: 'lg', md: 'xl' }} mt="4">
+            <Heading fontSize={{ base: "lg", md: "xl" }} mt="4">
               Registro del Emprendimiento
             </Heading>
           </HStack>
           <Stack
-            spacing={{ base: '12px', md: '24px' }}
+            spacing={{ base: "12px", md: "24px" }}
             mt="8"
-            pl={{ md: '10' }}>
+            pl={{ md: "10" }}
+          >
             <Field name="ruc">
               {({ field, form }) => (
                 <FormControl
                   id="ruc"
-                  isInvalid={form.errors.ruc && form.touched.ruc}>
+                  isInvalid={form.errors.ruc && form.touched.ruc}
+                >
                   <FormLabel>RUC</FormLabel>
                   <Input
                     type="text"
@@ -285,7 +321,7 @@ export default function RegisterForm() {
                 </FormControl>
               )}
             </Field>
-            <Box display={{ md: 'flex' }}>
+            <Box display={{ md: "flex" }}>
               <Field name="razonsocial">
                 {({ field, form }) => (
                   <FormControl id="razonsocial">
@@ -299,7 +335,8 @@ export default function RegisterForm() {
                   <FormControl
                     id="nfantasia"
                     ml={{ md: 4 }}
-                    mt={{ base: 4, md: 0 }}>
+                    mt={{ base: 4, md: 0 }}
+                  >
                     <FormLabel>Nombre de Fantasía</FormLabel>
                     <Input type="text" name="nfantasia" {...field} />
                   </FormControl>
@@ -335,18 +372,20 @@ export default function RegisterForm() {
                 <FormControl id="facturacion">
                   <FormLabel>Facturación del 2010</FormLabel>
                   <Select name="facturacion" {...field}>
-                    <option value={'Menor o igual a 650 millones Gs.'}>
+                    <option value={"Menor o igual a 650 millones Gs."}>
                       Menor o igual a 650 millones Gs.
                     </option>
                     <option
-                      value={'Entre 650 millones y 3.250 millones de Gs.'}>
+                      value={"Entre 650 millones y 3.250 millones de Gs."}
+                    >
                       Entre 650 millones y 3.250 millones de Gs.
                     </option>
                     <option
-                      value={'Entre 3.250 millones y 7.700 millones de Gs.'}>
+                      value={"Entre 3.250 millones y 7.700 millones de Gs."}
+                    >
                       Entre 3.250 millones y 7.700 millones de Gs.
                     </option>
-                    <option value={'Mayor a 7.700 millones Gs.'}>
+                    <option value={"Mayor a 7.700 millones Gs."}>
                       Mayor a 7.700 millones Gs.
                     </option>
                   </Select>
@@ -374,7 +413,8 @@ export default function RegisterForm() {
               mt="4"
               size="lg"
               type="submit"
-              isLoading={isLoading}>
+              isLoading={isLoading}
+            >
               Registrarse
             </Button>
           </Stack>

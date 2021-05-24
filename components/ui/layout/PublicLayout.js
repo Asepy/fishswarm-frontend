@@ -1,18 +1,18 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { useRouter } from "next/router";
-import { Link as NextChakraLink } from "@trevorblades/next-chakra-link";
 import {
   Flex,
   Stack,
   useDisclosure,
   IconButton,
   Collapse,
-  useColorModeValue,
+  useColorModeValue
 } from "@chakra-ui/react";
 import { CloseIcon, HamburgerIcon } from "@chakra-ui/icons";
 import Container from "components/ui/Container";
 import Logo from "components/ui/Logo";
+import InternalLink from "../InternalLink";
 
 export default function PublicLayout({ children }) {
   const { isOpen, onToggle } = useDisclosure();
@@ -68,7 +68,7 @@ function MobileNav() {
           justify={"space-between"}
           align={"left"}
           _hover={{
-            textDecoration: "none",
+            textDecoration: "none"
           }}
         >
           Asociáte
@@ -79,7 +79,7 @@ function MobileNav() {
           justify={"space-between"}
           align={"left"}
           _hover={{
-            textDecoration: "none",
+            textDecoration: "none"
           }}
         >
           ¿Ya Soy Socio?
@@ -112,23 +112,23 @@ function HeaderLink({ href, children, ...rest }) {
 
   const selected = router.pathname === href;
   return (
-    <NextChakraLink
+    <InternalLink
       href={href}
       py="2"
       px="4"
       _hover={{
-        bg: useColorModeValue("gray.100", "gray.900"),
+        bg: useColorModeValue("gray.100", "gray.900")
       }}
       borderRadius="md"
       bg={selected ? useColorModeValue("gray.100", "gray.900") : "inherit"}
       {...rest}
     >
       {children}
-    </NextChakraLink>
+    </InternalLink>
   );
 }
 
 HeaderLink.propTypes = {
   href: PropTypes.string.isRequired,
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node.isRequired
 };

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Modal,
   ModalOverlay,
@@ -20,45 +20,51 @@ import {
   Box,
   useToast,
   FormErrorMessage
-} from '@chakra-ui/react';
-import useForm from '../../utils/useForm';
-import { Form, Formik, Field } from 'formik';
-import * as Yup from 'yup';
-import useEditMember from '../../utils/useEditMember';
+} from "@chakra-ui/react";
+import useForm from "../../utils/useForm";
+import { Form, Formik, Field } from "formik";
+import * as Yup from "yup";
+import useEditMember from "../../utils/useEditMember";
+import useDepartments from "utils/useDepartments";
 
 export default function EditModal({ closeModal, member }) {
   const toast = useToast();
   const { mutate: editMember } = useEditMember();
   const { values } = useForm({
-    name: member?.name || '',
-    surname: member?.surname || '',
-    document: member?.national_id || '',
-    birthdate: member?.birthdate || '',
-    sex: member?.sex || '',
-    departament: member?.department || '',
-    city: member?.city || '',
-    email: member?.mail_id || '',
-    cellphone: member?.cellphone || '',
-    businessName: member?.businessName || '',
-    fancyBusinessName: member?.fancyBusinessName || '',
-    ruc: member?.ruc || '',
-    sector: member?.sector || '',
+    name: member?.name || "",
+    surname: member?.surname || "",
+    document: member?.national_id || "",
+    birthdate: member?.birthdate || "",
+    sex: member?.sex || "",
+    departament: member?.department || "",
+    cityId: member?.city || "",
+    email: member?.mail_id || "",
+    cellphone: member?.cellphone || "",
+    businessName: member?.businessName || "",
+    fancyBusinessName: member?.fancyBusinessName || "",
+    ruc: member?.ruc || "",
+    sector: member?.sector || "",
     numberEmployees: member?.numberEmployees || 0,
-    website: member?.website || '',
-    anualTurnover: member?.anualTurnover || ''
+    website: member?.website || "",
+    anualTurnover: member?.anualTurnover || ""
   });
+  const { departmentResult, citiesResult, updateDepartment } = useDepartments();
 
   const MemberEditSchema = Yup.object().shape({
-    name: Yup.string().required('El nombre es requerido'),
-    surname: Yup.string().required('El apellido es requerido'),
+    name: Yup.string().required("El nombre es requerido"),
+    surname: Yup.string().required("El apellido es requerido"),
     email: Yup.string()
-      .email('Email inválido')
-      .required('El email es requerido'),
-    birthdate: Yup.date().required('La fecha de nacimiento es requerida'),
-    document: Yup.string().required('La cédula es requerida'),
-    cellphone: Yup.string().required('El número de celular es requerido'),
-    ruc: Yup.string().required('El RUC es requerido')
+      .email("Email inválido")
+      .required("El email es requerido"),
+    birthdate: Yup.date().required("La fecha de nacimiento es requerida"),
+    document: Yup.string().required("La cédula es requerida"),
+    cellphone: Yup.string().required("El número de celular es requerido"),
+    ruc: Yup.string().required("El RUC es requerido")
   });
+
+  const onChangeDepartment = (e) => {
+    updateDepartment(e);
+  };
 
   const handleSubmit = async (e) => {
     editMember(
@@ -67,24 +73,24 @@ export default function EditModal({ closeModal, member }) {
         onError: (error) => {
           console.log(error.message);
           const errorMessage =
-            'Ocurrió un error al editar los datos del usuario.';
+            "Ocurrió un error al editar los datos del usuario.";
           toast({
-            position: 'top',
-            title: 'Error al editar los datos del usuario.',
+            position: "top",
+            title: "Error al editar los datos del usuario.",
             description: errorMessage,
-            status: 'error',
+            status: "error",
             duration: 7000,
             isClosable: true
           });
         },
         onSuccess: () => {
           toast({
-            position: 'top',
-            title: 'Datos modificados correctamente',
+            position: "top",
+            title: "Datos modificados correctamente",
             description:
-              'Se ha modificado correctamente los datos del usuario ' +
+              "Se ha modificado correctamente los datos del usuario " +
               `${member.national_id}`,
-            status: 'success',
+            status: "success",
             duration: 7000,
             isClosable: true
           });
@@ -96,13 +102,21 @@ export default function EditModal({ closeModal, member }) {
     );
   };
 
+  const { data: departments, status: departmentStatus } = departmentResult;
+  const { data: cities, status: citiesStatus } = citiesResult;
+
+  console.log("departmentResult :: ", departmentResult);
+  console.log("citiesResult :: ", citiesResult);
+  console.log("cities :: ", cities);
+
   return (
     <>
       <Modal
         isOpen={true}
         onClose={closeModal}
         closeOnOverlayClick={false}
-        size={['3xl']}>
+        size={["3xl"]}
+      >
         <ModalOverlay />
         <ModalContent>
           <ModalCloseButton />
@@ -110,7 +124,8 @@ export default function EditModal({ closeModal, member }) {
             <Formik
               initialValues={values}
               validationSchema={MemberEditSchema}
-              onSubmit={(values) => handleSubmit(values)}>
+              onSubmit={(values) => handleSubmit(values)}
+            >
               {(props) => (
                 <Form name="form">
                   <HStack spacing="4">
@@ -121,8 +136,9 @@ export default function EditModal({ closeModal, member }) {
                       <Field name="name">
                         {({ field, form }) => (
                           <FormControl
-                            id={'name'}
-                            isInvalid={form.errors.name && form.touched.name}>
+                            id={"name"}
+                            isInvalid={form.errors.name && form.touched.name}
+                          >
                             <FormLabel>Nombres</FormLabel>
                             <Input {...field} id="name" />
                             <FormErrorMessage>
@@ -134,10 +150,11 @@ export default function EditModal({ closeModal, member }) {
                       <Field name="surname">
                         {({ field, form }) => (
                           <FormControl
-                            id={'surname'}
+                            id={"surname"}
                             isInvalid={
                               form.errors.surname && form.touched.surname
-                            }>
+                            }
+                          >
                             <FormLabel>Apellidos</FormLabel>
                             <Input {...field} id="surname" />
                             <FormErrorMessage>
@@ -149,10 +166,11 @@ export default function EditModal({ closeModal, member }) {
                       <Field name="document">
                         {({ field, form }) => (
                           <FormControl
-                            id={'document'}
+                            id={"document"}
                             isInvalid={
                               form.errors.document && form.touched.document
-                            }>
+                            }
+                          >
                             <FormLabel>Cédula</FormLabel>
                             <Input {...field} id="document" />
                             <FormErrorMessage>
@@ -164,10 +182,11 @@ export default function EditModal({ closeModal, member }) {
                       <Field name="birthdate">
                         {({ field, form }) => (
                           <FormControl
-                            id={'birthdate'}
+                            id={"birthdate"}
                             isInvalid={
                               form.errors.birthdate && form.touched.birthdate
-                            }>
+                            }
+                          >
                             <FormLabel htmlFor="birthdate">
                               Fecha de Nacimiento
                             </FormLabel>
@@ -180,7 +199,7 @@ export default function EditModal({ closeModal, member }) {
                       </Field>
                       <Field name="sex">
                         {({ field, form }) => (
-                          <FormControl id={'sex'}>
+                          <FormControl id={"sex"}>
                             <FormLabel>Sexo</FormLabel>
                             <Select {...field} id="sex">
                               <option value="Masculino">Masculino</option>
@@ -191,45 +210,51 @@ export default function EditModal({ closeModal, member }) {
                       </Field>
                       <Field name="departament">
                         {({ field, form }) => (
-                          <FormControl id={'department'}>
+                          <FormControl id={"department"}>
                             <FormLabel>Departamento</FormLabel>
-                            <Select {...field} id="departament">
-                              <option value={'Capital'}>Capital</option>
-                              <option value={'Concepción'}>Concepción</option>
-                              <option value={'San Pedro'}>Capital</option>
-                              <option value={'Coordillera'}>Coordillera</option>
-                              <option value={'Guairá'}>Guairá</option>
-                              <option value={'Caaguazú'}>Caaguazú</option>
-                              <option value={'Caazapá'}>Caazapá</option>
-                              <option value={'Itapúa'}>Itapúa</option>
-                              <option value={'Misiones'}>Misiones</option>
-                              <option value={'Paraguarí'}>Paraguarí</option>
-                              <option value={'Alto Paraná'}>Alto Paraná</option>
-                              <option value={'Central'}>Central</option>
-                              <option value={'Ñeembucú'}>Ñeembucú</option>
-                              <option value={'Amambay'}>Amambay</option>
-                              <option value={'Canindeyú'}>Canindeyú</option>
-                              <option value={'Pdte. Hayes'}>Pdte. Hayes</option>
-                              <option value={'Alto Paraguay'}>
-                                Alto Paraguay
-                              </option>
+                            <Select
+                              placeholder="Seleccione departmento"
+                              name="departament"
+                              {...field}
+                              onChange={onChangeDepartment}
+                            >
+                              {departments?.map((d) => (
+                                <option key={d.id} value={d.id}>
+                                  {d.name}
+                                </option>
+                              ))}
                             </Select>
                           </FormControl>
                         )}
                       </Field>
-                      <Field name="city">
+                      <Field name="cityId">
                         {({ field, form }) => (
-                          <FormControl id={'city'}>
+                          <FormControl id={"cityId"}>
                             <FormLabel>Ciudad</FormLabel>
-                            <Input {...field} id="city" />
+                            <Select
+                              {...field}
+                              placeholder={
+                                citiesStatus === "loading"
+                                  ? "Cargando..."
+                                  : "Seleccione ciudad"
+                              }
+                              name="cityId"
+                            >
+                              {cities?.map((c) => (
+                                <option key={c.id} value={c.id}>
+                                  {c.name}
+                                </option>
+                              ))}
+                            </Select>
                           </FormControl>
                         )}
                       </Field>
                       <Field name="email">
                         {({ field, form }) => (
                           <FormControl
-                            id={'email'}
-                            isInvalid={form.errors.email && form.touched.email}>
+                            id={"email"}
+                            isInvalid={form.errors.email && form.touched.email}
+                          >
                             <FormLabel>E-mail</FormLabel>
                             <Input {...field} type="email" id="email" />
                             <FormErrorMessage>
@@ -241,10 +266,11 @@ export default function EditModal({ closeModal, member }) {
                       <Field name="cellphone">
                         {({ field, form }) => (
                           <FormControl
-                            id={'cellphone'}
+                            id={"cellphone"}
                             isInvalid={
                               form.errors.cellphone && form.touched.cellphone
-                            }>
+                            }
+                          >
                             <FormLabel>Celular</FormLabel>
                             <Input {...field} name="cellphone" />
                             <FormErrorMessage>
@@ -268,8 +294,9 @@ export default function EditModal({ closeModal, member }) {
                       <Field name="ruc">
                         {({ field, form }) => (
                           <FormControl
-                            id={'ruc'}
-                            isInvalid={form.errors.ruc && form.touched.ruc}>
+                            id={"ruc"}
+                            isInvalid={form.errors.ruc && form.touched.ruc}
+                          >
                             <FormLabel>RUC</FormLabel>
                             <Input {...field} name="ruc" />
                             <FormHelperText>
@@ -284,7 +311,7 @@ export default function EditModal({ closeModal, member }) {
                       </Field>
                       <Field name="businessName">
                         {({ field, form }) => (
-                          <FormControl id={'businessName'}>
+                          <FormControl id={"businessName"}>
                             <FormLabel>Razón Social</FormLabel>
                             <Input {...field} name="businessName" />
                           </FormControl>
@@ -292,7 +319,7 @@ export default function EditModal({ closeModal, member }) {
                       </Field>
                       <Field name="fancyBusinessName">
                         {({ field, form }) => (
-                          <FormControl id={'fancyBusinessName'}>
+                          <FormControl id={"fancyBusinessName"}>
                             <FormLabel>Nombre de Fantasía</FormLabel>
                             <Input {...field} name="fancyBusinessName" />
                           </FormControl>
@@ -300,7 +327,7 @@ export default function EditModal({ closeModal, member }) {
                       </Field>
                       <Field name="sector">
                         {({ field, form }) => (
-                          <FormControl id={'sector'}>
+                          <FormControl id={"sector"}>
                             <FormLabel>Especifique el Rubro</FormLabel>
                             <Input {...field} name="sector" />
                           </FormControl>
@@ -308,7 +335,7 @@ export default function EditModal({ closeModal, member }) {
                       </Field>
                       <Field name="numberEmployees">
                         {({ field, form }) => (
-                          <FormControl id={'numberEmployees'}>
+                          <FormControl id={"numberEmployees"}>
                             <FormLabel>Cantidad de Empleados</FormLabel>
                             <Input {...field} name="numberEmployees" />
                             <FormHelperText>
@@ -319,26 +346,29 @@ export default function EditModal({ closeModal, member }) {
                       </Field>
                       <Field name="anualTurnover">
                         {({ field, form }) => (
-                          <FormControl id={'anualTurnover'}>
+                          <FormControl id={"anualTurnover"}>
                             <FormLabel>Facturación del 2010</FormLabel>
                             <Select {...field} name="anualTurnover">
                               <option
-                                value={'Menor o igual a 650 millones Gs.'}>
+                                value={"Menor o igual a 650 millones Gs."}
+                              >
                                 Menor o igual a 650 millones Gs.
                               </option>
                               <option
                                 value={
-                                  'Entre 650 millones y 3.250 millones de Gs.'
-                                }>
+                                  "Entre 650 millones y 3.250 millones de Gs."
+                                }
+                              >
                                 Entre 650 millones y 3.250 millones de Gs.
                               </option>
                               <option
                                 value={
-                                  'Entre 3.250 millones y 7.700 millones de Gs.'
-                                }>
+                                  "Entre 3.250 millones y 7.700 millones de Gs."
+                                }
+                              >
                                 Entre 3.250 millones y 7.700 millones de Gs.
                               </option>
-                              <option value={'Mayor a 7.700 millones Gs.'}>
+                              <option value={"Mayor a 7.700 millones Gs."}>
                                 Mayor a 7.700 millones Gs.
                               </option>
                             </Select>
