@@ -54,7 +54,8 @@ export default function RegisterForm(props) {
     birthdate: Yup.string().required("La fecha de nacimiento es requerida"),
     document: Yup.string().required("La cédula es requerida"),
     cellphone: Yup.string().required("El número de celular es requerido"),
-    ruc: Yup.string().required("El RUC es requerido")
+    ruc: Yup.string().required("El RUC es requerido"),
+    cityId: Yup.number().required("Ciudad es requerido")
   });
 
   const { citiesResult, updateDepartment } = useDepartments(
@@ -222,22 +223,11 @@ export default function RegisterForm(props) {
                 </FormControl>
               )}
             </Field>
-            <Field name="sexo">
-              {({ field }) => (
-                <FormControl id="sexo">
-                  <FormLabel>Sexo (Opcional)</FormLabel>
-                  <Select placeholder="Sexo" name="sexo" {...field}>
-                    <option value="Masculino">Masculino</option>
-                    <option value="Femenino">Femenino</option>
-                  </Select>
-                </FormControl>
-              )}
-            </Field>
             <Box display={{ md: "flex" }}>
               <Field name="departamento">
                 {({ field }) => (
                   <FormControl id="departmento">
-                    <FormLabel>Departamento (Opcional)</FormLabel>
+                    <FormLabel>Departamento</FormLabel>
                     <Select
                       placeholder="Seleccione departmento"
                       name="departamento"
@@ -257,14 +247,15 @@ export default function RegisterForm(props) {
                 )}
               </Field>
               <Field name="cityId">
-                {() => (
+                {({ field, form }) => (
                   <FormControl
                     id="cityId"
                     ml={{ md: 4 }}
                     mt={{ base: 4, md: 0 }}
                     isDisabled={!cities || cities.length === 0}
+                    isInvalid={form.errors.cityId && form.touched.cityId}
                   >
-                    <FormLabel>Ciudad (Opcional)</FormLabel>
+                    <FormLabel>Ciudad</FormLabel>
                     <Select
                       placeholder={
                         citiesStatus === "loading"
@@ -272,6 +263,7 @@ export default function RegisterForm(props) {
                           : "Seleccione ciudad"
                       }
                       name="cityId"
+                      {...field}
                     >
                       {cities?.map((c) => (
                         <option key={c.id} value={c.id}>
@@ -279,11 +271,22 @@ export default function RegisterForm(props) {
                         </option>
                       ))}
                     </Select>
+                    <FormErrorMessage>{form.errors.cityId}</FormErrorMessage>
                   </FormControl>
                 )}
               </Field>
             </Box>
-
+            <Field name="sexo">
+              {({ field }) => (
+                <FormControl id="sexo">
+                  <FormLabel>Sexo (Opcional)</FormLabel>
+                  <Select placeholder="Sexo" name="sexo" {...field}>
+                    <option value="Masculino">Masculino</option>
+                    <option value="Femenino">Femenino</option>
+                  </Select>
+                </FormControl>
+              )}
+            </Field>
             <Divider></Divider>
           </Stack>
           <HStack spacing="4">
