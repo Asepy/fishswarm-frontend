@@ -153,7 +153,8 @@ export default function RegisterForm(props) {
             placeholder="Sexo"
             name="sexo"
             value={values.sexo}
-            onChange={updateValue}>
+            onChange={updateValue}
+          >
             <option value="Masculino">Masculino</option>
             <option value="Femenino">Femenino</option>
           </Select>
@@ -166,7 +167,8 @@ export default function RegisterForm(props) {
               placeholder="Seleccione departmento"
               name="departamento"
               value={values.departamento}
-              onChange={onChangeDepartment}>
+              onChange={onChangeDepartment}
+            >
               {departments.map((d) => (
                 <option key={d.id} value={d.id}>
                   {d.name}
@@ -178,7 +180,8 @@ export default function RegisterForm(props) {
             isDisabled={!cities || cities.length === 0}
             id="cityId"
             ml={{ md: 4 }}
-            mt={{ base: 4, md: 0 }}>
+            mt={{ base: 4, md: 0 }}
+          >
             <FormLabel>Ciudad</FormLabel>
             <Select
               placeholder={
@@ -186,7 +189,8 @@ export default function RegisterForm(props) {
               }
               name="cityId"
               value={values.cityId}
-              onChange={updateValue}>
+              onChange={updateValue}
+            >
               {cities?.map((c) => (
                 <option key={c.id} value={c.id}>
                   {c.name}
@@ -288,7 +292,8 @@ export default function RegisterForm(props) {
           <Select
             name="facturacion"
             value={values.facturacion}
-            onChange={updateValue}>
+            onChange={updateValue}
+          >
             <option value={"Menor o igual a 650 millones Gs."}>
               Menor o igual a 650 millones Gs.
             </option>
@@ -321,7 +326,8 @@ export default function RegisterForm(props) {
           mt="4"
           size="lg"
           type="submit"
-          isLoading={isLoading}>
+          isLoading={isLoading}
+        >
           Registrarse
         </Button>
       </Stack>
