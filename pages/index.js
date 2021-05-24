@@ -5,7 +5,6 @@ import RegisterForm from "components/members/RegisterForm";
 import PublicLayout from "components/ui/layout/PublicLayout";
 import Seo from "components/ui/layout/Seo";
 import fetchDepartments from "utils/fetchDepartments";
-import fetchCities from "utils/fetchCities";
 
 export default function index(props) {
   return (

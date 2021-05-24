@@ -13,12 +13,16 @@ async function getCitiesByDep({ depId }) {
 
 export const CITIES_BY_DEP_QUERY = "query:citiesByDep";
 
-export default function useCitiesByDep({ depId }) {
-  return useQuery([CITIES_BY_DEP_QUERY, depId], async () => {
-    if (depId == null || depId === "") {
-      return [];
-    }
-    const resp = await getCitiesByDep({ depId });
-    return resp?.data || [];
-  });
+export default function useCitiesByDep({ depId }, options) {
+  return useQuery(
+    [CITIES_BY_DEP_QUERY, depId],
+    async () => {
+      if (depId == null || depId === "") {
+        return [];
+      }
+      const resp = await getCitiesByDep({ depId });
+      return resp?.data || [];
+    },
+    options
+  );
 }

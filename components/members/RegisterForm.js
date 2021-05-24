@@ -14,12 +14,13 @@ import {
   Box,
   Tag,
   TagLabel,
-  useToast
+  useToast,
+  Spinner
 } from "@chakra-ui/react";
 import BirthDatePicker from "components/ui/BirthDatePicker";
 import useForm from "utils/useForm";
 import useCreateMember from "utils/useCreateMember";
-import useCitiesByDep from "utils/useCitiesByDep";
+import useDepartments from "utils/useDepartments";
 
 export default function RegisterForm(props) {
   const toast = useToast();
@@ -44,10 +45,12 @@ export default function RegisterForm(props) {
     facturacion: "",
     tarroMiel: ""
   });
-  const [selectedDepId, setSelectedDepId] = React.useState();
-  const { data: cities } = useCitiesByDep({
-    depId: selectedDepId
-  });
+  const { citiesResult, updateDepartment } = useDepartments(
+    {
+      enabled: false
+    },
+    { staleTime: Infinity }
+  );
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -79,10 +82,10 @@ export default function RegisterForm(props) {
   };
   const onChangeDepartment = (e) => {
     updateValue(e);
-    const depId = e.target.value;
-    setSelectedDepId(depId);
+    updateDepartment(e);
   };
   const { departments = [] } = props;
+  const { data: cities, status: citiesStatus } = citiesResult;
   return (
     <form onSubmit={handleSubmit}>
       <Input
@@ -173,12 +176,14 @@ export default function RegisterForm(props) {
           </FormControl>
           <FormControl
             isDisabled={!cities || cities.length === 0}
-            id="city"
+            id="cityId"
             ml={{ md: 4 }}
             mt={{ base: 4, md: 0 }}>
             <FormLabel>Ciudad</FormLabel>
             <Select
-              placeholder="Seleccione ciudad"
+              placeholder={
+                citiesStatus === "loading" ? "Cargando..." : "Seleccione ciudad"
+              }
               name="cityId"
               value={values.cityId}
               onChange={updateValue}>
