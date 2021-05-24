@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from "react";
 import {
   Modal,
   ModalOverlay,
@@ -18,65 +18,79 @@ import {
   FormHelperText,
   Divider,
   Box,
-  useToast
-} from '@chakra-ui/react';
-import useForm from '../../utils/useForm';
-import { Form, Formik, Field } from 'formik';
-import BirthDatePicker from 'components/ui/BirthDatePicker';
-import useEditMember from '../../utils/useEditMember';
+  useToast,
+  FormErrorMessage
+} from "@chakra-ui/react";
+import useForm from "../../utils/useForm";
+import { Form, Formik, Field } from "formik";
+import * as Yup from "yup";
+import useEditMember from "../../utils/useEditMember";
+import useDepartments from "utils/useDepartments";
 
 export default function EditModal({ closeModal, member }) {
   const toast = useToast();
-  const { isLoading, mutate: editMember } = useEditMember();
-
-  const { values, updateValue } = useForm({
-    name: member?.name || '',
-    surname: member?.surname || '',
-    document: member?.national_id || '',
-    birthdate: member?.birthdate || '',
-    sex: member?.sex || '',
-    departament: member?.department || '',
-    city: member?.city || '',
-    email: member?.mail_id || '',
-    cellphone: member?.cellphone || '',
-    businessName: member?.businessName || '',
-    fancyBusinessName: member?.fancyBusinessName || '',
-    ruc: member?.ruc || '',
-    sector: member?.sector || '',
+  const { mutate: editMember } = useEditMember();
+  const { values } = useForm({
+    name: member?.name || "",
+    surname: member?.surname || "",
+    document: member?.national_id || "",
+    birthdate: member?.birthdate || "",
+    sex: member?.sex || "",
+    departament: member?.department || "",
+    cityId: member?.city || "",
+    email: member?.mail_id || "",
+    cellphone: member?.cellphone || "",
+    businessName: member?.businessName || "",
+    fancyBusinessName: member?.fancyBusinessName || "",
+    ruc: member?.ruc || "",
+    sector: member?.sector || "",
     numberEmployees: member?.numberEmployees || 0,
-    website: member?.website || '',
-    anualTurnover: member?.anualTurnover || ''
+    website: member?.website || "",
+    anualTurnover: member?.anualTurnover || ""
+  });
+  const { departmentResult, citiesResult, updateDepartment } = useDepartments();
+
+  const MemberEditSchema = Yup.object().shape({
+    name: Yup.string().required("El nombre es requerido"),
+    surname: Yup.string().required("El apellido es requerido"),
+    email: Yup.string()
+      .email("Email inválido")
+      .required("El email es requerido"),
+    birthdate: Yup.date().required("La fecha de nacimiento es requerida"),
+    document: Yup.string().required("La cédula es requerida"),
+    cellphone: Yup.string().required("El número de celular es requerido"),
+    ruc: Yup.string().required("El RUC es requerido")
   });
 
+  const onChangeDepartment = (e) => {
+    updateDepartment(e);
+  };
+
   const handleSubmit = async (e) => {
-    e.preventDefault();
     editMember(
-      {
-        document: member.document,
-        values
-      },
+      { document: member.national_id, values: e },
       {
         onError: (error) => {
-          console.error(error.message);
+          console.log(error.message);
           const errorMessage =
-            'Ocurrió un error al editar los datos del usuario.';
+            "Ocurrió un error al editar los datos del usuario.";
           toast({
-            position: 'top',
-            title: 'Error al editar los datos del usuario.',
+            position: "top",
+            title: "Error al editar los datos del usuario.",
             description: errorMessage,
-            status: 'error',
+            status: "error",
             duration: 7000,
             isClosable: true
           });
         },
         onSuccess: () => {
           toast({
-            position: 'top',
-            title: 'Datos modificados correctamente',
+            position: "top",
+            title: "Datos modificados correctamente",
             description:
-              'Se ha modificado correctamente los datos del usuario ' +
+              "Se ha modificado correctamente los datos del usuario " +
               `${member.national_id}`,
-            status: 'success',
+            status: "success",
             duration: 7000,
             isClosable: true
           });
@@ -88,18 +102,30 @@ export default function EditModal({ closeModal, member }) {
     );
   };
 
+  const { data: departments, status: departmentStatus } = departmentResult;
+  const { data: cities, status: citiesStatus } = citiesResult;
+
+  console.log("departmentResult :: ", departmentResult);
+  console.log("citiesResult :: ", citiesResult);
+  console.log("cities :: ", cities);
+
   return (
     <>
       <Modal
         isOpen={true}
         onClose={closeModal}
         closeOnOverlayClick={false}
-        size={['3xl']}>
+        size={["3xl"]}
+      >
         <ModalOverlay />
         <ModalContent>
           <ModalCloseButton />
           <ModalBody p={7}>
-            <Formik initialValues={values}>
+            <Formik
+              initialValues={values}
+              validationSchema={MemberEditSchema}
+              onSubmit={(values) => handleSubmit(values)}
+            >
               {(props) => (
                 <Form name="form">
                   <HStack spacing="4">
@@ -109,45 +135,71 @@ export default function EditModal({ closeModal, member }) {
                     <VStack>
                       <Field name="name">
                         {({ field, form }) => (
-                          <FormControl id={'name'} onChange={updateValue}>
+                          <FormControl
+                            id={"name"}
+                            isInvalid={form.errors.name && form.touched.name}
+                          >
                             <FormLabel>Nombres</FormLabel>
-                            <Input {...field} id="name" isRequired={true} />
+                            <Input {...field} id="name" />
+                            <FormErrorMessage>
+                              {form.errors.name}
+                            </FormErrorMessage>
                           </FormControl>
                         )}
                       </Field>
                       <Field name="surname">
                         {({ field, form }) => (
-                          <FormControl id={'surname'} onChange={updateValue}>
+                          <FormControl
+                            id={"surname"}
+                            isInvalid={
+                              form.errors.surname && form.touched.surname
+                            }
+                          >
                             <FormLabel>Apellidos</FormLabel>
-                            <Input {...field} id="surname" isRequired={true} />
+                            <Input {...field} id="surname" />
+                            <FormErrorMessage>
+                              {form.errors.surname}
+                            </FormErrorMessage>
                           </FormControl>
                         )}
                       </Field>
                       <Field name="document">
                         {({ field, form }) => (
-                          <FormControl id={'document'} onChange={updateValue}>
+                          <FormControl
+                            id={"document"}
+                            isInvalid={
+                              form.errors.document && form.touched.document
+                            }
+                          >
                             <FormLabel>Cédula</FormLabel>
-                            <Input {...field} id="document" isRequired={true} />
+                            <Input {...field} id="document" />
+                            <FormErrorMessage>
+                              {form.errors.document}
+                            </FormErrorMessage>
                           </FormControl>
                         )}
                       </Field>
                       <Field name="birthdate">
                         {({ field, form }) => (
-                          <FormControl id={'birthdate'} onChange={updateValue}>
+                          <FormControl
+                            id={"birthdate"}
+                            isInvalid={
+                              form.errors.birthdate && form.touched.birthdate
+                            }
+                          >
                             <FormLabel htmlFor="birthdate">
                               Fecha de Nacimiento
                             </FormLabel>
-                            <BirthDatePicker
-                              {...field}
-                              id="birthdate"
-                              isRequired={true}
-                            />
+                            <Input {...field} id="birthdate" type="date" />
+                            <FormErrorMessage>
+                              {form.errors.birthdate}
+                            </FormErrorMessage>
                           </FormControl>
                         )}
                       </Field>
                       <Field name="sex">
                         {({ field, form }) => (
-                          <FormControl id={'sex'} onChange={updateValue}>
+                          <FormControl id={"sex"}>
                             <FormLabel>Sexo</FormLabel>
                             <Select {...field} id="sex">
                               <option value="Masculino">Masculino</option>
@@ -158,53 +210,72 @@ export default function EditModal({ closeModal, member }) {
                       </Field>
                       <Field name="departament">
                         {({ field, form }) => (
-                          <FormControl id={'department'} onChange={updateValue}>
+                          <FormControl id={"department"}>
                             <FormLabel>Departamento</FormLabel>
-                            <Select {...field} id="departament">
-                              <option value={'Capital'}>Capital</option>
-                              <option value={'Concepción'}>Concepción</option>
-                              <option value={'San Pedro'}>Capital</option>
-                              <option value={'Coordillera'}>Coordillera</option>
-                              <option value={'Guairá'}>Guairá</option>
-                              <option value={'Caaguazú'}>Caaguazú</option>
-                              <option value={'Caazapá'}>Caazapá</option>
-                              <option value={'Itapúa'}>Itapúa</option>
-                              <option value={'Misiones'}>Misiones</option>
-                              <option value={'Paraguarí'}>Paraguarí</option>
-                              <option value={'Alto Paraná'}>Alto Paraná</option>
-                              <option value={'Central'}>Central</option>
-                              <option value={'Ñeembucú'}>Ñeembucú</option>
-                              <option value={'Amambay'}>Amambay</option>
-                              <option value={'Canindeyú'}>Canindeyú</option>
-                              <option value={'Pdte. Hayes'}>Pdte. Hayes</option>
-                              <option value={'Alto Paraguay'}>
-                                Alto Paraguay
-                              </option>
+                            <Select
+                              placeholder="Seleccione departmento"
+                              name="departament"
+                              {...field}
+                              onChange={onChangeDepartment}
+                            >
+                              {departments?.map((d) => (
+                                <option key={d.id} value={d.id}>
+                                  {d.name}
+                                </option>
+                              ))}
                             </Select>
                           </FormControl>
                         )}
                       </Field>
-                      <Field name="city">
+                      <Field name="cityId">
                         {({ field, form }) => (
-                          <FormControl id={'city'} onChange={updateValue}>
+                          <FormControl id={"cityId"}>
                             <FormLabel>Ciudad</FormLabel>
-                            <Input {...field} id="city" />
+                            <Select
+                              {...field}
+                              placeholder={
+                                citiesStatus === "loading"
+                                  ? "Cargando..."
+                                  : "Seleccione ciudad"
+                              }
+                              name="cityId"
+                            >
+                              {cities?.map((c) => (
+                                <option key={c.id} value={c.id}>
+                                  {c.name}
+                                </option>
+                              ))}
+                            </Select>
                           </FormControl>
                         )}
                       </Field>
                       <Field name="email">
                         {({ field, form }) => (
-                          <FormControl id={'email'} onChange={updateValue}>
+                          <FormControl
+                            id={"email"}
+                            isInvalid={form.errors.email && form.touched.email}
+                          >
                             <FormLabel>E-mail</FormLabel>
                             <Input {...field} type="email" id="email" />
+                            <FormErrorMessage>
+                              {form.errors.email}
+                            </FormErrorMessage>
                           </FormControl>
                         )}
                       </Field>
                       <Field name="cellphone">
                         {({ field, form }) => (
-                          <FormControl id={'cellphone'} onChange={updateValue}>
+                          <FormControl
+                            id={"cellphone"}
+                            isInvalid={
+                              form.errors.cellphone && form.touched.cellphone
+                            }
+                          >
                             <FormLabel>Celular</FormLabel>
                             <Input {...field} name="cellphone" />
+                            <FormErrorMessage>
+                              {form.errors.cellphone}
+                            </FormErrorMessage>
                           </FormControl>
                         )}
                       </Field>
@@ -222,41 +293,41 @@ export default function EditModal({ closeModal, member }) {
                     <VStack>
                       <Field name="ruc">
                         {({ field, form }) => (
-                          <FormControl id={'ruc'} onChange={updateValue}>
+                          <FormControl
+                            id={"ruc"}
+                            isInvalid={form.errors.ruc && form.touched.ruc}
+                          >
                             <FormLabel>RUC</FormLabel>
-                            <Input {...field} name="ruc" isRequired={true} />
+                            <Input {...field} name="ruc" />
                             <FormHelperText>
                               El único requisito para asociarte es contar con un
                               RUC activo.
                             </FormHelperText>
+                            <FormErrorMessage>
+                              {form.errors.ruc}
+                            </FormErrorMessage>
                           </FormControl>
                         )}
                       </Field>
-                      <HStack spacing="4">
-                        <Field name="businessName">
-                          {({ field, form }) => (
-                            <FormControl
-                              id={'businessName'}
-                              onChange={updateValue}>
-                              <FormLabel>Razón Social</FormLabel>
-                              <Input {...field} name="businessName" />
-                            </FormControl>
-                          )}
-                        </Field>
-                        <Field name="fancyBusinessName">
-                          {({ field, form }) => (
-                            <FormControl
-                              id={'fancyBusinessName'}
-                              onChange={updateValue}>
-                              <FormLabel>Nombre de Fantasía</FormLabel>
-                              <Input {...field} name="fancyBusinessName" />
-                            </FormControl>
-                          )}
-                        </Field>
-                      </HStack>
+                      <Field name="businessName">
+                        {({ field, form }) => (
+                          <FormControl id={"businessName"}>
+                            <FormLabel>Razón Social</FormLabel>
+                            <Input {...field} name="businessName" />
+                          </FormControl>
+                        )}
+                      </Field>
+                      <Field name="fancyBusinessName">
+                        {({ field, form }) => (
+                          <FormControl id={"fancyBusinessName"}>
+                            <FormLabel>Nombre de Fantasía</FormLabel>
+                            <Input {...field} name="fancyBusinessName" />
+                          </FormControl>
+                        )}
+                      </Field>
                       <Field name="sector">
                         {({ field, form }) => (
-                          <FormControl id={'sector'} onChange={updateValue}>
+                          <FormControl id={"sector"}>
                             <FormLabel>Especifique el Rubro</FormLabel>
                             <Input {...field} name="sector" />
                           </FormControl>
@@ -264,9 +335,7 @@ export default function EditModal({ closeModal, member }) {
                       </Field>
                       <Field name="numberEmployees">
                         {({ field, form }) => (
-                          <FormControl
-                            id={'numberEmployees'}
-                            onChange={updateValue}>
+                          <FormControl id={"numberEmployees"}>
                             <FormLabel>Cantidad de Empleados</FormLabel>
                             <Input {...field} name="numberEmployees" />
                             <FormHelperText>
@@ -277,28 +346,29 @@ export default function EditModal({ closeModal, member }) {
                       </Field>
                       <Field name="anualTurnover">
                         {({ field, form }) => (
-                          <FormControl
-                            id={'anualTurnover'}
-                            onChange={updateValue}>
+                          <FormControl id={"anualTurnover"}>
                             <FormLabel>Facturación del 2010</FormLabel>
                             <Select {...field} name="anualTurnover">
                               <option
-                                value={'Menor o igual a 650 millones Gs.'}>
+                                value={"Menor o igual a 650 millones Gs."}
+                              >
                                 Menor o igual a 650 millones Gs.
                               </option>
                               <option
                                 value={
-                                  'Entre 650 millones y 3.250 millones de Gs.'
-                                }>
+                                  "Entre 650 millones y 3.250 millones de Gs."
+                                }
+                              >
                                 Entre 650 millones y 3.250 millones de Gs.
                               </option>
                               <option
                                 value={
-                                  'Entre 3.250 millones y 7.700 millones de Gs.'
-                                }>
+                                  "Entre 3.250 millones y 7.700 millones de Gs."
+                                }
+                              >
                                 Entre 3.250 millones y 7.700 millones de Gs.
                               </option>
-                              <option value={'Mayor a 7.700 millones Gs.'}>
+                              <option value={"Mayor a 7.700 millones Gs."}>
                                 Mayor a 7.700 millones Gs.
                               </option>
                             </Select>
@@ -307,7 +377,7 @@ export default function EditModal({ closeModal, member }) {
                       </Field>
                       <Field name="website">
                         {({ field, form }) => (
-                          <FormControl onChange={updateValue}>
+                          <FormControl name="website">
                             <FormLabel>Sitio web o redes sociales</FormLabel>
                             <Input {...field} name="website" />
                           </FormControl>
@@ -315,21 +385,18 @@ export default function EditModal({ closeModal, member }) {
                       </Field>
                     </VStack>
                   </Stack>
+                  <ModalFooter>
+                    <Button variant="outline" mr={3} onClick={closeModal}>
+                      Cancelar
+                    </Button>
+                    <Button type="submit" variant="primary">
+                      Editar
+                    </Button>
+                  </ModalFooter>
                 </Form>
               )}
             </Formik>
           </ModalBody>
-          <ModalFooter>
-            <Button variant={'outline'} mr={3} onClick={closeModal}>
-              Cancelar
-            </Button>
-            <Button
-              variant="primary"
-              onClick={handleSubmit}
-              isLoading={isLoading}>
-              Editar
-            </Button>
-          </ModalFooter>
         </ModalContent>
       </Modal>
     </>

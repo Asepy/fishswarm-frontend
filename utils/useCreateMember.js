@@ -1,5 +1,4 @@
 import React from "react";
-import formatDate from "./formatDate";
 import handleResponse from "./handleResponse";
 
 async function postMemberToApi(newMember) {
@@ -10,7 +9,7 @@ async function postMemberToApi(newMember) {
     },
     body: JSON.stringify({
       ...newMember,
-      birthdate: formatDate(newMember.birthdate)
+      birthdate: newMember.birthdate
     })
   });
 

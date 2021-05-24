@@ -25,7 +25,8 @@ export default function PublicLayout({ children }) {
         justify="center"
         align="center"
         py={6}
-        backgroundColor="screencase">
+        backgroundColor="screencase"
+      >
         <Container>
           <Flex justify="space-between">
             <a href="https://asepy.org">
@@ -68,7 +69,8 @@ function MobileNav() {
           align={"left"}
           _hover={{
             textDecoration: "none"
-          }}>
+          }}
+        >
           Asociáte
         </Flex>
         <Flex
@@ -78,7 +80,8 @@ function MobileNav() {
           align={"left"}
           _hover={{
             textDecoration: "none"
-          }}>
+          }}
+        >
           ¿Ya Soy Socio?
         </Flex>
       </Stack>
@@ -94,7 +97,8 @@ const DesktopNav = () => {
       justify={["center", "space-between", "flex-end", "flex-end"]}
       direction={["column", "row", "row", "row"]}
       display={{ base: "none", md: "flex" }}
-      pt={[4, 4, 0, 0]}>
+      pt={[4, 4, 0, 0]}
+    >
       <HeaderLink href="/">Asociáte</HeaderLink>
       <HeaderLink href="/search-member">¿Soy Socio?</HeaderLink>
     </Stack>
@@ -117,7 +121,8 @@ function HeaderLink({ href, children, ...rest }) {
       }}
       borderRadius="md"
       bg={selected ? useColorModeValue("gray.100", "gray.900") : "inherit"}
-      {...rest}>
+      {...rest}
+    >
       {children}
     </InternalLink>
   );

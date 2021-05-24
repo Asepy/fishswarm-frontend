@@ -3,6 +3,12 @@ import { useState } from "react";
 export default function useForm(defaults) {
   const [values, setValues] = useState(defaults);
 
+  function resetValues (values) {
+    setValues({
+      ...values,
+    });
+  }
+
   function updateValue(e) {
     // check if its a number and convert
     let { value } = e.target;
@@ -26,5 +32,5 @@ export default function useForm(defaults) {
     }));
   }
 
-  return { values, updateValue, updateValueByName };
+  return { values, resetValues, updateValue, updateValueByName };
 }

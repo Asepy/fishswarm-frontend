@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Modal,
   ModalOverlay,
@@ -8,14 +8,14 @@ import {
   VStack,
   Button,
   Text,
-  useToast,
-} from "@chakra-ui/react";
-import useDeactivateMember from "/utils/useDeactivateMember";
+  useToast
+} from '@chakra-ui/react';
+import useDeactivateMember from '/utils/useDeactivateMember';
 
 export default function DeactivateModal({
   associate,
   closeModal,
-  text = "¿Está seguro que desea desactivar al usuario?",
+  text = '¿Está seguro que desea desactivar al usuario?'
 }) {
   const toast = useToast();
   const [content] = React.useState(text);
@@ -26,28 +26,28 @@ export default function DeactivateModal({
     deactivateMember(associate.id_number, {
       onError: (error) => {
         const errorMessage =
-          error.message || "Ocurrió un error al desactivar al usuario.";
+          error.message || 'Ocurrió un error al desactivar al usuario.';
         toast({
-          position: "top",
-          title: "Error al desactivar al usuario.",
+          position: 'top',
+          title: 'Error al desactivar al usuario.',
           description: errorMessage,
-          status: "error",
+          status: 'error',
           duration: 5000,
-          isClosable: true,
+          isClosable: true
         });
       },
       onSuccess: () => {
         toast({
-          position: "top",
-          title: "Usuario desactivado",
+          position: 'top',
+          title: 'Usuario desactivado',
           description:
-            "Se ha desactivado al socio con CI " + `${associate.national_id}`,
-          status: "success",
+            'Se ha desactivado al socio con CI ' + `${associate.national_id}`,
+          status: 'success',
           duration: 5000,
-          isClosable: true,
+          isClosable: true
         });
         closeModal();
-      },
+      }
     });
   };
 
@@ -64,14 +64,13 @@ export default function DeactivateModal({
             </VStack>
           </ModalBody>
           <ModalFooter>
-            <Button variant={"outline"} mr={3} onClick={closeModal}>
+            <Button variant={'outline'} mr={3} onClick={closeModal}>
               Cancelar
             </Button>
             <Button
-              colorScheme={"red"}
+              colorScheme={'red'}
               onClick={handleDeactivate}
-              isLoading={isLoading}
-            >
+              isLoading={isLoading}>
               Desactivar
             </Button>
           </ModalFooter>

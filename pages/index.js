@@ -18,7 +18,8 @@ export default function index(props) {
             xl: "repeat(5, minmax(auto, 1fr))"
           }}
           gap={4}
-          pb="16">
+          pb="16"
+        >
           <GridItem colSpan={{ xl: 3 }}>
             <RegisterForm departments={props.departments} />
           </GridItem>
