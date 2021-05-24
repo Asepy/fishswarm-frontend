@@ -45,9 +45,18 @@ import DeactivateModal from "./DeactivateModal";
 import getUIMemberStatus from "utils/getUIMemberStatus";
 import { formatISODate } from "utils/formatDate";
 import useDepartments from "utils/useDepartments";
+import useForm from "utils/useForm";
+import useFocus from "utils/useFocus";
+
+const initialSearchValues = {
+  searchTerm: "",
+  cityId: "",
+  status: ""
+};
 
 export default function MemberList() {
-  const [searchTerm, setSearchTerm] = React.useState();
+  const { values, updateValue, resetValues, updateValueByName } =
+    useForm(initialSearchValues);
   const [queryParams, setQueryParams] = React.useState({
     name: "",
     document: "",
@@ -64,21 +73,21 @@ export default function MemberList() {
     status
   } = useFilterMemberPaginated(queryParams);
   const { departmentResult, citiesResult, updateDepartment } = useDepartments();
-
-  const handleFilter = (event) => {
-    if (event.key === "Enter") {
-      setPage(1);
-      if (isNumeric(searchTerm)) {
-        setQueryParams(() => ({ document: searchTerm }));
-      } else {
-        setQueryParams(() => ({ name: searchTerm }));
-      }
-    }
+  const [searchInputRef, setSearchInputFocus] = useFocus();
+  const handleSubmitSearch = (event) => {
+    event.preventDefault();
+    setPage(1);
+    const { searchTerm } = values;
+    const queryParams = {
+      document: isNumeric(searchTerm) ? searchTerm : null,
+      name: !isNumeric(searchTerm) ? searchTerm : null
+    };
+    setQueryParams(() => ({ ...queryParams }));
   };
 
   const handleClear = () => {
     setPage(1);
-    setSearchTerm("");
+    resetValues(initialSearchValues);
     setQueryParams({ name: "", document: "", status: "pending" });
   };
 
@@ -93,87 +102,108 @@ export default function MemberList() {
         </TabList>
       </Tabs>
       <Stack spacing={6} mt={4}>
-        <PageSection spacing={4} px={6}>
-          <Text fontSize="sm">Buscar Miembros</Text>
-          <InputGroup size="sm">
-            <InputLeftElement pointerEvents="none">
-              <SearchIcon color="gray.300" />
-            </InputLeftElement>
-            <Input
-              variant="outline"
-              type={"text"}
-              placeholder="Buscar por CI, Nombre, Apellido, Razón Social o RUC"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              onKeyDown={handleFilter}
-            />
-            <InputRightElement width="4.5rem">
-              {searchTerm ? (
-                <IconButton
+        <form onSubmit={handleSubmitSearch}>
+          <PageSection spacing={4} px={6}>
+            <Text fontSize="sm">Buscar Miembros</Text>
+
+            <InputGroup size="sm">
+              <InputLeftElement pointerEvents="none">
+                <SearchIcon color="gray.300" />
+              </InputLeftElement>
+              <Input
+                variant="outline"
+                type={"text"}
+                placeholder="Buscar por CI, Nombre, Apellido, Razón Social o RUC"
+                value={values.searchTerm}
+                name="searchTerm"
+                onChange={updateValue}
+                ref={searchInputRef}
+              />
+              <InputRightElement width="4.5rem">
+                {values.searchTerm ? (
+                  <IconButton
+                    onClick={() => {
+                      setSearchInputFocus();
+                      updateValueByName("searchTerm", "");
+                    }}
+                    size="xs"
+                    icon={<CloseIcon />}
+                  />
+                ) : null}
+              </InputRightElement>
+            </InputGroup>
+            <HStack maxW="40%">
+              <Select
+                size="xs"
+                placeholder={
+                  departmentStatus === "loading"
+                    ? "Cargando..."
+                    : "Departamento: Todos"
+                }
+                isDisabled={!departments}
+                onChange={updateDepartment}
+              >
+                {departments?.map((d) => (
+                  <option key={d.id} value={d.id}>
+                    {d.name}
+                  </option>
+                ))}
+              </Select>
+              <Select
+                size="xs"
+                placeholder={
+                  citiesStatus === "loading" ? "Cargando..." : "Ciudad: Todos"
+                }
+                name="cityId"
+                value={values.cityId}
+                onChange={updateValue}
+                isDisabled={!cities}
+              >
+                {cities?.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                  </option>
+                ))}
+              </Select>
+            </HStack>
+            <Divider></Divider>
+            <HStack justify="space-between">
+              <CardRadioGroup
+                name="status"
+                value={values.status}
+                onChange={(value) => updateValueByName("status", value)}
+                options={[
+                  { value: "pending", label: "Pendiente" },
+                  { value: "active", label: "Activo" },
+                  { value: "inactive", label: "Inactivo" },
+                  { value: "conditional", label: "Condicional" }
+                ]}
+              />
+              <HStack>
+                <Button
+                  size="sm"
+                  variant="primary"
+                  type="submit"
+                  isLoading={status === "loading"}
+                >
+                  Buscar
+                </Button>
+                <Button
+                  variant="outline"
+                  px={4}
+                  h="1.75rem"
+                  size="sm"
                   onClick={handleClear}
-                  size="xs"
-                  icon={<CloseIcon />}
-                />
-              ) : null}
-            </InputRightElement>
-          </InputGroup>
-          <HStack maxW="40%">
-            <Select
-              size="xs"
-              placeholder={
-                departmentStatus === "loading"
-                  ? "Cargando..."
-                  : "Departamento: Todos"
-              }
-              isDisabled={!departments}
-              onChange={updateDepartment}
-            >
-              {departments?.map((d) => (
-                <option key={d.id} value={d.id}>
-                  {d.name}
-                </option>
-              ))}
-            </Select>
-            <Select
-              size="xs"
-              placeholder={
-                citiesStatus === "loading" ? "Cargando..." : "Ciudad: Todos"
-              }
-              isDisabled={!cities}
-            >
-              {cities?.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.name}
-                </option>
-              ))}
-            </Select>
-          </HStack>
-          <Divider></Divider>
-          <HStack justify="space-between">
-            <CardRadioGroup
-              name="status"
-              options={[
-                { value: "pending", label: "Pendiente" },
-                { value: "active", label: "Activo" },
-                { value: "inactive", label: "Inactivo" },
-                { value: "conditional", label: "Condicional" }
-              ]}
-            />
-            <Button
-              variant="outline"
-              px={4}
-              h="1.75rem"
-              size="sm"
-              onClick={handleClear}
-            >
-              Limpiar
-            </Button>
-          </HStack>
-        </PageSection>
+                >
+                  Limpiar
+                </Button>
+              </HStack>
+            </HStack>
+          </PageSection>
+        </form>
         <PageSection boxShadow="md">
           <MembersTable error={error} status={status} data={data} />
           <SimplePaginator
-            gotoPage={(pageParam) => setPage(pageParam)}
             nextPage={nextPage}
             pageIndex={page}
             previousPage={previousPage}
@@ -228,7 +258,7 @@ function MembersTable({ error, status, data }) {
           <Th>Nombre</Th>
           <Th isNumeric>Cédula de Identidad</Th>
           <Th isNumeric>RUC</Th>
-          <Th>Ingresado El</Th>
+          <Th>Registrado El</Th>
           <Th textAlign="center">Estado</Th>
           <Th textAlign="center">Opciones</Th>
         </Tr>
@@ -368,16 +398,17 @@ function CardRadioGroup({
   options,
   name,
   defaultValue = "",
-  onChange = () => {}
+  onChange = () => {},
+  value
 }) {
   const { getRootProps, getRadioProps } = useRadioGroup({
     name,
     defaultValue,
-    onChange
+    onChange,
+    value
   });
 
   const group = getRootProps();
-
   return (
     <HStack {...group}>
       {options.map(({ value, label }) => {

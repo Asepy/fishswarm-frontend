@@ -3,9 +3,9 @@ import { useState } from "react";
 export default function useForm(defaults) {
   const [values, setValues] = useState(defaults);
 
-  function resetValues (values) {
+  function resetValues(values) {
     setValues({
-      ...values,
+      ...values
     });
   }
 
@@ -19,7 +19,7 @@ export default function useForm(defaults) {
       // copy the existing values into it
       ...values,
       // update the new value that changed
-      [e.target.name]: value,
+      [e.target.name]: value
     });
   }
 
@@ -28,7 +28,7 @@ export default function useForm(defaults) {
       // copy the existing values into it
       ...values,
       // update the new value that changed
-      [name]: value,
+      [name]: value
     }));
   }
 
