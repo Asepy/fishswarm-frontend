@@ -63,6 +63,7 @@ export default function MemberList() {
     hasMore,
     status
   } = useFilterMemberPaginated(queryParams);
+  const { departmentResult, citiesResult, updateDepartment } = useDepartments();
 
   const handleFilter = (event) => {
     if (event.key === "Enter") {
@@ -81,9 +82,8 @@ export default function MemberList() {
     setQueryParams({ name: "", document: "", status: "pending" });
   };
 
-  if (error) {
-    return <Text color="red.500">{error.message}</Text>;
-  }
+  const { data: departments, status: departmentStatus } = departmentResult;
+  const { data: cities, status: citiesStatus } = citiesResult;
 
   return (
     <>
@@ -118,15 +118,34 @@ export default function MemberList() {
             </InputRightElement>
           </InputGroup>
           <HStack maxW="40%">
-            <Select size="xs" placeholder="Departamento">
-              <option value="" selected>
-                Departamento: Todos
-              </option>
+            <Select
+              size="xs"
+              placeholder={
+                departmentStatus === "loading"
+                  ? "Cargando..."
+                  : "Departamento: Todos"
+              }
+              isDisabled={!departments}
+              onChange={updateDepartment}
+            >
+              {departments?.map((d) => (
+                <option key={d.id} value={d.id}>
+                  {d.name}
+                </option>
+              ))}
             </Select>
-            <Select size="xs" placeholder="Ciudad">
-              <option selected value="">
-                Ciudad: Todos
-              </option>
+            <Select
+              size="xs"
+              placeholder={
+                citiesStatus === "loading" ? "Cargando..." : "Ciudad: Todos"
+              }
+              isDisabled={!cities}
+            >
+              {cities?.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.name}
+                </option>
+              ))}
             </Select>
           </HStack>
           <Divider></Divider>
