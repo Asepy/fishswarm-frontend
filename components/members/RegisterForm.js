@@ -15,7 +15,6 @@ import {
   Tag,
   TagLabel,
   useToast,
-  Spinner,
   FormErrorMessage
 } from "@chakra-ui/react";
 import useCreateMember from "utils/useCreateMember";
@@ -33,7 +32,7 @@ export default function RegisterForm(props) {
     birthdate: "",
     sexo: "",
     departamento: "",
-    city: "",
+    cityId: "",
     email: "",
     cellphone: "",
     razonsocial: "",
@@ -68,7 +67,7 @@ export default function RegisterForm(props) {
   const handleSubmit = async (e) => {
     createMember(e, {
       onError: (error) => {
-        console.log(error.message);
+        console.error(error.message);
         const errorMessage =
           error.message || "Ocurrió un error durante el registro.";
         console.error({ errorMessage });
@@ -107,7 +106,7 @@ export default function RegisterForm(props) {
       validationSchema={CreateMemberSchema}
       onSubmit={(values) => handleSubmit(values)}
     >
-      {(props) => (
+      {() => (
         <Form name="form">
           <HStack spacing="4">
             <Tag
@@ -189,63 +188,6 @@ export default function RegisterForm(props) {
                 </FormControl>
               )}
             </Field>
-            <Field name="sexo">
-              {({ field, form }) => (
-                <FormControl id="sexo">
-                  <FormLabel>Sexo</FormLabel>
-                  <Select placeholder="Sexo" name="sexo" {...field}>
-                    <option value="Masculino">Masculino</option>
-                    <option value="Femenino">Femenino</option>
-                  </Select>
-                </FormControl>
-              )}
-            </Field>
-            <Box display={{ md: "flex" }}>
-              <Field name="departamento">
-                {({ field, form }) => (
-                  <FormControl id="departmento">
-                    <FormLabel>Departamento</FormLabel>
-                    <Select
-                      placeholder="Seleccione departmento"
-                      name="departamento"
-                      {...field}
-                      onChange={onChangeDepartment}
-                    >
-                      {departments.map((d) => (
-                        <option key={d.id} value={d.id}>
-                          {d.name}
-                        </option>
-                      ))}
-                    </Select>
-                  </FormControl>
-                )}
-              </Field>
-              <Field name="cityId">
-                {({ field, form }) => (
-                  <FormControl
-                    id="cityId"
-                    ml={{ md: 4 }}
-                    mt={{ base: 4, md: 0 }}
-                  >
-                    <FormLabel>Ciudad</FormLabel>
-                    <Select
-                      placeholder={
-                        citiesStatus === "loading"
-                          ? "Cargando..."
-                          : "Seleccione ciudad"
-                      }
-                      name="cityId"
-                    >
-                      {cities?.map((c) => (
-                        <option key={c.id} value={c.id}>
-                          {c.name}
-                        </option>
-                      ))}
-                    </Select>
-                  </FormControl>
-                )}
-              </Field>
-            </Box>
             <Field name="email">
               {({ field, form }) => (
                 <FormControl
@@ -280,6 +222,68 @@ export default function RegisterForm(props) {
                 </FormControl>
               )}
             </Field>
+            <Field name="sexo">
+              {({ field }) => (
+                <FormControl id="sexo">
+                  <FormLabel>Sexo (Opcional)</FormLabel>
+                  <Select placeholder="Sexo" name="sexo" {...field}>
+                    <option value="Masculino">Masculino</option>
+                    <option value="Femenino">Femenino</option>
+                  </Select>
+                </FormControl>
+              )}
+            </Field>
+            <Box display={{ md: "flex" }}>
+              <Field name="departamento">
+                {({ field }) => (
+                  <FormControl id="departmento">
+                    <FormLabel>Departamento (Opcional)</FormLabel>
+                    <Select
+                      placeholder="Seleccione departmento"
+                      name="departamento"
+                      {...field}
+                      onChange={(e) => {
+                        field.onChange(e);
+                        onChangeDepartment(e);
+                      }}
+                    >
+                      {departments.map((d) => (
+                        <option key={d.id} value={d.id}>
+                          {d.name}
+                        </option>
+                      ))}
+                    </Select>
+                  </FormControl>
+                )}
+              </Field>
+              <Field name="cityId">
+                {() => (
+                  <FormControl
+                    id="cityId"
+                    ml={{ md: 4 }}
+                    mt={{ base: 4, md: 0 }}
+                    isDisabled={!cities || cities.length === 0}
+                  >
+                    <FormLabel>Ciudad (Opcional)</FormLabel>
+                    <Select
+                      placeholder={
+                        citiesStatus === "loading"
+                          ? "Cargando..."
+                          : "Seleccione ciudad"
+                      }
+                      name="cityId"
+                    >
+                      {cities?.map((c) => (
+                        <option key={c.id} value={c.id}>
+                          {c.name}
+                        </option>
+                      ))}
+                    </Select>
+                  </FormControl>
+                )}
+              </Field>
+            </Box>
+
             <Divider></Divider>
           </Stack>
           <HStack spacing="4">
@@ -321,40 +325,38 @@ export default function RegisterForm(props) {
                 </FormControl>
               )}
             </Field>
-            <Box display={{ md: "flex" }}>
-              <Field name="razonsocial">
-                {({ field, form }) => (
-                  <FormControl id="razonsocial">
-                    <FormLabel>Razón Social</FormLabel>
-                    <Input type="text" name="razonsocial" {...field} />
-                  </FormControl>
-                )}
-              </Field>
-              <Field name="nfantasia">
-                {({ field, form }) => (
-                  <FormControl
-                    id="nfantasia"
-                    ml={{ md: 4 }}
-                    mt={{ base: 4, md: 0 }}
-                  >
-                    <FormLabel>Nombre de Fantasía</FormLabel>
-                    <Input type="text" name="nfantasia" {...field} />
-                  </FormControl>
-                )}
-              </Field>
-            </Box>
+            <Field name="razonsocial">
+              {({ field }) => (
+                <FormControl id="razonsocial">
+                  <FormLabel>Razón Social (Opcional)</FormLabel>
+                  <Input type="text" name="razonsocial" {...field} />
+                </FormControl>
+              )}
+            </Field>
+            <Field name="nfantasia">
+              {({ field }) => (
+                <FormControl
+                  id="nfantasia"
+                  ml={{ md: 4 }}
+                  mt={{ base: 4, md: 0 }}
+                >
+                  <FormLabel>Nombre de Fantasía (Opcional)</FormLabel>
+                  <Input type="text" name="nfantasia" {...field} />
+                </FormControl>
+              )}
+            </Field>
             <Field name="rubro">
-              {({ field, form }) => (
+              {({ field }) => (
                 <FormControl id="rubro">
-                  <FormLabel>Especifique el Rubro</FormLabel>
+                  <FormLabel>Especifique el Rubro (Opcional)</FormLabel>
                   <Input type="text" name="rubro" {...field} />
                 </FormControl>
               )}
             </Field>
             <Field name="empleados">
-              {({ field, form }) => (
+              {({ field }) => (
                 <FormControl id="empleados">
-                  <FormLabel>Cantidad de Empleados</FormLabel>
+                  <FormLabel>Cantidad de Empleados (Opcional)</FormLabel>
                   <Input
                     type="text"
                     name="empleados"
@@ -368,9 +370,9 @@ export default function RegisterForm(props) {
               )}
             </Field>
             <Field name="facturacion">
-              {({ field, form }) => (
+              {({ field }) => (
                 <FormControl id="facturacion">
-                  <FormLabel>Facturación del 2010</FormLabel>
+                  <FormLabel>Facturación del 2020 (Opcional)</FormLabel>
                   <Select name="facturacion" {...field}>
                     <option value={"Menor o igual a 650 millones Gs."}>
                       Menor o igual a 650 millones Gs.
@@ -393,9 +395,9 @@ export default function RegisterForm(props) {
               )}
             </Field>
             <Field name="sitioweb">
-              {({ field, form }) => (
+              {({ field }) => (
                 <FormControl id="sitioweb">
-                  <FormLabel>Sitio web o redes sociales</FormLabel>
+                  <FormLabel>Sitio web o redes sociales (Opcional)</FormLabel>
                   <Input
                     type="text"
                     name="sitioweb"
