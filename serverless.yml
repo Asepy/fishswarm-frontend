@@ -2,7 +2,7 @@ asepyFishSwarm:
   component: "@sls-next/serverless-component@1.19.0"
   inputs:
     memory:
-      defaultLambda: 1024
+      defaultLambda: 2048
       apiLambda: 2048
     timeout:
       defaultLambda: 30
