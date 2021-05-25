@@ -1,6 +1,11 @@
 asepyFishSwarm:
   component: "@sls-next/serverless-component@1.19.0"
   inputs:
+    memory:
+      defaultLambda: 1024
+      apiLambda: 2048
+    timeout:
+      defaultLambda: 30
     # cloudfront:
     #   distributionId: ${env.CF_DISTRIBUTION_ID}
     env:
