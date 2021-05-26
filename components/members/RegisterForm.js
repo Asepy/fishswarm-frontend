@@ -31,7 +31,7 @@ export default function RegisterForm(props) {
     document: "",
     birthdate: "",
     sexo: "",
-    departamento: "",
+    deparmentId: "",
     cityId: "",
     email: "",
     cellphone: "",
@@ -65,8 +65,8 @@ export default function RegisterForm(props) {
     { staleTime: Infinity }
   );
 
-  const handleSubmit = async (e) => {
-    createMember(e, {
+  const handleSubmit = async (values) => {
+    createMember(values, {
       onError: (error) => {
         console.error(error.message);
         const errorMessage =
@@ -224,13 +224,13 @@ export default function RegisterForm(props) {
               )}
             </Field>
             <Box display={{ md: "flex" }}>
-              <Field name="departamento">
+              <Field name="deparmentId">
                 {({ field }) => (
                   <FormControl id="departmento">
                     <FormLabel>Departamento</FormLabel>
                     <Select
                       placeholder="Seleccione departmento"
-                      name="departamento"
+                      name="deparmentId"
                       {...field}
                       onChange={(e) => {
                         field.onChange(e);

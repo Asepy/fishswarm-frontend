@@ -1,19 +1,43 @@
 import React from "react";
 import handleResponse from "./handleResponse";
 
-async function postMemberToApi(newMember) {
-  const response = await fetch("/api/createMember", {
+async function postMember(newMember) {
+  const {
+    name,
+    document,
+    surname,
+    birthdate,
+    cellphone,
+    email,
+    ruc,
+    cityId,
+    deparmentId
+  } = newMember;
+  const requiredValues = {
+    name,
+    document,
+    surname,
+    birthdate,
+    cellphone,
+    email,
+    ruc,
+    cityId,
+    deparmentId
+  };
+  const body = JSON.stringify(requiredValues);
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/members`, {
     method: "POST",
+    mode: "cors",
+    body,
     headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      ...newMember,
-      birthdate: newMember.birthdate
-    })
+      "Content-Type": "application/json",
+      "X-Api-Key": `${process.env.NEXT_PUBLIC_API_KEY}`
+    }
   });
-
-  return handleResponse(response);
+  const jsonResponse = await handleResponse(response);
+  // eslint-disable-next-line no-console
+  console.log("response was", { jsonResponse });
+  return jsonResponse;
 }
 
 export default function useCreateMember() {
@@ -21,7 +45,7 @@ export default function useCreateMember() {
   const mutate = async (values, options) => {
     setIsLoading(true);
     try {
-      const data = await postMemberToApi(values);
+      const data = await postMember(values);
       options.onSuccess(data);
     } catch (error) {
       options.onError(error);
