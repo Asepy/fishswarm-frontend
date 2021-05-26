@@ -1,4 +1,4 @@
-import fetchCities from "utils/fetchCities";
+import { fetchCities } from "utils/useCitiesByDep";
 
 export default async function handler(req, res) {
   try {
