@@ -11,7 +11,7 @@ import {
   HStack,
   VStack,
   Text,
-  Box,
+  Box
 } from "@chakra-ui/react";
 import { ArrowForwardIcon, SearchIcon } from "@chakra-ui/icons";
 import BirthDatePicker from "components/ui/BirthDatePicker";
@@ -22,13 +22,14 @@ import useSearchMember from "utils/useSearchMember";
 import useForm from "utils/useForm";
 import allEmptyValues from "utils/allEmptyValues";
 import Seo from "components/ui/layout/Seo";
+import ErrorAlert from "components/ui/ErrorAlert";
 
 export default function searchMember() {
   const { values, updateValue, updateValueByName } = useForm({
     document: "",
-    birthdate: "",
+    birthdate: ""
   });
-  const { isLoading, data, refetch } = useSearchMember(values);
+  const { isLoading, data, refetch, error } = useSearchMember(values);
   const handleSearch = (e) => {
     e.preventDefault();
     refetch();
@@ -70,7 +71,7 @@ export default function searchMember() {
               </Button>
             </FieldsStack>
           </form>
-
+          {error && <ErrorAlert>{error.message}</ErrorAlert>}
           <SkeletonText
             isLoaded={!isLoading}
             textAlign="center"

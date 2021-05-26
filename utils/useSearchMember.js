@@ -1,35 +1,41 @@
-import React from "react";
+import { useState } from "react";
 import formatDate from "./formatDate";
+import handleResponse from "./handleResponse";
 
-async function getMemberFromApi({ document, birthdate }) {
+async function searchMember({ document, birthdate }) {
   const dateAsStr = formatDate(birthdate);
-  const response = await fetch(
-    `/api/members/${document}?birthdate=${dateAsStr}`,
+  const resp = await fetch(
+    `${process.env.NEXT_PUBLIC_API_BASE}/members/validate?document=${document}&birthdate=${dateAsStr}`,
     {
       method: "GET",
+      mode: "cors",
       headers: {
         "Content-Type": "application/json",
-      },
+        "X-Api-Key": `${process.env.NEXT_PUBLIC_API_KEY}`
+      }
     }
   );
-  if (!response.ok) {
-    const errorJson = await response.json();
-    throw new Error(errorJson.message);
-  }
-  return response.json();
+  const jsonResp = await handleResponse(resp);
+  // eslint-disable-next-line no-console
+  console.log("response was", { jsonResp });
+  return jsonResp;
 }
 
 export default function useSearchMember({ document, birthdate }) {
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [data, setData] = React.useState();
+  const [isLoading, setIsLoading] = useState(false);
+  const [data, setData] = useState();
+  const [error, setError] = useState();
   const refetch = async () => {
     setIsLoading(true);
+    setError(null);
     try {
-      const response = await getMemberFromApi({ document, birthdate });
+      const response = await searchMember({ document, birthdate });
       setData(response);
+    } catch (error) {
+      setError(error);
     } finally {
       setIsLoading(false);
     }
   };
-  return { isLoading, refetch, data };
+  return { isLoading, refetch, data, error };
 }
