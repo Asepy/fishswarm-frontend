@@ -1,27 +1,40 @@
 import { useState, useMemo } from "react";
 import { useQuery } from "react-query";
+import handleResponse from "./handleResponse";
 import serialize from "./serialize";
 
 export const FILTER_MEMBER_QUERY_ID = "query:filter-members";
 export const FILTER_MEMBER_PAGED_QUERY_ID = "query:filter-members-paginated";
 
-async function filterMember({ page, name, document }) {
+async function fetchFilteredMembers({ page, name, document }) {
   const queryParams = serialize({ page, name, document });
-  const response = await fetch(`/api/members/filter?${queryParams}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json"
+  const resp = await fetch(
+    `${process.env.NEXT_PUBLIC_API_BASE}/members/filter?${queryParams}`,
+    {
+      method: "GET",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Api-Key": `${process.env.NEXT_PUBLIC_API_KEY}`
+      }
     }
-  });
-  if (!response.ok) {
-    const errorJson = await response.json();
-    throw new Error(errorJson.message);
-  }
-  return response.json();
+  );
+  const data = await handleResponse(resp);
+
+  // eslint-disable-next-line no-console
+  console.log("response was:", data);
+
+  const parsedData = data.data.map((item) =>
+    typeof item === "string" ? JSON.parse(item) : item
+  );
+
+  return { ...data, data: parsedData };
 }
 
 export default function useFilterMember({ page }) {
-  return useQuery([FILTER_MEMBER_QUERY_ID, page], () => filterMember({ page }));
+  return useQuery([FILTER_MEMBER_QUERY_ID, page], () =>
+    fetchFilteredMembers({ page })
+  );
 }
 
 export function useFilterMemberPaginated(queryParams) {
@@ -30,7 +43,7 @@ export function useFilterMemberPaginated(queryParams) {
   const { name, document } = queryParams;
   const { data, ...restQuery } = useQuery(
     [FILTER_MEMBER_PAGED_QUERY_ID, page, name, document],
-    () => filterMember({ page, name, document }),
+    () => fetchFilteredMembers({ page, name, document }),
     { keepPreviousData: true }
   );
 
