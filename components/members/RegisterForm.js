@@ -21,6 +21,7 @@ import useCreateMember from "utils/useCreateMember";
 import { Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import useDepartments from "utils/useDepartments";
+import { differenceInYears, parse } from "date-fns";
 
 export default function RegisterForm(props) {
   const toast = useToast();
@@ -51,7 +52,13 @@ export default function RegisterForm(props) {
     email: Yup.string()
       .email("Email inválido")
       .required("El email es requerido"),
-    birthdate: Yup.string().required("La fecha de nacimiento es requerida"),
+    birthdate: Yup.string()
+      .required("La fecha de nacimiento es requerida")
+      .test("mayor-de-edad", "Debe ser mayor de 18 años", (value) => {
+        const dateBorn = parse(value, "yyyy-MM-dd", new Date());
+        const today = new Date();
+        return differenceInYears(today, dateBorn) >= 18;
+      }),
     document: Yup.string().required("La cédula es requerida"),
     cellphone: Yup.string()
       .required("El número de celular es requerido")
@@ -74,7 +81,6 @@ export default function RegisterForm(props) {
         console.error(error.message);
         const errorMessage =
           error.message || "Ocurrió un error durante el registro.";
-        console.error({ errorMessage });
         toast({
           position: "top",
           title: "Error durante el registro",
