@@ -53,7 +53,10 @@ export default function RegisterForm(props) {
       .required("El email es requerido"),
     birthdate: Yup.string().required("La fecha de nacimiento es requerida"),
     document: Yup.string().required("La cédula es requerida"),
-    cellphone: Yup.string().required("El número de celular es requerido"),
+    cellphone: Yup.string()
+      .required("El número de celular es requerido")
+      .matches(/^09.*$/i, "Debe empezar con '09'")
+      .length(10, "Mímimo 10 dígitos"),
     ruc: Yup.string().required("El RUC es requerido"),
     cityId: Yup.number().required("Ciudad es requerido")
   });
