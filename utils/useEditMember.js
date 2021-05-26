@@ -1,39 +1,33 @@
-import React from 'react';
-import { useQueryClient } from 'react-query';
-import { FILTER_MEMBER_PAGED_QUERY_ID } from './useFilterMember';
+import { useState } from "react";
+import { useQueryClient } from "react-query";
+import handleResponse from "./handleResponse";
+import { FILTER_MEMBER_PAGED_QUERY_ID } from "./useFilterMember";
 
-async function editMemberToApi(document, editMember) {
-  console.log(
-    'editMember :: ' +
-      JSON.stringify({
-        ...editMember
-      })
+async function editMemberToApi(idNumber, editMember) {
+  const body = JSON.stringify(editMember);
+  const resp = await fetch(
+    `${process.env.NEXT_PUBLIC_API_BASE}/members/${idNumber}`,
+    {
+      method: "PUT",
+      mode: "cors",
+      body,
+      headers: {
+        "Content-Type": "application/json",
+        "X-Api-Key": `${process.env.NEXT_PUBLIC_API_KEY}`
+      }
+    }
   );
-  const response = await fetch(`/api/editMember?document=${document}`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      ...editMember,
-      cityId: 1 // TODO en duro por ahora
-    })
-  });
-  if (!response.ok) {
-    const errorJson = await response.json();
-    throw new Error(errorJson.message);
-  }
-  return response.json();
+  return handleResponse(resp);
 }
 
 export default function useEditMember() {
-  const [isLoading, setIsLoading] = React.useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const queryClient = useQueryClient();
 
-  const mutate = async ({ document, values }, options) => {
+  const mutate = async ({ idNumber, values }, options) => {
     setIsLoading(true);
     try {
-      const data = await editMemberToApi(document, values);
+      const data = await editMemberToApi(idNumber, values);
       // Forces a refresh of the member's table
       queryClient.invalidateQueries(FILTER_MEMBER_PAGED_QUERY_ID);
       options.onSuccess(data);

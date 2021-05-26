@@ -29,7 +29,7 @@ import useDepartments from "utils/useDepartments";
 
 export default function EditModal({ closeModal, member }) {
   const toast = useToast();
-  const { mutate: editMember } = useEditMember();
+  const { mutate: editMember, isLoading: saving } = useEditMember();
   const { values } = useForm({
     name: member?.name || "",
     surname: member?.surname || "",
@@ -66,9 +66,9 @@ export default function EditModal({ closeModal, member }) {
     updateDepartment(e);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (values) => {
     editMember(
-      { document: member.national_id, values: e },
+      { idNumber: member.id_number, values },
       {
         onError: (error) => {
           console.log(error.message);
@@ -393,8 +393,8 @@ export default function EditModal({ closeModal, member }) {
                     <Button variant="outline" mr={3} onClick={closeModal}>
                       Cancelar
                     </Button>
-                    <Button type="submit" variant="primary">
-                      Editar
+                    <Button type="submit" variant="primary" isLoading={saving}>
+                      Guardar
                     </Button>
                   </ModalFooter>
                 </Form>
