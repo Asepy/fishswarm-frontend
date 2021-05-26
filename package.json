@@ -1,6 +1,6 @@
 {
-  "name": "myfirstreact",
-  "version": "0.2.0",
+  "name": "asepyfishswarm",
+  "version": "0.2.1",
   "private": true,
   "dependencies": {
     "@aws-amplify/ui-react": "^1.0.7",
