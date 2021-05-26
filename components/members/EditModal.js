@@ -216,7 +216,10 @@ export default function EditModal({ closeModal, member }) {
                               placeholder="Seleccione departmento"
                               name="departament"
                               {...field}
-                              onChange={onChangeDepartment}
+                              onChange={(e) => {
+                                field.onChange(e);
+                                onChangeDepartment(e);
+                              }}
                             >
                               {departments?.map((d) => (
                                 <option key={d.id} value={d.id}>
@@ -239,6 +242,7 @@ export default function EditModal({ closeModal, member }) {
                                   : "Seleccione ciudad"
                               }
                               name="cityId"
+                              isDisabled={!cities || cities.length === 0}
                             >
                               {cities?.map((c) => (
                                 <option key={c.id} value={c.id}>
