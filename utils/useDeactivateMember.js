@@ -1,28 +1,30 @@
-import React from 'react';
-import { useQueryClient } from 'react-query';
-import { FILTER_MEMBER_PAGED_QUERY_ID } from './useFilterMember';
+import React from "react";
+import { useQueryClient } from "react-query";
+import handleResponse from "./handleResponse";
+import { FILTER_MEMBER_PAGED_QUERY_ID } from "./useFilterMember";
 
-async function deactivateMemberToApi(idNumber) {
-  const response = await fetch(`/api/deactivateMember?idNumber=${idNumber}`, {
-    method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json'
+async function deleteMember(idNumber) {
+  const resp = await fetch(
+    `${process.env.NEXT_PUBLIC_API_BASE}/members/${idNumber}`,
+    {
+      method: "DELETE",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Api-Key": `${process.env.NEXT_PUBLIC_API_KEY}`
+      }
     }
-  });
-  if (!response.ok) {
-    const errorJson = await response.json();
-    throw new Error(errorJson.message);
-  }
-  return response.json();
+  );
+  return handleResponse(resp);
 }
 
 export default function useDeactivateMember() {
   const [isLoading, setIsLoading] = React.useState(false);
   const queryClient = useQueryClient();
-  const mutate = async (values, options) => {
+  const mutate = async (idNumber, options) => {
     setIsLoading(true);
     try {
-      const data = await deactivateMemberToApi(values);
+      const data = await deleteMember(idNumber);
       queryClient.invalidateQueries(FILTER_MEMBER_PAGED_QUERY_ID);
       options.onSuccess(data);
     } catch (error) {
