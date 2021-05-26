@@ -3,14 +3,22 @@ import { useQuery } from "react-query";
 import handleResponse from "./handleResponse";
 import useCitiesByDep from "./useCitiesByDep";
 
-async function getDepartmentsFromApi() {
-  const response = await fetch(`/api/departments`, {
+async function fetchDepartments() {
+  const resp = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/deparments`, {
     method: "GET",
+    mode: "cors",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
+      "X-Api-Key": `${process.env.NEXT_PUBLIC_API_KEY}`
     }
   });
-  return handleResponse(response);
+  const data = await handleResponse(resp);
+  // eslint-disable-next-line no-console
+  console.log("response was:", data);
+  const parsedData = data.data.map((item) =>
+    typeof item === "string" ? JSON.parse(item) : item
+  );
+  return { ...data, data: parsedData };
 }
 
 export const DEPARTMENTS_QUERY_ID = "query:departments";
@@ -27,7 +35,7 @@ export default function useDepartments(departmentOptions, citiesOptions) {
   const departmentQuery = useQuery(
     DEPARTMENTS_QUERY_ID,
     async () => {
-      const resp = await getDepartmentsFromApi();
+      const resp = await fetchDepartments();
       return resp?.data || [];
     },
     departmentOptions
