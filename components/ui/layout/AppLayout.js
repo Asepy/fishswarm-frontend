@@ -21,13 +21,13 @@ import {
   MenuItem,
   Avatar,
   MenuDivider,
-  Heading,
+  Heading
 } from "@chakra-ui/react";
 import {
   HamburgerIcon,
   CloseIcon,
   ChevronDownIcon,
-  ChevronRightIcon,
+  ChevronRightIcon
 } from "@chakra-ui/icons";
 
 import { Auth } from "aws-amplify";
@@ -131,7 +131,7 @@ export default function WithSubnavigation({ children }) {
                 color={useColorModeValue("gray.600", "gray.200")}
                 _hover={{
                   textDecoration: "none",
-                  color: useColorModeValue("gray.800", "white"),
+                  color: useColorModeValue("gray.800", "white")
                 }}
               >
                 Asociáte
@@ -186,7 +186,7 @@ const DesktopNav = () => {
                 color={useColorModeValue("gray.600", "gray.200")}
                 _hover={{
                   textDecoration: "none",
-                  color: useColorModeValue("gray.800", "white"),
+                  color: useColorModeValue("gray.800", "white")
                 }}
               >
                 {navItem.label}
@@ -279,7 +279,7 @@ const MobileNavItem = ({ label, children, href }) => {
         justify={"space-between"}
         align={"center"}
         _hover={{
-          textDecoration: "none",
+          textDecoration: "none"
         }}
       >
         <Text
@@ -327,8 +327,8 @@ const NAV_ITEMS = [
       {
         label: "Miembros registrados",
         subLabel: "Administración de socios registrados a ASEPY",
-        href: "#",
-      },
-    ],
-  },
+        href: "#"
+      }
+    ]
+  }
 ];
