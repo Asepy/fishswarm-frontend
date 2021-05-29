@@ -70,10 +70,13 @@ export default function MemberList() {
     setPage,
     error,
     hasMore,
-    status
+    status,
+    isFetching,
+    isPreviousData
   } = useFilterMemberPaginated(queryParams);
   const { departmentResult, citiesResult, updateDepartment } = useDepartments();
   const [searchInputRef, setSearchInputFocus] = useFocus();
+
   const handleSubmitSearch = (event) => {
     event.preventDefault();
     setPage(1);
@@ -184,7 +187,7 @@ export default function MemberList() {
                   size="sm"
                   variant="primary"
                   type="submit"
-                  isLoading={status === "loading"}
+                  isLoading={isPreviousData && isFetching}
                 >
                   Buscar
                 </Button>
@@ -202,12 +205,19 @@ export default function MemberList() {
           </PageSection>
         </form>
         <PageSection boxShadow="md">
-          <MembersTable error={error} status={status} data={data} />
+          <MembersTable
+            error={error}
+            status={status}
+            data={data}
+            isFetching={isFetching}
+          />
           <SimplePaginator
             nextPage={nextPage}
             pageIndex={page}
             previousPage={previousPage}
             hasMore={hasMore}
+            isPageLoading={isPreviousData && isFetching}
+            isNextDisabled={isPreviousData || !hasMore}
             pageTotal={data?.pageTotal}
             totalElements={data?.total}
             px={4}
@@ -222,7 +232,7 @@ function PageSection(props) {
   return <Stack boxShadow="md" py={4} {...props} />;
 }
 
-function MembersTable({ error, status, data }) {
+function MembersTable({ error, status, data, isFetching }) {
   const [showEditModal, setShowEditModal] = React.useState(false);
   const [showDeactivateModal, setShowDeactivateModal] = React.useState(false);
   const [associate, setAssociate] = React.useState();
@@ -250,7 +260,6 @@ function MembersTable({ error, status, data }) {
       ></SkeletonLines>
     );
   }
-
   return (
     <Table variant="simple" size="sm">
       <Thead>
@@ -258,6 +267,7 @@ function MembersTable({ error, status, data }) {
           <Th>Nombre</Th>
           <Th isNumeric>Cédula de Identidad</Th>
           <Th isNumeric>RUC</Th>
+          <Th>Ciudad</Th>
           <Th>Registrado El</Th>
           <Th textAlign="center">Estado</Th>
           <Th textAlign="center">Opciones</Th>
@@ -266,7 +276,7 @@ function MembersTable({ error, status, data }) {
 
       <Tbody>
         {data?.data.map((member) => (
-          <Tr key={member.id_number}>
+          <Tr key={member.id_number} w="20%">
             <Td>
               <Stack>
                 <span>
@@ -277,13 +287,27 @@ function MembersTable({ error, status, data }) {
                 </Box>
               </Stack>
             </Td>
-            <Td isNumeric>{member.national_id}</Td>
-            <Td isNumeric>{member.ruc}</Td>
-            <Td>{formatISODate(member.startDate)}</Td>
-            <Td textAlign="center">
+            <Td isNumeric w="15%">
+              {member.national_id}
+            </Td>
+            <Td isNumeric w="15%">
+              {member.ruc}
+            </Td>
+            <Td w="20%">
+              <Stack>
+                <span>{member?.cityName}</span>
+                <Box as="span" fontSize="xs" color="gray.500">
+                  {member?.departmentName}
+                </Box>
+              </Stack>
+            </Td>
+            <Td w="20%">
+              {formatISODate(member.startDate, "dd-MM-yyyy HH:mm")}
+            </Td>
+            <Td w="5%" textAlign="center">
               <StatusCell status={member.status} />
             </Td>
-            <Td textAlign="center">
+            <Td w="5%" textAlign="center">
               <Menu matchWidth>
                 <MenuButton
                   fontSize="12px"
@@ -345,8 +369,11 @@ function SimplePaginator({
   previousPage = () => {},
   hasMore = false,
   totalElements = 0,
+  isNextDisabled = true,
+  isPageLoading = false,
   ...rest
 }) {
+  const previousPageIndex = pageIndex > 1 ? pageIndex - 1 : pageIndex;
   return (
     <>
       <Flex justifyContent="space-between" m={8} alignItems="center" {...rest}>
@@ -360,7 +387,7 @@ function SimplePaginator({
           <Text flexShrink="0" mr={8}>
             Página{" "}
             <Text fontWeight="bold" as="span">
-              {pageIndex}
+              {isPageLoading ? previousPageIndex : pageIndex}
             </Text>{" "}
             de{" "}
             <Text fontWeight="bold" as="span">
@@ -380,10 +407,11 @@ function SimplePaginator({
           </Button>
           <Button
             onClick={nextPage}
-            isDisabled={!hasMore}
+            isDisabled={isNextDisabled}
             ml={2}
             size="sm"
             variant="outline"
+            isLoading={isPageLoading}
           >
             Siguiente
           </Button>

@@ -24,11 +24,7 @@ async function fetchFilteredMembers({ page, name, document }) {
   // eslint-disable-next-line no-console
   console.log("response was:", data);
 
-  const parsedData = data.data.map((item) =>
-    typeof item === "string" ? JSON.parse(item) : item
-  );
-
-  return { ...data, data: parsedData };
+  return data;
 }
 
 export default function useFilterMember({ page }) {
