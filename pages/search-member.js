@@ -106,7 +106,7 @@ function FieldsStack({ children }) {
 
 function SearchResult({ result, ...rest }) {
   const { found } = result.data;
-  if (found === "true") {
+  if (found === true) {
     return (
       <VStack spacing="8" {...rest}>
         <Alert status="success">
