@@ -3,7 +3,7 @@ import { useQuery } from "react-query";
 import handleResponse from "./handleResponse";
 import useCitiesByDep from "./useCitiesByDep";
 
-async function fetchDepartments() {
+export async function fetchDepartments() {
   const resp = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/deparments`, {
     method: "GET",
     mode: "cors",
@@ -15,10 +15,7 @@ async function fetchDepartments() {
   const data = await handleResponse(resp);
   // eslint-disable-next-line no-console
   console.log("response was:", data);
-  const parsedData = data.data.map((item) =>
-    typeof item === "string" ? JSON.parse(item) : item
-  );
-  return { ...data, data: parsedData };
+  return data;
 }
 
 export const DEPARTMENTS_QUERY_ID = "query:departments";

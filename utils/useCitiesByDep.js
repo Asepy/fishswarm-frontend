@@ -17,10 +17,7 @@ export async function fetchCities({ depId }) {
   const data = await handleResponse(response);
   // eslint-disable-next-line no-console
   console.log("Response was:", data);
-  const parsedData = data.data.map((item) =>
-    typeof item === "string" ? JSON.parse(item) : item
-  );
-  return { ...data, data: parsedData };
+  return data;
 }
 
 export default function useCitiesByDep({ depId }, options) {
