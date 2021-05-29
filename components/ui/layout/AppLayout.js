@@ -29,11 +29,10 @@ import {
   ChevronDownIcon,
   ChevronRightIcon
 } from "@chakra-ui/icons";
-
 import { Auth } from "aws-amplify";
 import Router from "next/router";
-import NextLink from "next/link";
 import LoadingModal from "../LoadingModal";
+import InternalLink from "../InternalLink";
 
 export default function WithSubnavigation({ children }) {
   const { isOpen, onToggle } = useDisclosure();
@@ -43,13 +42,13 @@ export default function WithSubnavigation({ children }) {
   React.useEffect(() => {
     checkUser();
   }, []);
+
   async function checkUser() {
     try {
       const currentUser = await Auth.currentAuthenticatedUser();
       setUser(currentUser);
-      console.log({ currentUser });
     } catch (err) {
-      console.log({ err });
+      console.error({ err });
     }
   }
 
@@ -58,12 +57,10 @@ export default function WithSubnavigation({ children }) {
     setTimeout(() => {
       Auth.signOut()
         .then(() => {
-          console.log("success signing out");
           Router.reload(window.location.pathname);
         })
         .catch((error) => {
-          console.log("error signing out: ", error);
-          setIsSigningOut(false);
+          console.error("error signing out: ", error);
           setShowLoadingModal(false);
         });
     }, 2000);
@@ -121,22 +118,20 @@ export default function WithSubnavigation({ children }) {
             direction={"row"}
             spacing={6}
           >
-            <NextLink href="/">
-              <Box
-                as="a"
-                p={2}
-                cursor="pointer"
-                fontSize={"sm"}
-                fontWeight={500}
-                color={useColorModeValue("gray.600", "gray.200")}
-                _hover={{
-                  textDecoration: "none",
-                  color: useColorModeValue("gray.800", "white")
-                }}
-              >
-                Asociáte
-              </Box>
-            </NextLink>
+            <Box
+              as={InternalLink}
+              href="/"
+              p={2}
+              fontSize={"sm"}
+              fontWeight={500}
+              color={useColorModeValue("gray.600", "gray.200")}
+              _hover={{
+                textDecoration: "none",
+                color: useColorModeValue("gray.800", "white")
+              }}
+            >
+              Asociáte
+            </Box>
             <Flex alignItems={"center"}>
               <Menu>
                 <MenuButton
