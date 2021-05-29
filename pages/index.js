@@ -4,7 +4,7 @@ import Container from "components/ui/Container";
 import RegisterForm from "components/members/RegisterForm";
 import PublicLayout from "components/ui/layout/PublicLayout";
 import Seo from "components/ui/layout/Seo";
-import fetchDepartments from "utils/fetchDepartments";
+import { fetchDepartments } from "utils/useDepartments";
 
 export default function index(props) {
   return (
