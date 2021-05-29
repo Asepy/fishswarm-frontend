@@ -23,8 +23,9 @@ async function fetchDepartments() {
 
 export const DEPARTMENTS_QUERY_ID = "query:departments";
 
-export default function useDepartments(departmentOptions, citiesOptions) {
-  const [selectedDepId, setSelectedDepId] = useState();
+export default function useDepartments(departmentOptions = {}, citiesOptions) {
+  const { initialDepId, ...restDepOptions } = departmentOptions;
+  const [selectedDepId, setSelectedDepId] = useState(initialDepId);
   const citiesQuery = useCitiesByDep(
     {
       depId: selectedDepId
@@ -38,7 +39,7 @@ export default function useDepartments(departmentOptions, citiesOptions) {
       const resp = await fetchDepartments();
       return resp?.data || [];
     },
-    departmentOptions
+    restDepOptions
   );
 
   const updateDepartment = (e) => {

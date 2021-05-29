@@ -36,8 +36,8 @@ export default function EditModal({ closeModal, member }) {
     document: member?.national_id || "",
     birthdate: member?.birthdate || "",
     sex: member?.sex || "",
-    departament: member?.department || "",
-    cityId: member?.city || "",
+    departmentId: member?.departmentId || "",
+    cityId: member?.cityId || "",
     email: member?.mail_id || "",
     cellphone: member?.cellphone || "",
     businessName: member?.businessName || "",
@@ -48,7 +48,9 @@ export default function EditModal({ closeModal, member }) {
     website: member?.website || "",
     anualTurnover: member?.anualTurnover || ""
   });
-  const { departmentResult, citiesResult, updateDepartment } = useDepartments();
+  const { departmentResult, citiesResult, updateDepartment } = useDepartments({
+    initialDepId: member?.departmentId
+  });
 
   const MemberEditSchema = Yup.object().shape({
     name: Yup.string().required("El nombre es requerido"),
@@ -208,13 +210,13 @@ export default function EditModal({ closeModal, member }) {
                           </FormControl>
                         )}
                       </Field>
-                      <Field name="departament">
+                      <Field name="departmentId">
                         {({ field, form }) => (
-                          <FormControl id={"department"}>
+                          <FormControl id="departmentId">
                             <FormLabel>Departamento</FormLabel>
                             <Select
                               placeholder="Seleccione departmento"
-                              name="departament"
+                              name="departmentId"
                               {...field}
                               onChange={(e) => {
                                 field.onChange(e);
@@ -242,7 +244,6 @@ export default function EditModal({ closeModal, member }) {
                                   : "Seleccione ciudad"
                               }
                               name="cityId"
-                              isDisabled={!cities || cities.length === 0}
                             >
                               {cities?.map((c) => (
                                 <option key={c.id} value={c.id}>
