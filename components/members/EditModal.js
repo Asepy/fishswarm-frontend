@@ -104,7 +104,7 @@ export default function EditModal({ closeModal, member }) {
     );
   };
 
-  const { data: departments, status: departmentStatus } = departmentResult;
+  const { data: departments } = departmentResult;
   const { data: cities, status: citiesStatus } = citiesResult;
 
   console.log("departmentResult :: ", departmentResult);
