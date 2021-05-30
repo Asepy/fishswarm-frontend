@@ -5,9 +5,9 @@ import {
   ModalContent,
   ModalBody,
   ModalFooter,
+  ModalHeader,
   ModalCloseButton,
   Button,
-  HStack,
   Heading,
   Stack,
   FormControl,
@@ -114,15 +114,17 @@ export default function EditModal({ closeModal, member }) {
   return (
     <>
       <Modal
+        title="holas"
         isOpen={true}
         onClose={closeModal}
         closeOnOverlayClick={false}
         size={["3xl"]}
       >
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent px={4}>
+          <ModalHeader>Editar Miembro</ModalHeader>
           <ModalCloseButton />
-          <ModalBody p={7}>
+          <ModalBody mt={4}>
             <Formik
               initialValues={values}
               validationSchema={MemberEditSchema}
@@ -130,10 +132,10 @@ export default function EditModal({ closeModal, member }) {
             >
               {(props) => (
                 <Form name="form">
-                  <HStack spacing="4">
-                    <Heading size="lg">Registro Personal</Heading>
-                  </HStack>
-                  <Stack spacing="24px" mt="8" pl="10">
+                  <Stack spacing="24px">
+                    <Heading fontSize={{ base: "lg", md: "xl" }}>
+                      Registro Personal
+                    </Heading>
                     <VStack>
                       <Field name="name">
                         {({ field, form }) => (
@@ -289,12 +291,11 @@ export default function EditModal({ closeModal, member }) {
                   <Box my="8">
                     <Divider></Divider>
                   </Box>
-                  <HStack spacing="4">
-                    <Heading size="lg" mt="4">
+
+                  <Stack spacing="24px" mt="8">
+                    <Heading fontSize={{ base: "lg", md: "xl" }}>
                       Registro del Emprendimiento
                     </Heading>
-                  </HStack>
-                  <Stack spacing="24px" mt="8" pl="10">
                     <VStack>
                       <Field name="ruc">
                         {({ field, form }) => (
@@ -390,8 +391,8 @@ export default function EditModal({ closeModal, member }) {
                       </Field>
                     </VStack>
                   </Stack>
-                  <ModalFooter>
-                    <Button variant="outline" mr={3} onClick={closeModal}>
+                  <ModalFooter mt={4}>
+                    <Button variant="ghost" mr={3} onClick={closeModal}>
                       Cancelar
                     </Button>
                     <Button type="submit" variant="primary" isLoading={saving}>

@@ -57,14 +57,12 @@ export default function DeactivateModal({
         <ModalOverlay />
         <ModalContent>
           <ModalBody>
-            <VStack p={12}>
-              <Text fontSize={18} fontWeight="bold" textAlign="center">
-                {content}
-              </Text>
-            </VStack>
+            <Text fontSize="md" pt={8} textAlign="center">
+              {content}
+            </Text>
           </ModalBody>
-          <ModalFooter>
-            <Button variant={"outline"} mr={3} onClick={closeModal}>
+          <ModalFooter mt={4}>
+            <Button variant="ghost" mr={3} onClick={closeModal}>
               Cancelar
             </Button>
             <Button
