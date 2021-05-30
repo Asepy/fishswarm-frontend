@@ -106,12 +106,7 @@ export default function WithSubnavigation({ children }) {
             >
               Asepy FishSwarm
             </Heading>
-
-            <Flex display={{ base: "none", md: "flex" }} ml={10}>
-              <DesktopNav />
-            </Flex>
           </Flex>
-
           <Stack
             flex={{ base: 1, md: 0 }}
             justify={"flex-end"}
