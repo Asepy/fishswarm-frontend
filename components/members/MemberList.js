@@ -40,7 +40,6 @@ import { useFilterMemberPaginated } from "utils/useFilterMember";
 import SkeletonLines from "components/ui/SkeletonLines";
 import ErrorAlert from "components/ui/ErrorAlert";
 import EditModal from "./EditModal";
-import isNumeric from "utils/isNumeric";
 import DeactivateModal from "./DeactivateModal";
 import getUIMemberStatus from "utils/getUIMemberStatus";
 import { formatISODate } from "utils/formatDate";
@@ -48,50 +47,44 @@ import useDepartments from "utils/useDepartments";
 import useForm from "utils/useForm";
 import useFocus from "utils/useFocus";
 
-const initialSearchValues = {
+const initialSearchFormValues = {
   searchTerm: "",
   cityId: "",
   status: ""
 };
 
 export default function MemberList() {
-  const { values, updateValue, resetValues, updateValueByName } =
-    useForm(initialSearchValues);
-  const [queryParams, setQueryParams] = React.useState({
-    name: "",
-    document: "",
-    status: "pending"
-  });
+  const { values, updateValue, resetValues, updateValueByName } = useForm(
+    initialSearchFormValues
+  );
+
   const {
     data,
-    page,
-    nextPage,
-    previousPage,
-    setPage,
     error,
     hasMore,
-    status,
     isFetching,
-    isPreviousData
-  } = useFilterMemberPaginated(queryParams);
+    isFetchingNewPage,
+    isNextPageDisabled,
+    isSearching,
+    nextPage,
+    onClear,
+    onSearch,
+    page,
+    previousPage,
+    status
+  } = useFilterMemberPaginated();
+
   const { departmentResult, citiesResult, updateDepartment } = useDepartments();
   const [searchInputRef, setSearchInputFocus] = useFocus();
 
   const handleSubmitSearch = (event) => {
     event.preventDefault();
-    setPage(1);
-    const { searchTerm } = values;
-    const queryParams = {
-      document: isNumeric(searchTerm) ? searchTerm : null,
-      name: !isNumeric(searchTerm) ? searchTerm : null
-    };
-    setQueryParams(() => ({ ...queryParams }));
+    onSearch(values);
   };
 
   const handleClear = () => {
-    setPage(1);
-    resetValues(initialSearchValues);
-    setQueryParams({ name: "", document: "", status: "pending" });
+    resetValues(initialSearchFormValues);
+    onClear();
   };
 
   const { data: departments, status: departmentStatus } = departmentResult;
@@ -109,14 +102,14 @@ export default function MemberList() {
           <PageSection spacing={4} px={6}>
             <Text fontSize="sm">Buscar Miembros</Text>
 
-            <InputGroup size="sm">
+            <InputGroup>
               <InputLeftElement pointerEvents="none">
                 <SearchIcon color="gray.300" />
               </InputLeftElement>
               <Input
                 variant="outline"
                 type={"text"}
-                placeholder="Buscar por CI, Nombre, Apellido, Razón Social o RUC"
+                placeholder="Buscar por CI, Nombre, Apellido o RUC"
                 value={values.searchTerm}
                 name="searchTerm"
                 onChange={updateValue}
@@ -187,12 +180,12 @@ export default function MemberList() {
                   size="sm"
                   variant="primary"
                   type="submit"
-                  isLoading={isPreviousData && isFetching}
+                  isLoading={isSearching}
                 >
                   Buscar
                 </Button>
                 <Button
-                  variant="outline"
+                  variant="ghost"
                   px={4}
                   h="1.75rem"
                   size="sm"
@@ -216,8 +209,8 @@ export default function MemberList() {
             pageIndex={page}
             previousPage={previousPage}
             hasMore={hasMore}
-            isPageLoading={isPreviousData && isFetching}
-            isNextDisabled={isPreviousData || !hasMore}
+            isPageLoading={isFetchingNewPage}
+            isNextDisabled={isNextPageDisabled}
             pageTotal={data?.pageTotal}
             totalElements={data?.total}
             px={4}
@@ -232,7 +225,7 @@ function PageSection(props) {
   return <Stack boxShadow="md" py={4} {...props} />;
 }
 
-function MembersTable({ error, status, data, isFetching }) {
+function MembersTable({ error, status, data }) {
   const [showEditModal, setShowEditModal] = React.useState(false);
   const [showDeactivateModal, setShowDeactivateModal] = React.useState(false);
   const [associate, setAssociate] = React.useState();
