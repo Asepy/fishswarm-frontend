@@ -10,7 +10,7 @@ export default function index(props) {
   return (
     <PublicLayout>
       <Seo title="Asociáte"></Seo>
-      <Container>
+      <Container py={4}>
         <Grid
           templateColumns={{
             base: "repeat(1, minmax(auto, 1fr))",

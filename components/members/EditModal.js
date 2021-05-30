@@ -134,7 +134,7 @@ export default function EditModal({ closeModal, member }) {
                 <Form name="form">
                   <Stack spacing="24px">
                     <Heading fontSize={{ base: "lg", md: "xl" }}>
-                      Registro Personal
+                      Información Personal
                     </Heading>
                     <VStack>
                       <Field name="name">
@@ -294,7 +294,7 @@ export default function EditModal({ closeModal, member }) {
 
                   <Stack spacing="24px" mt="8">
                     <Heading fontSize={{ base: "lg", md: "xl" }}>
-                      Registro del Emprendimiento
+                      Información del Emprendimiento
                     </Heading>
                     <VStack>
                       <Field name="ruc">

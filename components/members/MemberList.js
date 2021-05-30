@@ -91,15 +91,15 @@ export default function MemberList() {
   const { data: cities, status: citiesStatus } = citiesResult;
 
   return (
-    <>
-      <Tabs>
+    <Box pb={8}>
+      <Tabs py={2}>
         <TabList>
           <Tab>Miembros</Tab>
         </TabList>
       </Tabs>
-      <Stack spacing={6} mt={4}>
+      <Stack spacing={6} mt={2}>
         <form onSubmit={handleSubmitSearch}>
-          <PageSection spacing={4} px={6}>
+          <PageSection spacing={4} px={6} py={4}>
             <Text fontSize="sm">Buscar Miembros</Text>
 
             <InputGroup>
@@ -197,7 +197,7 @@ export default function MemberList() {
             </HStack>
           </PageSection>
         </form>
-        <PageSection boxShadow="md">
+        <PageSection boxShadow="md" py={4}>
           <MembersTable
             error={error}
             status={status}
@@ -217,12 +217,12 @@ export default function MemberList() {
           />
         </PageSection>
       </Stack>
-    </>
+    </Box>
   );
 }
 
 function PageSection(props) {
-  return <Stack boxShadow="md" py={4} {...props} />;
+  return <Stack boxShadow="md" {...props} />;
 }
 
 function MembersTable({ error, status, data }) {

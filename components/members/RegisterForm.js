@@ -1,6 +1,7 @@
 import React from "react";
 
 import {
+  Box,
   Button,
   FormControl,
   FormLabel,
@@ -11,7 +12,6 @@ import {
   Heading,
   Select,
   Divider,
-  Box,
   Tag,
   TagLabel,
   useToast,
@@ -111,329 +111,333 @@ export default function RegisterForm(props) {
   const { data: cities, status: citiesStatus } = citiesResult;
 
   return (
-    <Formik
-      initialValues={initialState}
-      validationSchema={CreateMemberSchema}
-      onSubmit={(values) => handleSubmit(values)}
-    >
-      {() => (
-        <Form name="form">
-          <HStack spacing="4">
-            <Tag
-              size="md"
-              borderRadius="full"
-              variant="solid"
-              colorScheme="green"
+    <Box>
+      <Formik
+        initialValues={initialState}
+        validationSchema={CreateMemberSchema}
+        onSubmit={(values) => handleSubmit(values)}
+      >
+        {() => (
+          <Form name="form">
+            <HStack spacing="4">
+              <Tag
+                size="md"
+                borderRadius="full"
+                variant="solid"
+                colorScheme="green"
+              >
+                <TagLabel>1</TagLabel>
+              </Tag>
+              <Heading fontSize={{ base: "lg", md: "xl" }}>
+                Registro Personal
+              </Heading>
+            </HStack>
+            <Stack
+              spacing={{ base: "12px", md: "24px" }}
+              my={8}
+              pl={{ md: "10" }}
             >
-              <TagLabel>1</TagLabel>
-            </Tag>
-            <Heading fontSize={{ base: "lg", md: "xl" }}>
-              Registro Personal
-            </Heading>
-          </HStack>
-          <Stack
-            spacing={{ base: "12px", md: "24px" }}
-            my={8}
-            pl={{ md: "10" }}
-          >
-            <Box display={{ md: "flex" }}>
-              <Field name="name">
+              <Box display={{ md: "flex" }}>
+                <Field name="name">
+                  {({ field, form }) => (
+                    <FormControl
+                      id="name"
+                      isInvalid={form.errors.name && form.touched.name}
+                    >
+                      <FormLabel>Nombres</FormLabel>
+                      <Input type="text" placeholder="Juan José" {...field} />
+                      <FormErrorMessage>{form.errors.name}</FormErrorMessage>
+                    </FormControl>
+                  )}
+                </Field>
+                <Field name="surname">
+                  {({ field, form }) => (
+                    <FormControl
+                      id="surname"
+                      ml={{ md: 4 }}
+                      mt={{ base: 4, md: 0 }}
+                      isInvalid={form.errors.surname && form.touched.surname}
+                    >
+                      <FormLabel>Apellidos</FormLabel>
+                      <Input
+                        type="text"
+                        placeholder="Pérez Emprendedor"
+                        name="surname"
+                        {...field}
+                      />
+                      <FormErrorMessage>{form.errors.surname}</FormErrorMessage>
+                    </FormControl>
+                  )}
+                </Field>
+              </Box>
+              <Field name="document">
                 {({ field, form }) => (
                   <FormControl
-                    id="name"
-                    isInvalid={form.errors.name && form.touched.name}
+                    id="document"
+                    isInvalid={form.errors.document && form.touched.document}
                   >
-                    <FormLabel>Nombres</FormLabel>
-                    <Input type="text" placeholder="Juan José" {...field} />
-                    <FormErrorMessage>{form.errors.name}</FormErrorMessage>
-                  </FormControl>
-                )}
-              </Field>
-              <Field name="surname">
-                {({ field, form }) => (
-                  <FormControl
-                    id="surname"
-                    ml={{ md: 4 }}
-                    mt={{ base: 4, md: 0 }}
-                    isInvalid={form.errors.surname && form.touched.surname}
-                  >
-                    <FormLabel>Apellidos</FormLabel>
+                    <FormLabel>Cédula</FormLabel>
                     <Input
                       type="text"
-                      placeholder="Pérez Emprendedor"
-                      name="surname"
+                      placeholder="123456"
+                      name="document"
                       {...field}
                     />
-                    <FormErrorMessage>{form.errors.surname}</FormErrorMessage>
+                    <FormErrorMessage>{form.errors.document}</FormErrorMessage>
                   </FormControl>
                 )}
               </Field>
-            </Box>
-            <Field name="document">
-              {({ field, form }) => (
-                <FormControl
-                  id="document"
-                  isInvalid={form.errors.document && form.touched.document}
-                >
-                  <FormLabel>Cédula</FormLabel>
-                  <Input
-                    type="text"
-                    placeholder="123456"
-                    name="document"
-                    {...field}
-                  />
-                  <FormErrorMessage>{form.errors.document}</FormErrorMessage>
-                </FormControl>
-              )}
-            </Field>
-            <Field name="birthdate">
-              {({ field, form }) => (
-                <FormControl
-                  id="birthdate"
-                  isInvalid={form.errors.birthdate && form.touched.birthdate}
-                >
-                  <FormLabel htmlFor="birthdate">Fecha de Nacimiento</FormLabel>
-                  <Input id="birthdate" type="date" {...field} />
-                  <FormErrorMessage>{form.errors.birthdate}</FormErrorMessage>
-                </FormControl>
-              )}
-            </Field>
-            <Field name="email">
-              {({ field, form }) => (
-                <FormControl
-                  id="email"
-                  isInvalid={form.errors.email && form.touched.email}
-                >
-                  <FormLabel>E-mail</FormLabel>
-                  <Input
-                    type="email"
-                    placeholder="john@example.com"
-                    name="email"
-                    {...field}
-                  />
-                  <FormErrorMessage>{form.errors.email}</FormErrorMessage>
-                </FormControl>
-              )}
-            </Field>
-            <Field name="cellphone">
-              {({ field, form }) => (
-                <FormControl
-                  id="cellphone"
-                  isInvalid={form.errors.cellphone && form.touched.cellphone}
-                >
-                  <FormLabel>Celular</FormLabel>
-                  <Input
-                    type="text"
-                    placeholder="0991555555"
-                    name="cellphone"
-                    {...field}
-                  />
-                  <FormErrorMessage>{form.errors.cellphone}</FormErrorMessage>
-                </FormControl>
-              )}
-            </Field>
-            <Box display={{ md: "flex" }}>
-              <Field name="deparmentId">
-                {({ field }) => (
-                  <FormControl id="departmento">
-                    <FormLabel>Departamento</FormLabel>
-                    <Select
-                      placeholder="Seleccione departmento"
-                      name="deparmentId"
-                      {...field}
-                      onChange={(e) => {
-                        field.onChange(e);
-                        onChangeDepartment(e);
-                      }}
-                    >
-                      {departments.map((d) => (
-                        <option key={d.id} value={d.id}>
-                          {d.name}
-                        </option>
-                      ))}
-                    </Select>
-                  </FormControl>
-                )}
-              </Field>
-              <Field name="cityId">
+              <Field name="birthdate">
                 {({ field, form }) => (
                   <FormControl
-                    id="cityId"
-                    ml={{ md: 4 }}
-                    mt={{ base: 4, md: 0 }}
-                    isDisabled={!cities || cities.length === 0}
-                    isInvalid={form.errors.cityId && form.touched.cityId}
+                    id="birthdate"
+                    isInvalid={form.errors.birthdate && form.touched.birthdate}
                   >
-                    <FormLabel>Ciudad</FormLabel>
-                    <Select
-                      placeholder={
-                        citiesStatus === "loading"
-                          ? "Cargando..."
-                          : "Seleccione ciudad"
-                      }
-                      name="cityId"
-                      {...field}
-                    >
-                      {cities?.map((c) => (
-                        <option key={c.id} value={c.id}>
-                          {c.name}
-                        </option>
-                      ))}
-                    </Select>
-                    <FormErrorMessage>{form.errors.cityId}</FormErrorMessage>
+                    <FormLabel htmlFor="birthdate">
+                      Fecha de Nacimiento
+                    </FormLabel>
+                    <Input id="birthdate" type="date" {...field} />
+                    <FormErrorMessage>{form.errors.birthdate}</FormErrorMessage>
                   </FormControl>
                 )}
               </Field>
-            </Box>
-            <Field name="sexo">
-              {({ field }) => (
-                <FormControl id="sexo">
-                  <FormLabel>Sexo (Opcional)</FormLabel>
-                  <Select placeholder="Sexo" name="sexo" {...field}>
-                    <option value="Masculino">Masculino</option>
-                    <option value="Femenino">Femenino</option>
-                  </Select>
-                </FormControl>
-              )}
-            </Field>
-            <Divider></Divider>
-          </Stack>
-          <HStack spacing="4">
-            <Tag
-              size="md"
-              borderRadius="full"
-              variant="solid"
-              colorScheme="green"
-            >
-              <TagLabel>2</TagLabel>
-            </Tag>
-            <Heading fontSize={{ base: "lg", md: "xl" }} mt="4">
-              Registro del Emprendimiento
-            </Heading>
-          </HStack>
-          <Stack
-            spacing={{ base: "12px", md: "24px" }}
-            mt="8"
-            pl={{ md: "10" }}
-          >
-            <Field name="ruc">
-              {({ field, form }) => (
-                <FormControl
-                  id="ruc"
-                  isInvalid={form.errors.ruc && form.touched.ruc}
-                >
-                  <FormLabel>RUC</FormLabel>
-                  <Input
-                    type="text"
-                    placeholder="7777777-3"
-                    name="ruc"
-                    {...field}
-                  />
-                  <FormHelperText>
-                    El único requisito para asociarte es contar con un RUC
-                    activo.
-                  </FormHelperText>
-                  <FormErrorMessage>{form.errors.ruc}</FormErrorMessage>
-                </FormControl>
-              )}
-            </Field>
-            <Field name="razonsocial">
-              {({ field }) => (
-                <FormControl id="razonsocial">
-                  <FormLabel>Razón Social (Opcional)</FormLabel>
-                  <Input type="text" name="razonsocial" {...field} />
-                </FormControl>
-              )}
-            </Field>
-            <Field name="nfantasia">
-              {({ field }) => (
-                <FormControl
-                  id="nfantasia"
-                  ml={{ md: 4 }}
-                  mt={{ base: 4, md: 0 }}
-                >
-                  <FormLabel>Nombre de Fantasía (Opcional)</FormLabel>
-                  <Input type="text" name="nfantasia" {...field} />
-                </FormControl>
-              )}
-            </Field>
-            <Field name="rubro">
-              {({ field }) => (
-                <FormControl id="rubro">
-                  <FormLabel>Especifique el Rubro (Opcional)</FormLabel>
-                  <Input type="text" name="rubro" {...field} />
-                </FormControl>
-              )}
-            </Field>
-            <Field name="empleados">
-              {({ field }) => (
-                <FormControl id="empleados">
-                  <FormLabel>Cantidad de Empleados (Opcional)</FormLabel>
-                  <Input
-                    type="text"
-                    name="empleados"
-                    placeholder="7"
-                    {...field}
-                  />
-                  <FormHelperText>
-                    Cantidad de empleados (si no aplica: 0)
-                  </FormHelperText>
-                </FormControl>
-              )}
-            </Field>
-            <Field name="facturacion">
-              {({ field }) => (
-                <FormControl id="facturacion">
-                  <FormLabel>Facturación del 2020 (Opcional)</FormLabel>
-                  <Select name="facturacion" {...field}>
-                    <option value={"Menor o igual a 650 millones Gs."}>
-                      Menor o igual a 650 millones Gs.
-                    </option>
-                    <option
-                      value={"Entre 650 millones y 3.250 millones de Gs."}
+              <Field name="email">
+                {({ field, form }) => (
+                  <FormControl
+                    id="email"
+                    isInvalid={form.errors.email && form.touched.email}
+                  >
+                    <FormLabel>E-mail</FormLabel>
+                    <Input
+                      type="email"
+                      placeholder="john@example.com"
+                      name="email"
+                      {...field}
+                    />
+                    <FormErrorMessage>{form.errors.email}</FormErrorMessage>
+                  </FormControl>
+                )}
+              </Field>
+              <Field name="cellphone">
+                {({ field, form }) => (
+                  <FormControl
+                    id="cellphone"
+                    isInvalid={form.errors.cellphone && form.touched.cellphone}
+                  >
+                    <FormLabel>Celular</FormLabel>
+                    <Input
+                      type="text"
+                      placeholder="0991555555"
+                      name="cellphone"
+                      {...field}
+                    />
+                    <FormErrorMessage>{form.errors.cellphone}</FormErrorMessage>
+                  </FormControl>
+                )}
+              </Field>
+              <Box display={{ md: "flex" }}>
+                <Field name="deparmentId">
+                  {({ field }) => (
+                    <FormControl id="departmento">
+                      <FormLabel>Departamento</FormLabel>
+                      <Select
+                        placeholder="Seleccione departmento"
+                        name="deparmentId"
+                        {...field}
+                        onChange={(e) => {
+                          field.onChange(e);
+                          onChangeDepartment(e);
+                        }}
+                      >
+                        {departments.map((d) => (
+                          <option key={d.id} value={d.id}>
+                            {d.name}
+                          </option>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  )}
+                </Field>
+                <Field name="cityId">
+                  {({ field, form }) => (
+                    <FormControl
+                      id="cityId"
+                      ml={{ md: 4 }}
+                      mt={{ base: 4, md: 0 }}
+                      isDisabled={!cities || cities.length === 0}
+                      isInvalid={form.errors.cityId && form.touched.cityId}
                     >
-                      Entre 650 millones y 3.250 millones de Gs.
-                    </option>
-                    <option
-                      value={"Entre 3.250 millones y 7.700 millones de Gs."}
-                    >
-                      Entre 3.250 millones y 7.700 millones de Gs.
-                    </option>
-                    <option value={"Mayor a 7.700 millones Gs."}>
-                      Mayor a 7.700 millones Gs.
-                    </option>
-                  </Select>
-                </FormControl>
-              )}
-            </Field>
-            <Field name="sitioweb">
-              {({ field }) => (
-                <FormControl id="sitioweb">
-                  <FormLabel>Sitio web o redes sociales (Opcional)</FormLabel>
-                  <Input
-                    type="text"
-                    name="sitioweb"
-                    placeholder="www.asepy.com"
-                    {...field}
-                  />
-                </FormControl>
-              )}
-            </Field>
-            <Box my="8">
+                      <FormLabel>Ciudad</FormLabel>
+                      <Select
+                        placeholder={
+                          citiesStatus === "loading"
+                            ? "Cargando..."
+                            : "Seleccione ciudad"
+                        }
+                        name="cityId"
+                        {...field}
+                      >
+                        {cities?.map((c) => (
+                          <option key={c.id} value={c.id}>
+                            {c.name}
+                          </option>
+                        ))}
+                      </Select>
+                      <FormErrorMessage>{form.errors.cityId}</FormErrorMessage>
+                    </FormControl>
+                  )}
+                </Field>
+              </Box>
+              <Field name="sexo">
+                {({ field }) => (
+                  <FormControl id="sexo">
+                    <FormLabel>Sexo (Opcional)</FormLabel>
+                    <Select placeholder="Sexo" name="sexo" {...field}>
+                      <option value="Masculino">Masculino</option>
+                      <option value="Femenino">Femenino</option>
+                    </Select>
+                  </FormControl>
+                )}
+              </Field>
               <Divider></Divider>
-            </Box>
-            <Button
-              variant="primary"
-              mt="4"
-              size="lg"
-              type="submit"
-              isLoading={isLoading}
+            </Stack>
+            <HStack spacing="4">
+              <Tag
+                size="md"
+                borderRadius="full"
+                variant="solid"
+                colorScheme="green"
+              >
+                <TagLabel>2</TagLabel>
+              </Tag>
+              <Heading fontSize={{ base: "lg", md: "xl" }} mt="4">
+                Registro del Emprendimiento
+              </Heading>
+            </HStack>
+            <Stack
+              spacing={{ base: "12px", md: "24px" }}
+              mt="8"
+              pl={{ md: "10" }}
             >
-              Registrarse
-            </Button>
-          </Stack>
-        </Form>
-      )}
-    </Formik>
+              <Field name="ruc">
+                {({ field, form }) => (
+                  <FormControl
+                    id="ruc"
+                    isInvalid={form.errors.ruc && form.touched.ruc}
+                  >
+                    <FormLabel>RUC</FormLabel>
+                    <Input
+                      type="text"
+                      placeholder="7777777-3"
+                      name="ruc"
+                      {...field}
+                    />
+                    <FormHelperText>
+                      El único requisito para asociarte es contar con un RUC
+                      activo.
+                    </FormHelperText>
+                    <FormErrorMessage>{form.errors.ruc}</FormErrorMessage>
+                  </FormControl>
+                )}
+              </Field>
+              <Field name="razonsocial">
+                {({ field }) => (
+                  <FormControl id="razonsocial">
+                    <FormLabel>Razón Social (Opcional)</FormLabel>
+                    <Input type="text" name="razonsocial" {...field} />
+                  </FormControl>
+                )}
+              </Field>
+              <Field name="nfantasia">
+                {({ field }) => (
+                  <FormControl
+                    id="nfantasia"
+                    ml={{ md: 4 }}
+                    mt={{ base: 4, md: 0 }}
+                  >
+                    <FormLabel>Nombre de Fantasía (Opcional)</FormLabel>
+                    <Input type="text" name="nfantasia" {...field} />
+                  </FormControl>
+                )}
+              </Field>
+              <Field name="rubro">
+                {({ field }) => (
+                  <FormControl id="rubro">
+                    <FormLabel>Especifique el Rubro (Opcional)</FormLabel>
+                    <Input type="text" name="rubro" {...field} />
+                  </FormControl>
+                )}
+              </Field>
+              <Field name="empleados">
+                {({ field }) => (
+                  <FormControl id="empleados">
+                    <FormLabel>Cantidad de Empleados (Opcional)</FormLabel>
+                    <Input
+                      type="text"
+                      name="empleados"
+                      placeholder="7"
+                      {...field}
+                    />
+                    <FormHelperText>
+                      Cantidad de empleados (si no aplica: 0)
+                    </FormHelperText>
+                  </FormControl>
+                )}
+              </Field>
+              <Field name="facturacion">
+                {({ field }) => (
+                  <FormControl id="facturacion">
+                    <FormLabel>Facturación del 2020 (Opcional)</FormLabel>
+                    <Select name="facturacion" {...field}>
+                      <option value={"Menor o igual a 650 millones Gs."}>
+                        Menor o igual a 650 millones Gs.
+                      </option>
+                      <option
+                        value={"Entre 650 millones y 3.250 millones de Gs."}
+                      >
+                        Entre 650 millones y 3.250 millones de Gs.
+                      </option>
+                      <option
+                        value={"Entre 3.250 millones y 7.700 millones de Gs."}
+                      >
+                        Entre 3.250 millones y 7.700 millones de Gs.
+                      </option>
+                      <option value={"Mayor a 7.700 millones Gs."}>
+                        Mayor a 7.700 millones Gs.
+                      </option>
+                    </Select>
+                  </FormControl>
+                )}
+              </Field>
+              <Field name="sitioweb">
+                {({ field }) => (
+                  <FormControl id="sitioweb">
+                    <FormLabel>Sitio web o redes sociales (Opcional)</FormLabel>
+                    <Input
+                      type="text"
+                      name="sitioweb"
+                      placeholder="www.asepy.com"
+                      {...field}
+                    />
+                  </FormControl>
+                )}
+              </Field>
+              <Box my="8">
+                <Divider></Divider>
+              </Box>
+              <Button
+                variant="primary"
+                mt="4"
+                size="lg"
+                type="submit"
+                isLoading={isLoading}
+              >
+                Registrarse
+              </Button>
+            </Stack>
+          </Form>
+        )}
+      </Formik>
+    </Box>
   );
 }

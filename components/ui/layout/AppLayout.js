@@ -34,7 +34,7 @@ import Router from "next/router";
 import LoadingModal from "../LoadingModal";
 import InternalLink from "../InternalLink";
 
-export default function WithSubnavigation({ children }) {
+export default function AppLayout({ children }) {
   const { isOpen, onToggle } = useDisclosure();
   const [user, setUser] = React.useState();
   const [showLoadingModal, setShowLoadingModal] = React.useState(false);
@@ -155,7 +155,7 @@ export default function WithSubnavigation({ children }) {
           <MobileNav />
         </Collapse>
       </Box>
-      <Box p={4}>{children}</Box>
+      <Box>{children}</Box>
       {showLoadingModal && <LoadingModal text="Cerrando sesión"></LoadingModal>}
     </>
   );

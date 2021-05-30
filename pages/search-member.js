@@ -38,7 +38,7 @@ export default function searchMember() {
   return (
     <PublicLayout>
       <Seo title="¿Soy Socio?"></Seo>
-      <Container centerContent>
+      <Container centerContent py={4}>
         <Stack spacing="8">
           <Heading size="md" textAlign="center">
             Ingresá tus datos para saber si ya sos socio

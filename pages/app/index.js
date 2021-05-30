@@ -8,7 +8,7 @@ function index() {
   return (
     <AuthenticationFlow>
       <AppLayout>
-        <Container pt={0}>
+        <Container>
           <MemberList />
         </Container>
       </AppLayout>
