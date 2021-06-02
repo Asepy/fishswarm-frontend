@@ -12,7 +12,7 @@ export default function useTable({ columns }) {
           isSortedDesc: undefined,
           title: curr.title,
           getHeaderProps: () => ({
-            isNumeric: curr.isNumeric || false,
+            isNumeric: curr.isNumeric,
             onClick: curr.sortable ? getOnHeaderClick(curr) : undefined,
             role: "columnHeader",
             style: { cursor: curr.sortable ? "pointer" : undefined },
