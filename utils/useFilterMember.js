@@ -7,8 +7,8 @@ import serialize from "./serialize";
 export const FILTER_MEMBER_QUERY_ID = "query:filter-members";
 export const FILTER_MEMBER_PAGED_QUERY_ID = "query:filter-members-paginated";
 
-async function fetchFilteredMembers({ page, name, document }) {
-  const queryParams = serialize({ page, name, document });
+async function fetchFilteredMembers({ page, name, document, sortBy }) {
+  const queryParams = serialize({ page, name, document, sortBy });
   const resp = await fetch(
     `${process.env.NEXT_PUBLIC_API_BASE}/members/filter?${queryParams}`,
     {
@@ -74,16 +74,18 @@ function searchReducer(state, action) {
 
 export function useFilterMemberPaginated() {
   const [page, setPage] = useState(1);
+  const [sortBy, setSortBy] = useState();
   const [state, dispatch] = useReducer(searchReducer, searchInitialState);
 
   const { data, isFetching, isPreviousData, ...restUseQueryResult } = useQuery(
-    [FILTER_MEMBER_PAGED_QUERY_ID, page, state.name, state.document],
+    [FILTER_MEMBER_PAGED_QUERY_ID, page, sortBy, state.name, state.document],
     () => {
       dispatch({ type: "fetching" });
       return fetchFilteredMembers({
-        page,
+        document: state.document,
         name: state.name,
-        document: state.document
+        page,
+        sortBy
       });
     },
     {
@@ -110,7 +112,18 @@ export function useFilterMemberPaginated() {
 
   const onClear = () => {
     setPage(1);
+    setSortBy(null);
     dispatch({ type: "clear" });
+  };
+
+  const onSortBy = (column, isSorted, isSortedDesc) => {
+    if (!isSorted) {
+      // resets sorting on this column
+      setSortBy(null);
+      return;
+    }
+    const orderBy = isSortedDesc ? "desc" : "asc";
+    setSortBy(`${orderBy}(${column})`);
   };
 
   return {
@@ -124,6 +137,7 @@ export function useFilterMemberPaginated() {
     isSearching: state.fetching,
     onClear,
     onSearch,
+    onSortBy,
     previousPage,
     page,
     setPage,

@@ -33,7 +33,13 @@ import {
 
 import { AiOutlineUserDelete } from "react-icons/ai";
 import { FaEllipsisV } from "react-icons/fa";
-import { EditIcon, SearchIcon, CloseIcon } from "@chakra-ui/icons";
+import {
+  EditIcon,
+  SearchIcon,
+  CloseIcon,
+  ChevronDownIcon,
+  ChevronUpIcon
+} from "@chakra-ui/icons";
 
 import { useFilterMemberPaginated } from "utils/useFilterMember";
 
@@ -46,6 +52,7 @@ import { formatISODate } from "utils/formatDate";
 import useDepartments from "utils/useDepartments";
 import useForm from "utils/useForm";
 import useFocus from "utils/useFocus";
+import useTable from "utils/useTable";
 
 const initialSearchFormValues = {
   searchTerm: "",
@@ -69,6 +76,7 @@ export default function MemberList() {
     nextPage,
     onClear,
     onSearch,
+    onSortBy,
     page,
     previousPage,
     status
@@ -199,10 +207,10 @@ export default function MemberList() {
         </form>
         <PageSection boxShadow="md" py={4}>
           <MembersTable
-            error={error}
-            status={status}
             data={data}
-            isFetching={isFetching}
+            error={error}
+            onSortBy={onSortBy}
+            status={status}
           />
           <SimplePaginator
             nextPage={nextPage}
@@ -225,11 +233,27 @@ function PageSection(props) {
   return <Stack boxShadow="md" {...props} />;
 }
 
-function MembersTable({ error, status, data }) {
+const columns = [
+  // Incluye nombre y apellido pero le damos relevancia al apellido
+  { title: "Nombre", accessor: "surname", sortable: true },
+  {
+    title: "Cédula de Identidad",
+    accessor: "national_id",
+    isNumeric: true,
+    sortable: true
+  },
+  { title: "RUC", accessor: "ruc", isNumeric: true, sortable: true },
+  { title: "Ciudad", accessor: "cityName", sortable: true },
+  { title: "Registrado El", accessor: "startDate", sortable: true },
+  { title: "Estado", accessor: "status", textAlign: "center", sortable: true },
+  { title: "Opciones", accessor: "options", textAlign: "center" }
+];
+
+function MembersTable({ data, error, onSortBy, status }) {
   const [showEditModal, setShowEditModal] = React.useState(false);
   const [showDeactivateModal, setShowDeactivateModal] = React.useState(false);
   const [associate, setAssociate] = React.useState();
-
+  const { getHeaders, getNextSortValues } = useTable({ columns });
   const handleEdit = (member) => {
     setShowEditModal(true);
     setAssociate(member);
@@ -253,17 +277,41 @@ function MembersTable({ error, status, data }) {
       ></SkeletonLines>
     );
   }
+
   return (
     <Table variant="simple" size="sm">
       <Thead>
         <Tr>
-          <Th>Nombre</Th>
-          <Th isNumeric>Cédula de Identidad</Th>
-          <Th isNumeric>RUC</Th>
-          <Th>Ciudad</Th>
-          <Th>Registrado El</Th>
-          <Th textAlign="center">Estado</Th>
-          <Th textAlign="center">Opciones</Th>
+          {getHeaders().map((column) => (
+            <Th
+              userSelect="none"
+              key={column.key}
+              {...column.getHeaderProps()}
+              onClick={() => {
+                const sortValues = getNextSortValues(column);
+                onSortBy(
+                  column.accessor,
+                  sortValues.isSorted,
+                  sortValues.isSortedDesc
+                );
+                column.getHeaderProps().onClick();
+              }}
+            >
+              <Flex alignItems="center">
+                {column.title}
+                {/* Add a sort direction indicator */}
+                {column.isSorted ? (
+                  column.isSortedDesc ? (
+                    <ChevronDownIcon ml={1} w={4} h={4} />
+                  ) : (
+                    <ChevronUpIcon ml={1} w={4} h={4} />
+                  )
+                ) : (
+                  ""
+                )}
+              </Flex>
+            </Th>
+          ))}
         </Tr>
       </Thead>
 
