@@ -49,6 +49,7 @@ import useFocus from "utils/useFocus";
 
 const initialSearchFormValues = {
   searchTerm: "",
+  departmentId: "",
   cityId: "",
   status: ""
 };
@@ -79,6 +80,7 @@ export default function MemberList() {
 
   const handleSubmitSearch = (event) => {
     event.preventDefault();
+    console.log("values :: ", values);
     onSearch(values);
   };
 
@@ -98,7 +100,7 @@ export default function MemberList() {
         </TabList>
       </Tabs>
       <Stack spacing={6} mt={2}>
-        <form onSubmit={handleSubmitSearch}>
+        <form id="form" onSubmit={handleSubmitSearch}>
           <PageSection spacing={4} px={6} py={4}>
             <Text fontSize="sm">Buscar Miembros</Text>
 
@@ -137,7 +139,11 @@ export default function MemberList() {
                     : "Departamento: Todos"
                 }
                 isDisabled={!departments}
-                onChange={updateDepartment}
+                name="departmentId"
+                onChange={(e) => {
+                  updateDepartment(e);
+                  values.departmentId = e.target.value;
+                }}
               >
                 {departments?.map((d) => (
                   <option key={d.id} value={d.id}>
@@ -169,10 +175,10 @@ export default function MemberList() {
                 value={values.status}
                 onChange={(value) => updateValueByName("status", value)}
                 options={[
-                  { value: "pending", label: "Pendiente" },
-                  { value: "active", label: "Activo" },
-                  { value: "inactive", label: "Inactivo" },
-                  { value: "conditional", label: "Condicional" }
+                  { value: "PENDING", label: "Pendiente" },
+                  { value: "ACTIVE", label: "Activo" },
+                  { value: "INACTIVE", label: "Inactivo" },
+                  { value: "CONDITIONAL", label: "Condicional" }
                 ]}
               />
               <HStack>
