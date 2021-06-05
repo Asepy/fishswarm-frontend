@@ -33,7 +33,13 @@ import {
 
 import { AiOutlineUserDelete } from "react-icons/ai";
 import { FaEllipsisV } from "react-icons/fa";
-import { EditIcon, SearchIcon, CloseIcon } from "@chakra-ui/icons";
+import {
+  EditIcon,
+  SearchIcon,
+  CloseIcon,
+  ChevronDownIcon,
+  ChevronUpIcon
+} from "@chakra-ui/icons";
 
 import { useFilterMemberPaginated } from "utils/useFilterMember";
 
@@ -46,6 +52,8 @@ import { formatISODate } from "utils/formatDate";
 import useDepartments from "utils/useDepartments";
 import useForm from "utils/useForm";
 import useFocus from "utils/useFocus";
+import useTable from "utils/useTable";
+import LoadingOverlay from "components/ui/LoadingOverlay";
 
 const initialSearchFormValues = {
   searchTerm: "",
@@ -70,6 +78,7 @@ export default function MemberList() {
     nextPage,
     onClear,
     onSearch,
+    onSortBy,
     page,
     previousPage,
     status
@@ -205,10 +214,11 @@ export default function MemberList() {
         </form>
         <PageSection boxShadow="md" py={4}>
           <MembersTable
-            error={error}
-            status={status}
             data={data}
-            isFetching={isFetching}
+            error={error}
+            onSortBy={onSortBy}
+            status={status}
+            isFetchingNewPage={isFetchingNewPage}
           />
           <SimplePaginator
             nextPage={nextPage}
@@ -231,11 +241,27 @@ function PageSection(props) {
   return <Stack boxShadow="md" {...props} />;
 }
 
-function MembersTable({ error, status, data }) {
+const columns = [
+  // Incluye nombre y apellido pero le damos relevancia al apellido
+  { title: "Nombre", accessor: "surname", sortable: true },
+  {
+    title: "Cédula de Identidad",
+    accessor: "national_id",
+    isNumeric: true,
+    sortable: true
+  },
+  { title: "RUC", accessor: "ruc", isNumeric: true, sortable: true },
+  { title: "Ciudad", accessor: "cityName", sortable: true },
+  { title: "Registrado El", accessor: "startDate", sortable: true },
+  { title: "Estado", accessor: "status", textAlign: "center", sortable: true },
+  { title: "Opciones", accessor: "options", textAlign: "center" }
+];
+
+function MembersTable({ data, error, onSortBy, status, isFetchingNewPage }) {
   const [showEditModal, setShowEditModal] = React.useState(false);
   const [showDeactivateModal, setShowDeactivateModal] = React.useState(false);
   const [associate, setAssociate] = React.useState();
-
+  const { getHeaders, getNextSortValues } = useTable({ columns });
   const handleEdit = (member) => {
     setShowEditModal(true);
     setAssociate(member);
@@ -259,96 +285,130 @@ function MembersTable({ error, status, data }) {
       ></SkeletonLines>
     );
   }
-  return (
-    <Table variant="simple" size="sm">
-      <Thead>
-        <Tr>
-          <Th>Nombre</Th>
-          <Th isNumeric>Cédula de Identidad</Th>
-          <Th isNumeric>RUC</Th>
-          <Th>Ciudad</Th>
-          <Th>Registrado El</Th>
-          <Th textAlign="center">Estado</Th>
-          <Th textAlign="center">Opciones</Th>
-        </Tr>
-      </Thead>
 
-      <Tbody>
-        {data?.data.map((member) => (
-          <Tr key={member.id_number} w="20%">
-            <Td>
-              <Stack>
-                <span>
-                  {member.name} {member.surname}
-                </span>
-                <Box as="span" fontSize="xs" color="gray.500">
-                  {member.mail_id}
-                </Box>
-              </Stack>
-            </Td>
-            <Td isNumeric w="15%">
-              {member.national_id}
-            </Td>
-            <Td isNumeric w="15%">
-              {member.ruc}
-            </Td>
-            <Td w="20%">
-              <Stack>
-                <span>{member?.cityName}</span>
-                <Box as="span" fontSize="xs" color="gray.500">
-                  {member?.departmentName}
-                </Box>
-              </Stack>
-            </Td>
-            <Td w="20%">
-              {formatISODate(member.startDate, "dd-MM-yyyy HH:mm")}
-            </Td>
-            <Td w="5%" textAlign="center">
-              <StatusCell status={member.status} />
-            </Td>
-            <Td w="5%" textAlign="center">
-              <Menu matchWidth>
-                <MenuButton
-                  fontSize="12px"
-                  as={IconButton}
-                  icon={<FaEllipsisV />}
-                  variant="outline"
-                  aria-label="Opciones"
-                ></MenuButton>
-                <MenuList>
-                  <MenuItem
-                    onClick={() => handleEdit(member)}
-                    icon={<EditIcon></EditIcon>}
-                  >
-                    Editar
-                  </MenuItem>
-                  <MenuItem
-                    isDisabled={member.status === "INACTIVE"}
-                    onClick={() => handleDeactivate(member)}
-                    icon={<AiOutlineUserDelete />}
-                  >
-                    Desactivar
-                  </MenuItem>
-                </MenuList>
-              </Menu>
-            </Td>
+  return (
+    <Box position="relative">
+      <Table variant="simple" size="sm">
+        <Thead>
+          <Tr>
+            {getHeaders().map((column) => (
+              <Th
+                userSelect="none"
+                key={column.key}
+                {...column.getHeaderProps()}
+                onClick={() => {
+                  const sortValues = getNextSortValues(column);
+                  onSortBy(
+                    column.accessor,
+                    sortValues.isSorted,
+                    sortValues.isSortedDesc
+                  );
+                  column.getHeaderProps().onClick();
+                }}
+              >
+                <Flex
+                  alignItems="center"
+                  justifyContent={
+                    column.getHeaderProps().isNumeric
+                      ? "flex-end"
+                      : "flex-start"
+                  }
+                >
+                  {column.title}
+                  {/* Add a sort direction indicator */}
+                  {column.isSorted ? (
+                    column.isSortedDesc ? (
+                      <ChevronDownIcon ml={1} w={4} h={4} />
+                    ) : (
+                      <ChevronUpIcon ml={1} w={4} h={4} />
+                    )
+                  ) : (
+                    ""
+                  )}
+                </Flex>
+              </Th>
+            ))}
           </Tr>
-        ))}
-        {showEditModal && (
-          <EditModal
-            closeModal={() => setShowEditModal(false)}
-            member={associate}
-          />
-        )}
-        {showDeactivateModal && (
-          <DeactivateModal
-            associate={associate}
-            closeModal={() => setShowDeactivateModal(false)}
-            text="¿Está seguro que desea desactivar al usuario?"
-          />
-        )}
-      </Tbody>
-    </Table>
+        </Thead>
+
+        <Tbody>
+          <LoadingOverlay isActive={isFetchingNewPage} />
+          {data?.data.map((member) => (
+            <Tr key={member.id_number} w="20%">
+              <Td>
+                <Stack>
+                  <span>
+                    {member.name} {member.surname}
+                  </span>
+                  <Box as="span" fontSize="xs" color="gray.500">
+                    {member.mail_id}
+                  </Box>
+                </Stack>
+              </Td>
+              <Td isNumeric w="15%">
+                {member.national_id}
+              </Td>
+              <Td isNumeric w="15%">
+                {member.ruc}
+              </Td>
+              <Td w="20%">
+                <Stack>
+                  <span>{member?.cityName}</span>
+                  <Box as="span" fontSize="xs" color="gray.500">
+                    {member?.departmentName}
+                  </Box>
+                </Stack>
+              </Td>
+              <Td w="20%">
+                {formatISODate(member.startDate, "dd-MM-yyyy HH:mm")}
+              </Td>
+              <Td w="5%" textAlign="center">
+                <StatusCell status={member.status} />
+              </Td>
+              <Td w="5%" textAlign="center">
+                <Menu matchWidth>
+                  <MenuButton
+                    fontSize="12px"
+                    as={IconButton}
+                    icon={<FaEllipsisV />}
+                    variant="outline"
+                    aria-label="Opciones"
+                  ></MenuButton>
+                  <MenuList>
+                    <MenuItem
+                      onClick={() => handleEdit(member)}
+                      icon={<EditIcon></EditIcon>}
+                    >
+                      Editar
+                    </MenuItem>
+                    <MenuItem
+                      isDisabled={member.status === "INACTIVE"}
+                      onClick={() => handleDeactivate(member)}
+                      icon={<AiOutlineUserDelete />}
+                    >
+                      Desactivar
+                    </MenuItem>
+                  </MenuList>
+                </Menu>
+              </Td>
+            </Tr>
+          ))}
+          {showEditModal && (
+            <EditModal
+              closeModal={() => setShowEditModal(false)}
+              member={associate}
+            />
+          )}
+          {showDeactivateModal && (
+            <DeactivateModal
+              associate={associate}
+              closeModal={() => setShowDeactivateModal(false)}
+              text="¿Está seguro que desea desactivar al usuario?"
+            />
+          )}
+        </Tbody>
+      </Table>
+    </Box>
   );
 }
 
@@ -410,7 +470,6 @@ function SimplePaginator({
             ml={2}
             size="sm"
             variant="outline"
-            isLoading={isPageLoading}
           >
             Siguiente
           </Button>
