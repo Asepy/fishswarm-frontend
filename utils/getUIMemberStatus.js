@@ -6,5 +6,5 @@ const statusMap = {
 };
 
 export default function getUIMemberStatus(status) {
-  return statusMap[status];
+  return statusMap[status.toUpperCase()];
 }
