@@ -25,16 +25,13 @@ import {
   Tabs,
   TabList,
   Tab,
-  Tag,
   Divider,
   useRadio,
   useRadioGroup
 } from "@chakra-ui/react";
 
-import { AiOutlineUserDelete } from "react-icons/ai";
 import { FaEllipsisV } from "react-icons/fa";
 import {
-  EditIcon,
   SearchIcon,
   CloseIcon,
   ChevronDownIcon,
@@ -47,13 +44,15 @@ import SkeletonLines from "components/ui/SkeletonLines";
 import ErrorAlert from "components/ui/ErrorAlert";
 import EditModal from "./EditModal";
 import DeactivateModal from "./DeactivateModal";
-import getUIMemberStatus from "utils/getUIMemberStatus";
 import { formatISODate } from "utils/formatDate";
 import useDepartments from "utils/useDepartments";
 import useForm from "utils/useForm";
 import useFocus from "utils/useFocus";
 import useTable from "utils/useTable";
 import LoadingOverlay from "components/ui/LoadingOverlay";
+import MemberStatusTag from "./MemberStatusTag";
+import EditStatusModal from "./EditStatusModal";
+import useSelectMemberStatus from "utils/useSelectMemberStatus";
 
 const initialSearchFormValues = {
   searchTerm: "",
@@ -71,7 +70,6 @@ export default function MemberList() {
     data,
     error,
     hasMore,
-    isFetching,
     isFetchingNewPage,
     isNextPageDisabled,
     isSearching,
@@ -86,6 +84,7 @@ export default function MemberList() {
 
   const { departmentResult, citiesResult, updateDepartment } = useDepartments();
   const [searchInputRef, setSearchInputFocus] = useFocus();
+  const { statusOptions } = useSelectMemberStatus();
 
   const handleSubmitSearch = (event) => {
     event.preventDefault();
@@ -183,12 +182,7 @@ export default function MemberList() {
                 name="status"
                 value={values.status}
                 onChange={(value) => updateValueByName("status", value)}
-                options={[
-                  { value: "PENDING", label: "Pendiente" },
-                  { value: "ACTIVE", label: "Activo" },
-                  { value: "INACTIVE", label: "Inactivo" },
-                  { value: "CONDITIONAL", label: "Condicional" }
-                ]}
+                options={statusOptions}
               />
               <HStack>
                 <Button
@@ -260,15 +254,18 @@ const columns = [
 function MembersTable({ data, error, onSortBy, status, isFetchingNewPage }) {
   const [showEditModal, setShowEditModal] = React.useState(false);
   const [showDeactivateModal, setShowDeactivateModal] = React.useState(false);
+  const [showChangeStatusModal, setShowChangeStatusModal] =
+    React.useState(false);
   const [associate, setAssociate] = React.useState();
   const { getHeaders, getNextSortValues } = useTable({ columns });
+
   const handleEdit = (member) => {
     setShowEditModal(true);
     setAssociate(member);
   };
 
-  const handleDeactivate = (member) => {
-    setShowDeactivateModal(true);
+  const handleChangeStatus = (member) => {
+    setShowChangeStatusModal(true);
     setAssociate(member);
   };
 
@@ -363,7 +360,7 @@ function MembersTable({ data, error, onSortBy, status, isFetchingNewPage }) {
                 {formatISODate(member.startDate, "dd-MM-yyyy HH:mm")}
               </Td>
               <Td w="5%" textAlign="center">
-                <StatusCell status={member.status} />
+                <MemberStatusTag status={member.status} />
               </Td>
               <Td w="5%" textAlign="center">
                 <Menu matchWidth>
@@ -375,18 +372,11 @@ function MembersTable({ data, error, onSortBy, status, isFetchingNewPage }) {
                     aria-label="Opciones"
                   ></MenuButton>
                   <MenuList>
-                    <MenuItem
-                      onClick={() => handleEdit(member)}
-                      icon={<EditIcon></EditIcon>}
-                    >
-                      Editar
+                    <MenuItem onClick={() => handleChangeStatus(member)}>
+                      Cambiar Estado
                     </MenuItem>
-                    <MenuItem
-                      isDisabled={member.status === "INACTIVE"}
-                      onClick={() => handleDeactivate(member)}
-                      icon={<AiOutlineUserDelete />}
-                    >
-                      Desactivar
+                    <MenuItem onClick={() => handleEdit(member)}>
+                      Editar Miembro
                     </MenuItem>
                   </MenuList>
                 </Menu>
@@ -406,18 +396,15 @@ function MembersTable({ data, error, onSortBy, status, isFetchingNewPage }) {
               text="¿Está seguro que desea desactivar al usuario?"
             />
           )}
+          {showChangeStatusModal && (
+            <EditStatusModal
+              onClose={() => setShowChangeStatusModal(false)}
+              member={associate}
+            />
+          )}
         </Tbody>
       </Table>
     </Box>
-  );
-}
-
-function StatusCell({ status }) {
-  const uiStatus = getUIMemberStatus(status);
-  return (
-    <Tag borderRadius="full" colorScheme={uiStatus.color}>
-      {uiStatus.label}
-    </Tag>
   );
 }
 
