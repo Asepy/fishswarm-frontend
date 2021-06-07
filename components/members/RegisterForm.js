@@ -31,18 +31,18 @@ export default function RegisterForm(props) {
     surname: "",
     document: "",
     birthdate: "",
-    sexo: "",
+    gender: "",
     deparmentId: "",
     cityId: "",
     email: "",
     cellphone: "",
-    razonsocial: "",
-    nfantasia: "",
+    businessName: "",
+    fancyBusinessName: "",
     ruc: "",
-    rubro: "",
-    empleados: 0,
-    sitioweb: "",
-    facturacion: "",
+    sector: "",
+    numberEmployees: 0,
+    website: "",
+    annualTurnover: "",
     tarroMiel: ""
   };
 
@@ -288,11 +288,11 @@ export default function RegisterForm(props) {
                   )}
                 </Field>
               </Box>
-              <Field name="sexo">
+              <Field name="gender">
                 {({ field }) => (
-                  <FormControl id="sexo">
+                  <FormControl id="gender">
                     <FormLabel>Sexo (Opcional)</FormLabel>
-                    <Select placeholder="Sexo" name="sexo" {...field}>
+                    <Select placeholder="Sexo" name="gender" {...field}>
                       <option value="Masculino">Masculino</option>
                       <option value="Femenino">Femenino</option>
                     </Select>
@@ -340,41 +340,41 @@ export default function RegisterForm(props) {
                   </FormControl>
                 )}
               </Field>
-              <Field name="razonsocial">
+              <Field name="businessName">
                 {({ field }) => (
-                  <FormControl id="razonsocial">
+                  <FormControl id="businessName">
                     <FormLabel>Razón Social (Opcional)</FormLabel>
-                    <Input type="text" name="razonsocial" {...field} />
+                    <Input type="text" name="businessName" {...field} />
                   </FormControl>
                 )}
               </Field>
-              <Field name="nfantasia">
+              <Field name="fancyBusinessName">
                 {({ field }) => (
                   <FormControl
-                    id="nfantasia"
+                    id="fancyBusinessName"
                     ml={{ md: 4 }}
                     mt={{ base: 4, md: 0 }}
                   >
                     <FormLabel>Nombre de Fantasía (Opcional)</FormLabel>
-                    <Input type="text" name="nfantasia" {...field} />
+                    <Input type="text" name="fancyBusinessName" {...field} />
                   </FormControl>
                 )}
               </Field>
-              <Field name="rubro">
+              <Field name="sector">
                 {({ field }) => (
-                  <FormControl id="rubro">
+                  <FormControl id="sector">
                     <FormLabel>Especifique el Rubro (Opcional)</FormLabel>
-                    <Input type="text" name="rubro" {...field} />
+                    <Input type="text" name="sector" {...field} />
                   </FormControl>
                 )}
               </Field>
-              <Field name="empleados">
+              <Field name="numberEmployees">
                 {({ field }) => (
-                  <FormControl id="empleados">
+                  <FormControl id="numberEmployees">
                     <FormLabel>Cantidad de Empleados (Opcional)</FormLabel>
                     <Input
                       type="text"
-                      name="empleados"
+                      name="numberEmployees"
                       placeholder="7"
                       {...field}
                     />
@@ -384,11 +384,11 @@ export default function RegisterForm(props) {
                   </FormControl>
                 )}
               </Field>
-              <Field name="facturacion">
+              <Field name="annualTurnover">
                 {({ field }) => (
-                  <FormControl id="facturacion">
+                  <FormControl id="annualTurnover">
                     <FormLabel>Facturación del 2020 (Opcional)</FormLabel>
-                    <Select name="facturacion" {...field}>
+                    <Select name="annualTurnover" {...field}>
                       <option value={"Menor o igual a 650 millones Gs."}>
                         Menor o igual a 650 millones Gs.
                       </option>
@@ -409,13 +409,13 @@ export default function RegisterForm(props) {
                   </FormControl>
                 )}
               </Field>
-              <Field name="sitioweb">
+              <Field name="website">
                 {({ field }) => (
-                  <FormControl id="sitioweb">
+                  <FormControl id="website">
                     <FormLabel>Sitio web o redes sociales (Opcional)</FormLabel>
                     <Input
                       type="text"
-                      name="sitioweb"
+                      name="website"
                       placeholder="www.asepy.com"
                       {...field}
                     />

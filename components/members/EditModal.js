@@ -35,18 +35,18 @@ export default function EditModal({ closeModal, member }) {
     surname: member?.surname || "",
     document: member?.national_id || "",
     birthdate: member?.birthdate || "",
-    sex: member?.sex || "",
+    gender: member?.gender || "",
     departmentId: member?.departmentId || "",
     cityId: member?.cityId || "",
     email: member?.mail_id || "",
     cellphone: member?.cellphone || "",
-    businessName: member?.businessName || "",
+    bussinessName: member?.bussinessName || "",
     fancyBusinessName: member?.fancyBusinessName || "",
     ruc: member?.ruc || "",
     sector: member?.sector || "",
     numberEmployees: member?.numberEmployees || 0,
     website: member?.website || "",
-    anualTurnover: member?.anualTurnover || ""
+    annualTurnover: member?.annualTurnover || ""
   });
   const { departmentResult, citiesResult, updateDepartment } = useDepartments({
     initialDepId: member?.departmentId
@@ -201,11 +201,11 @@ export default function EditModal({ closeModal, member }) {
                           </FormControl>
                         )}
                       </Field>
-                      <Field name="sex">
+                      <Field name="gender">
                         {({ field, form }) => (
-                          <FormControl id={"sex"}>
+                          <FormControl id={"gender"}>
                             <FormLabel>Sexo</FormLabel>
-                            <Select {...field} id="sex">
+                            <Select {...field} id="gender">
                               <option value="Masculino">Masculino</option>
                               <option value="Femenino">Femenino</option>
                             </Select>
@@ -315,11 +315,11 @@ export default function EditModal({ closeModal, member }) {
                           </FormControl>
                         )}
                       </Field>
-                      <Field name="businessName">
+                      <Field name="bussinessName">
                         {({ field, form }) => (
-                          <FormControl id={"businessName"}>
+                          <FormControl id={"bussinessName"}>
                             <FormLabel>Razón Social</FormLabel>
-                            <Input {...field} name="businessName" />
+                            <Input {...field} name="bussinessName" />
                           </FormControl>
                         )}
                       </Field>
@@ -350,11 +350,11 @@ export default function EditModal({ closeModal, member }) {
                           </FormControl>
                         )}
                       </Field>
-                      <Field name="anualTurnover">
+                      <Field name="annualTurnover">
                         {({ field, form }) => (
-                          <FormControl id={"anualTurnover"}>
+                          <FormControl id={"annualTurnover"}>
                             <FormLabel>Facturación del 2010</FormLabel>
-                            <Select {...field} name="anualTurnover">
+                            <Select {...field} name="annualTurnover">
                               <option
                                 value={"Menor o igual a 650 millones Gs."}
                               >

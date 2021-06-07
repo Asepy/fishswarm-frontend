@@ -7,8 +7,26 @@ import serialize from "./serialize";
 export const FILTER_MEMBER_QUERY_ID = "query:filter-members";
 export const FILTER_MEMBER_PAGED_QUERY_ID = "query:filter-members-paginated";
 
-async function fetchFilteredMembers({ page, name, document, sortBy }) {
-  const queryParams = serialize({ page, name, document, sortBy });
+async function fetchFilteredMembers({
+  page,
+  name,
+  document,
+  ruc,
+  departmentId,
+  cityId,
+  status,
+  sortBy
+}) {
+  const queryParams = serialize({
+    page,
+    name,
+    document,
+    ruc,
+    departmentId,
+    cityId,
+    status,
+    sortBy
+  });
   const resp = await fetch(
     `${process.env.NEXT_PUBLIC_API_BASE}/members/filter?${queryParams}`,
     {
@@ -37,18 +55,30 @@ export default function useFilterMember({ page }) {
 const searchInitialState = {
   name: "",
   document: "",
+  ruc: "",
   status: "",
+  departmentId: "",
+  cityId: "",
   trigger: false,
   fetching: false
 };
 
+const validName = new RegExp(
+  "^[A-Za-zñÑäÄëËïÏöÖüÜáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ]+$"
+);
+const validRuc = new RegExp("^([0-9]*)-[0-9]$");
+
 function searchReducer(state, action) {
   if (action.type === "trigger") {
-    const { searchTerm } = action;
+    const { searchTerm, departmentId, cityId, status } = action;
     return {
       ...state,
       document: isNumeric(searchTerm) ? searchTerm : null,
-      name: !isNumeric(searchTerm) ? searchTerm : null,
+      ruc: validRuc.test(searchTerm) ? searchTerm : null,
+      name: validName.test(searchTerm) ? searchTerm : null,
+      departmentId: departmentId,
+      cityId: cityId,
+      status: status,
       trigger: true
     };
   }
@@ -78,13 +108,27 @@ export function useFilterMemberPaginated() {
   const [state, dispatch] = useReducer(searchReducer, searchInitialState);
 
   const { data, isFetching, isPreviousData, ...restUseQueryResult } = useQuery(
-    [FILTER_MEMBER_PAGED_QUERY_ID, page, sortBy, state.name, state.document],
+    [
+      FILTER_MEMBER_PAGED_QUERY_ID,
+      page,
+      sortBy,
+      state.name,
+      state.document,
+      state.ruc,
+      state.departmentId,
+      state.cityId,
+      state.status
+    ],
     () => {
       dispatch({ type: "fetching" });
       return fetchFilteredMembers({
-        document: state.document,
-        name: state.name,
         page,
+        name: state.name,
+        document: state.document,
+        ruc: state.ruc,
+        departmentId: state.departmentId,
+        cityId: state.cityId,
+        status: state.status,
         sortBy
       });
     },
@@ -105,9 +149,9 @@ export function useFilterMemberPaginated() {
 
   const nextPage = () => setPage((old) => (hasMore ? old + 1 : old));
 
-  const onSearch = ({ searchTerm }) => {
+  const onSearch = ({ searchTerm, departmentId, cityId, status }) => {
     setPage(1);
-    dispatch({ type: "trigger", searchTerm });
+    dispatch({ type: "trigger", searchTerm, departmentId, cityId, status });
   };
 
   const onClear = () => {
