@@ -19,9 +19,15 @@ export const ButtonStyles = {
         boxShadow: "md",
         borderColor: "primary",
         color: "primary",
-      },
-    }),
+        _disabled: {
+          bg: "primary",
+          color: "white",
+          borderColor: "transparent",
+          borderWidth: "1px"
+        }
+      }
+    })
   },
   // default values for `size` and `variant`
-  defaultProps: {},
+  defaultProps: {}
 };
