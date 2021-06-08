@@ -285,6 +285,7 @@ function MembersTable({ data, error, onSortBy, status, isFetchingNewPage }) {
 
   return (
     <Box position="relative">
+      <LoadingOverlay isActive={isFetchingNewPage} />
       <Table variant="simple" size="sm">
         <Thead>
           <Tr>
@@ -329,7 +330,6 @@ function MembersTable({ data, error, onSortBy, status, isFetchingNewPage }) {
         </Thead>
 
         <Tbody>
-          <LoadingOverlay isActive={isFetchingNewPage} />
           {data?.data.map((member) => (
             <Tr key={member.id_number} w="20%">
               <Td>

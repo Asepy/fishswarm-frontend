@@ -1,20 +1,19 @@
+import React, { useEffect, useState } from "react";
 import "configureAmplify";
-import { useEffect, useState } from "react";
 import { Auth } from "aws-amplify";
+import { Flex, Text, VStack } from "@chakra-ui/layout";
 import SignIn from "./SignIn";
 import SignUp from "./SignUp";
 import ForgotPassword from "./ForgotPassword";
 import ForgotPasswordSubmit from "./ForgotPasswordSubmit";
 import ConfirmSignUp from "./ConfirmSignUp";
-import React from "react";
-import { Flex, Text, VStack } from "@chakra-ui/layout";
 
 function AuthenticationFlow(props) {
   const [uiState, setUiState] = useState(null);
   const [formState, setFormState] = useState({
     email: "",
     password: "",
-    authCode: "",
+    authCode: ""
   });
   const { email, password, authCode } = formState;
   const [isLoading, setIsLoading] = React.useState(false);
@@ -57,7 +56,7 @@ function AuthenticationFlow(props) {
       await Auth.signIn(email, password);
       setUiState("signedIn");
     } catch (err) {
-      console.log({ err });
+      console.error({ err });
       setError(err);
     } finally {
       setIsLoading(false);
@@ -70,7 +69,7 @@ function AuthenticationFlow(props) {
       await Auth.signIn(email, password);
       setUiState("signedIn");
     } catch (err) {
-      console.log({ err });
+      console.error({ err });
       setError(err);
     } finally {
       setIsLoading(false);
@@ -83,7 +82,7 @@ function AuthenticationFlow(props) {
       await Auth.forgotPassword(email);
       setUiState("forgotPasswordSubmit");
     } catch (err) {
-      console.log({ err });
+      console.error({ err });
       setError(error);
     } finally {
       setIsLoading(false);
@@ -96,7 +95,7 @@ function AuthenticationFlow(props) {
       await Auth.forgotPasswordSubmit(email, authCode, password);
       setUiState("signIn");
     } catch (err) {
-      console.log({ err });
+      console.error({ err });
       setError(err);
     } finally {
       setIsLoading(false);
@@ -105,7 +104,7 @@ function AuthenticationFlow(props) {
 
   if (uiState === "signedIn") {
     return React.cloneElement(props.children, {
-      onSignOut: () => setUiState("signIn"),
+      onSignOut: () => setUiState("signIn")
     });
   }
 
