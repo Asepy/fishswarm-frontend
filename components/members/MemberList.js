@@ -148,9 +148,10 @@ export default function MemberList() {
                 }
                 isDisabled={!departments}
                 name="departmentId"
+                value={values.departmentId}
                 onChange={(e) => {
                   updateDepartment(e);
-                  values.departmentId = e.target.value;
+                  updateValue(e);
                 }}
               >
                 {departments?.map((d) => (

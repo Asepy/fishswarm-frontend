@@ -10,9 +10,7 @@ export const FILTER_MEMBER_PAGED_QUERY_ID = "query:filter-members-paginated";
 
 async function fetchFilteredMembers({
   page,
-  name,
-  document,
-  ruc,
+  searchTerm,
   departmentId,
   cityId,
   status,
@@ -21,9 +19,7 @@ async function fetchFilteredMembers({
   const token = await getCurrentUserToken();
   const queryParams = serialize({
     page,
-    name,
-    document,
-    ruc,
+    searchTerm,
     departmentId,
     cityId,
     status,
@@ -56,29 +52,25 @@ export default function useFilterMember({ page }) {
 }
 
 const searchInitialState = {
-  name: "",
-  document: "",
-  ruc: "",
   status: "",
   departmentId: "",
   cityId: "",
+  searchTerm: "",
   trigger: false,
   fetching: false
 };
 
-const validName = new RegExp(
-  "^[A-Za-zñÑäÄëËïÏöÖüÜáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ]+$"
-);
-const validRuc = new RegExp("^([0-9]*)-[0-9]$");
+// const validName = new RegExp(
+//   "^[A-Za-zñÑäÄëËïÏöÖüÜáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ]+$"
+// );
+// const validRuc = new RegExp("^([0-9]*)-[0-9]$");
 
 function searchReducer(state, action) {
   if (action.type === "trigger") {
     const { searchTerm, departmentId, cityId, status } = action;
     return {
       ...state,
-      document: isNumeric(searchTerm) ? searchTerm : null,
-      ruc: validRuc.test(searchTerm) ? searchTerm : null,
-      name: validName.test(searchTerm) ? searchTerm : null,
+      searchTerm,
       departmentId: departmentId,
       cityId: cityId,
       status: status,
@@ -115,9 +107,7 @@ export function useFilterMemberPaginated() {
       FILTER_MEMBER_PAGED_QUERY_ID,
       page,
       sortBy,
-      state.name,
-      state.document,
-      state.ruc,
+      state.searchTerm,
       state.departmentId,
       state.cityId,
       state.status
@@ -126,9 +116,7 @@ export function useFilterMemberPaginated() {
       dispatch({ type: "fetching" });
       return fetchFilteredMembers({
         page,
-        name: state.name,
-        document: state.document,
-        ruc: state.ruc,
+        searchTerm: state.searchTerm,
         departmentId: state.departmentId,
         cityId: state.cityId,
         status: state.status,
