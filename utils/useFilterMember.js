@@ -1,5 +1,6 @@
 import { useState, useMemo, useReducer } from "react";
 import { useQuery } from "react-query";
+import getCurrentUserToken from "./getCurrentUserToken";
 import handleResponse from "./handleResponse";
 import isNumeric from "./isNumeric";
 import serialize from "./serialize";
@@ -17,6 +18,7 @@ async function fetchFilteredMembers({
   status,
   sortBy
 }) {
+  const token = await getCurrentUserToken();
   const queryParams = serialize({
     page,
     name,
@@ -34,7 +36,8 @@ async function fetchFilteredMembers({
       mode: "cors",
       headers: {
         "Content-Type": "application/json",
-        "X-Api-Key": `${process.env.NEXT_PUBLIC_API_KEY}`
+        "X-Api-Key": `${process.env.NEXT_PUBLIC_API_KEY}`,
+        Authorization: token
       }
     }
   );
