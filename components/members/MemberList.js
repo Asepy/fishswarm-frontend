@@ -119,7 +119,7 @@ export default function MemberList() {
               <Input
                 variant="outline"
                 type={"text"}
-                placeholder="Buscar por CI, Nombre, Apellido o RUC"
+                placeholder="Buscar por Nombre, Apellido, Cédula o RUC"
                 value={values.searchTerm}
                 name="searchTerm"
                 onChange={updateValue}
@@ -183,7 +183,7 @@ export default function MemberList() {
                 name="status"
                 value={values.status}
                 onChange={(value) => updateValueByName("status", value)}
-                options={statusOptions}
+                options={[{ value: "", label: "Todos" }, ...statusOptions]}
               />
               <HStack>
                 <Button
