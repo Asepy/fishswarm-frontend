@@ -11,7 +11,14 @@ async function postMember(newMember) {
     email,
     ruc,
     cityId,
-    deparmentId
+    deparmentId,
+    gender,
+    annualTurnover,
+    businessName,
+    fancyBusinessName,
+    sector,
+    website,
+    numberEmployees
   } = newMember;
   const requiredValues = {
     name,
@@ -22,7 +29,14 @@ async function postMember(newMember) {
     email,
     ruc,
     cityId,
-    deparmentId
+    deparmentId,
+    gender,
+    annualTurnover,
+    businessName,
+    fancyBusinessName,
+    sector,
+    website,
+    numberEmployees
   };
   const body = JSON.stringify(requiredValues);
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/members`, {
