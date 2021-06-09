@@ -40,7 +40,7 @@ export default function EditModal({ closeModal, member }) {
     cityId: member?.cityId || "",
     email: member?.mail_id || "",
     cellphone: member?.cellphone || "",
-    businessName: member?.bussinessName || "",
+    businessName: member?.businessName || "",
     fancyBusinessName: member?.fancyBusinessName || "",
     ruc: member?.ruc || "",
     sector: member?.sector || "",
