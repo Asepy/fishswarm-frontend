@@ -40,7 +40,7 @@ export default function EditModal({ closeModal, member }) {
     cityId: member?.cityId || "",
     email: member?.mail_id || "",
     cellphone: member?.cellphone || "",
-    bussinessName: member?.bussinessName || "",
+    businessName: member?.bussinessName || "",
     fancyBusinessName: member?.fancyBusinessName || "",
     ruc: member?.ruc || "",
     sector: member?.sector || "",
@@ -315,11 +315,11 @@ export default function EditModal({ closeModal, member }) {
                           </FormControl>
                         )}
                       </Field>
-                      <Field name="bussinessName">
+                      <Field name="businessName">
                         {({ field, form }) => (
-                          <FormControl id={"bussinessName"}>
+                          <FormControl id={"businessName"}>
                             <FormLabel>Razón Social</FormLabel>
-                            <Input {...field} name="bussinessName" />
+                            <Input {...field} name="businessName" />
                           </FormControl>
                         )}
                       </Field>
