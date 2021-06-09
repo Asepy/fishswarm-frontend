@@ -222,7 +222,7 @@ export default function MemberList() {
             hasMore={hasMore}
             isPageLoading={isFetchingNewPage}
             isNextDisabled={isNextPageDisabled}
-            pageTotal={data?.pageTotal}
+            pageTotal={data?.size}
             totalElements={data?.total}
             px={4}
           />

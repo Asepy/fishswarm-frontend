@@ -2,7 +2,6 @@ import { useState, useMemo, useReducer } from "react";
 import { useQuery } from "react-query";
 import getCurrentUserToken from "./getCurrentUserToken";
 import handleResponse from "./handleResponse";
-import isNumeric from "./isNumeric";
 import serialize from "./serialize";
 
 export const FILTER_MEMBER_QUERY_ID = "query:filter-members";
@@ -132,7 +131,7 @@ export function useFilterMemberPaginated() {
   );
 
   const hasMore = useMemo(
-    () => page < data?.pageTotal && data?.pageTotal < data?.total,
+    () => page < data?.size && data?.pageTotal < data?.total,
     [data]
   );
 
