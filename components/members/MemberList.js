@@ -3,6 +3,7 @@ import {
   Button,
   Box,
   Table,
+  Text,
   Thead,
   Tbody,
   Tr,
@@ -14,7 +15,6 @@ import {
   MenuItem,
   MenuButton,
   IconButton,
-  Text,
   Select,
   Flex,
   Input,
@@ -27,7 +27,8 @@ import {
   Tab,
   Divider,
   useRadio,
-  useRadioGroup
+  useRadioGroup,
+  VStack
 } from "@chakra-ui/react";
 
 import { FaEllipsisV } from "react-icons/fa";
@@ -53,6 +54,7 @@ import LoadingOverlay from "components/ui/LoadingOverlay";
 import MemberStatusTag from "./MemberStatusTag";
 import EditStatusModal from "./EditStatusModal";
 import useSelectMemberStatus from "utils/useSelectMemberStatus";
+import EmptyDataIcon from "components/ui/svg/EmptyDataIcon";
 
 const initialSearchFormValues = {
   searchTerm: "",
@@ -331,9 +333,21 @@ function MembersTable({ data, error, onSortBy, status, isFetchingNewPage }) {
         </Thead>
 
         <Tbody>
+          {data?.data.length === 0 && (
+            <Tr>
+              <Td colSpan={getHeaders().length}>
+                <VStack p={4} my={4}>
+                  <Text color="gray.500" fontWeight="hairline">
+                    Sin datos que mostrar
+                  </Text>
+                  <EmptyDataIcon boxSize="4rem" />
+                </VStack>
+              </Td>
+            </Tr>
+          )}
           {data?.data.map((member) => (
-            <Tr key={member.id_number} w="20%">
-              <Td>
+            <Tr key={member.id_number}>
+              <Td w="20%">
                 <Stack>
                   <span>
                     {member.name} {member.surname}
