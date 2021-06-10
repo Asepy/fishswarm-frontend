@@ -222,7 +222,7 @@ export default function MemberList() {
             hasMore={hasMore}
             isPageLoading={isFetchingNewPage}
             isNextDisabled={isNextPageDisabled}
-            pageTotal={data?.size}
+            totalPages={data?.totalPages}
             totalElements={data?.total}
             px={4}
           />
@@ -412,10 +412,10 @@ function MembersTable({ data, error, onSortBy, status, isFetchingNewPage }) {
 function SimplePaginator({
   nextPage = () => {},
   pageIndex = 0,
-  pageTotal = 10,
   previousPage = () => {},
   hasMore = false,
   totalElements = 0,
+  totalPages = 0,
   isNextDisabled = true,
   isPageLoading = false,
   ...rest
@@ -438,7 +438,7 @@ function SimplePaginator({
             </Text>{" "}
             de{" "}
             <Text fontWeight="bold" as="span">
-              {!hasMore ? pageIndex : pageTotal}
+              {!hasMore ? pageIndex : totalPages}
             </Text>
           </Text>
         </Flex>

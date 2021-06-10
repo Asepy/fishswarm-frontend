@@ -130,10 +130,7 @@ export function useFilterMemberPaginated() {
     }
   );
 
-  const hasMore = useMemo(
-    () => page < data?.size && data?.pageTotal < data?.total,
-    [data]
-  );
+  const hasMore = useMemo(() => data?.hasMore, [data]);
 
   const previousPage = () => setPage((old) => Math.max(old - 1, 0));
 
