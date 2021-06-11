@@ -168,6 +168,7 @@ export default function AppLayout({ children }) {
       <Box
         as="main"
         bg="gray.50"
+        height="100%"
         _before={{
           background: "white",
           content: '" "',
