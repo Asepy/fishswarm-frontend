@@ -68,7 +68,7 @@ export default function AppLayout({ children }) {
   };
 
   return (
-    <>
+    <Box>
       <Box as="header" position="relative" zIndex="999" py={4}>
         <Container>
           <Flex
@@ -167,8 +167,6 @@ export default function AppLayout({ children }) {
       </Box>
       <Box
         as="main"
-        bg="gray.50"
-        height="100%"
         _before={{
           background: "white",
           content: '" "',
@@ -184,7 +182,12 @@ export default function AppLayout({ children }) {
         <Box position="relative">{children}</Box>
       </Box>
       {showLoadingModal && <LoadingModal text="Cerrando sesión"></LoadingModal>}
-    </>
+      <style jsx global>{`
+        body {
+          background-color: var(--chakra-colors-gray-50);
+        }
+      `}</style>
+    </Box>
   );
 }
 
