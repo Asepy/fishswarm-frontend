@@ -5,23 +5,23 @@ const styles = {
   global: {
     ...chakraTheme.styles.global,
     "html, body, #__next": {
-      height: "100%",
-    },
-  },
+      height: "100%"
+    }
+  }
 };
 
 const customTheme = extendTheme({
   colors: {
-    primary: chakraTheme.colors.black,
+    primary: chakraTheme.colors.black
   },
   components: {
-    Button: ButtonStyles,
+    Button: ButtonStyles
   },
   fonts: {
     heading: `Poppins,${chakraTheme.fonts.heading}`,
-    body: `Poppins,${chakraTheme.fonts.body}`,
+    body: `Poppins,${chakraTheme.fonts.body}`
   },
-  styles,
+  styles
 });
 
 export default customTheme;
