@@ -30,7 +30,8 @@ import {
   ChevronRightIcon
 } from "@chakra-ui/icons";
 import { Auth } from "aws-amplify";
-import Router from "next/router";
+import Router, { useRouter } from "next/router";
+import Container from "components/ui/Container";
 import LoadingModal from "../LoadingModal";
 import InternalLink from "../InternalLink";
 
@@ -68,94 +69,119 @@ export default function AppLayout({ children }) {
 
   return (
     <>
-      <Box>
-        <Flex
-          bg={useColorModeValue("white", "gray.800")}
-          color={useColorModeValue("gray.600", "white")}
-          minH={"60px"}
-          py={{ base: 2 }}
-          px={{ base: 4 }}
-          borderBottom={1}
-          borderStyle={"solid"}
-          borderColor={useColorModeValue("gray.200", "gray.900")}
-          align={"center"}
-        >
+      <Box as="header" position="relative" zIndex="999" py={4}>
+        <Container>
           <Flex
-            flex={{ base: 1, md: "auto" }}
-            ml={{ base: -2 }}
-            display={{ base: "flex", md: "none" }}
+            bg={useColorModeValue("white", "gray.800")}
+            color={useColorModeValue("gray.600", "white")}
+            minH={"60px"}
+            pb={{ base: 4 }}
+            borderBottom={1}
+            borderStyle={"solid"}
+            borderColor={useColorModeValue("gray.200", "gray.900")}
+            align={"center"}
           >
-            <IconButton
-              onClick={onToggle}
-              icon={
-                isOpen ? (
-                  <CloseIcon w={3} h={3} />
-                ) : (
-                  <HamburgerIcon w={5} h={5} />
-                )
-              }
-              variant={"ghost"}
-              aria-label={"Toggle Navigation"}
-            />
-          </Flex>
-          <Flex flex={{ base: 1 }} justify={{ base: "center", md: "start" }}>
-            <Heading
-              textAlign={useBreakpointValue({ base: "center", md: "left" })}
-              color={useColorModeValue("gray.800", "white")}
-              size="base"
+            <Flex
+              flex={{ base: 1, md: "auto" }}
+              ml={{ base: -2 }}
+              display={{ base: "flex", md: "none" }}
             >
-              Asepy FishSwarm
-            </Heading>
-          </Flex>
-          <Stack
-            flex={{ base: 1, md: 0 }}
-            justify={"flex-end"}
-            direction={"row"}
-            spacing={6}
-          >
-            <Box
-              as={InternalLink}
-              href="/"
-              p={2}
-              fontSize={"sm"}
-              fontWeight={500}
-              color={useColorModeValue("gray.600", "gray.200")}
-              _hover={{
-                textDecoration: "none",
-                color: useColorModeValue("gray.800", "white")
-              }}
-            >
-              Asociáte
-            </Box>
-            <Flex alignItems={"center"}>
-              <Menu>
-                <MenuButton
-                  as={Button}
-                  rounded={"full"}
-                  variant={"link"}
-                  cursor={"pointer"}
-                >
-                  <Avatar size="sm" />
-                </MenuButton>
-                <MenuList>
-                  <MenuItem>
-                    <Text color="gray.500">
-                      {user && user.attributes.email}
-                    </Text>
-                  </MenuItem>
-                  <MenuDivider />
-                  <MenuItem onClick={handleSignOut}>Salir</MenuItem>
-                </MenuList>
-              </Menu>
+              <IconButton
+                onClick={onToggle}
+                icon={
+                  isOpen ? (
+                    <CloseIcon w={3} h={3} />
+                  ) : (
+                    <HamburgerIcon w={5} h={5} />
+                  )
+                }
+                variant={"ghost"}
+                aria-label={"Toggle Navigation"}
+              />
             </Flex>
-          </Stack>
-        </Flex>
-
-        <Collapse in={isOpen} animateOpacity>
-          <MobileNav />
-        </Collapse>
+            <Flex flex={{ base: 1 }} justify={{ base: "center", md: "start" }}>
+              <Heading
+                textAlign={useBreakpointValue({ base: "center", md: "left" })}
+                color={useColorModeValue("gray.800", "white")}
+                size="base"
+              >
+                Asepy FishSwarm
+              </Heading>
+            </Flex>
+            <Stack
+              flex={{ base: 1, md: 0 }}
+              justify={"flex-end"}
+              direction={"row"}
+              spacing={6}
+            >
+              <Box
+                as={InternalLink}
+                href="/"
+                p={2}
+                fontSize={"sm"}
+                fontWeight={500}
+                color={useColorModeValue("gray.600", "gray.200")}
+                _hover={{
+                  textDecoration: "none",
+                  color: useColorModeValue("gray.800", "white")
+                }}
+              >
+                Asociáte
+              </Box>
+              <Flex alignItems={"center"}>
+                <Menu placement="bottom-end">
+                  <MenuButton
+                    as={Button}
+                    rounded={"full"}
+                    variant={"link"}
+                    cursor={"pointer"}
+                  >
+                    <Avatar size="sm" />
+                  </MenuButton>
+                  <MenuList>
+                    <MenuItem>
+                      <Text color="gray.500">
+                        {user && user.attributes.email}
+                      </Text>
+                    </MenuItem>
+                    <MenuDivider />
+                    <MenuItem onClick={handleSignOut}>Salir</MenuItem>
+                  </MenuList>
+                </Menu>
+              </Flex>
+            </Stack>
+          </Flex>
+          <Flex
+            bg={useColorModeValue("white", "gray.800")}
+            color={useColorModeValue("gray.600", "white")}
+            minH={"60px"}
+            align={"center"}
+            display={{ base: "none", md: "flex" }}
+          >
+            <DesktopNav />
+          </Flex>
+          <Collapse in={isOpen} animateOpacity>
+            <MobileNav />
+          </Collapse>
+        </Container>
       </Box>
-      <Box>{children}</Box>
+      <Box
+        as="main"
+        bg="gray.50"
+        _before={{
+          background: "white",
+          content: '" "',
+          display: "block",
+          height: "264px",
+          left: 0,
+          position: "absolute",
+          top: 0,
+          width: "100%",
+          zIndex: 0
+        }}
+      >
+        <Box position="relative">{children}</Box>
+      </Box>
       {showLoadingModal && <LoadingModal text="Cerrando sesión"></LoadingModal>}
     </>
   );
@@ -168,19 +194,9 @@ const DesktopNav = () => {
         <Box key={navItem.label}>
           <Popover trigger={"hover"} placement={"bottom-start"}>
             <PopoverTrigger>
-              <Link
-                p={2}
-                href={navItem.href ?? "#"}
-                fontSize={"sm"}
-                fontWeight={500}
-                color={useColorModeValue("gray.600", "gray.200")}
-                _hover={{
-                  textDecoration: "none",
-                  color: useColorModeValue("gray.800", "white")
-                }}
-              >
+              <HeaderLink href={navItem.href ?? "#"}>
                 {navItem.label}
-              </Link>
+              </HeaderLink>
             </PopoverTrigger>
 
             {navItem.children && (
@@ -205,6 +221,36 @@ const DesktopNav = () => {
     </Stack>
   );
 };
+
+function HeaderLink({ href, children, ...rest }) {
+  const router = useRouter();
+
+  const selected = router.pathname === href;
+  return (
+    <InternalLink
+      href={href}
+      py="2"
+      px="4"
+      fontSize="md"
+      fontWeight={500}
+      color={
+        selected
+          ? useColorModeValue("gray.800", "white")
+          : useColorModeValue("gray.600", "gray.200")
+      }
+      _hover={{
+        textDecoration: "none",
+        color: useColorModeValue("gray.800", "white"),
+        bg: useColorModeValue("gray.50", "gray.900")
+      }}
+      borderRadius="md"
+      bg={selected ? useColorModeValue("gray.50", "gray.900") : "inherit"}
+      {...rest}
+    >
+      {children}
+    </InternalLink>
+  );
+}
 
 const DesktopSubNav = ({ label, href, subLabel }) => {
   return (
@@ -262,22 +308,8 @@ const MobileNavItem = ({ label, children, href }) => {
 
   return (
     <Stack spacing={4} onClick={children && onToggle}>
-      <Flex
-        py={2}
-        as={Link}
-        href={href ?? "#"}
-        justify={"space-between"}
-        align={"center"}
-        _hover={{
-          textDecoration: "none"
-        }}
-      >
-        <Text
-          fontWeight={600}
-          color={useColorModeValue("gray.600", "gray.200")}
-        >
-          {label}
-        </Text>
+      <HeaderLink href={href ?? "#"}>
+        {label}
         {children && (
           <Icon
             as={ChevronDownIcon}
@@ -287,7 +319,7 @@ const MobileNavItem = ({ label, children, href }) => {
             h={6}
           />
         )}
-      </Flex>
+      </HeaderLink>
 
       <Collapse in={isOpen} animateOpacity style={{ marginTop: "0!important" }}>
         <Stack
@@ -312,13 +344,7 @@ const MobileNavItem = ({ label, children, href }) => {
 
 const NAV_ITEMS = [
   {
-    label: "Administración",
-    children: [
-      {
-        label: "Miembros registrados",
-        subLabel: "Administración de socios registrados a ASEPY",
-        href: "#"
-      }
-    ]
+    label: "Miembros",
+    href: "/app"
   }
 ];

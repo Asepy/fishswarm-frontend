@@ -22,9 +22,6 @@ import {
   InputRightElement,
   InputGroup,
   HStack,
-  Tabs,
-  TabList,
-  Tab,
   Divider,
   useRadio,
   useRadioGroup,
@@ -104,22 +101,15 @@ export default function MemberList() {
 
   return (
     <Box pb={8}>
-      <Tabs py={2}>
-        <TabList>
-          <Tab>Miembros</Tab>
-        </TabList>
-      </Tabs>
       <Stack spacing={6} mt={2}>
         <form id="form" onSubmit={handleSubmitSearch}>
           <PageSection spacing={4} px={6} py={4}>
             <Text fontSize="sm">Buscar Miembros</Text>
-
-            <InputGroup>
+            <InputGroup variant="outline">
               <InputLeftElement pointerEvents="none">
                 <SearchIcon color="gray.300" />
               </InputLeftElement>
               <Input
-                variant="outline"
                 type={"text"}
                 placeholder="Buscar por Nombre, Apellido, Cédula o RUC"
                 value={values.searchTerm}
@@ -235,7 +225,7 @@ export default function MemberList() {
 }
 
 function PageSection(props) {
-  return <Stack boxShadow="md" {...props} />;
+  return <Stack bg="white" boxShadow="md" borderRadius="lg" {...props} />;
 }
 
 const columns = [
@@ -378,7 +368,7 @@ function MembersTable({ data, error, onSortBy, status, isFetchingNewPage }) {
                 <MemberStatusTag status={member.status} />
               </Td>
               <Td w="5%" textAlign="center">
-                <Menu matchWidth>
+                <Menu matchWidth placement="bottom-end">
                   <MenuButton
                     fontSize="12px"
                     as={IconButton}
