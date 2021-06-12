@@ -12,14 +12,15 @@ const styles = {
 
 const customTheme = extendTheme({
   colors: {
-    primary: chakraTheme.colors.black
+    primary: chakraTheme.colors.black,
+    "accents-1": "#FAFAFA"
   },
   components: {
     Button: ButtonStyles
   },
   fonts: {
     heading: `Poppins,${chakraTheme.fonts.heading}`,
-    body: `Poppins,${chakraTheme.fonts.body}`
+    body: `Roboto,${chakraTheme.fonts.body}`
   },
   styles
 });
