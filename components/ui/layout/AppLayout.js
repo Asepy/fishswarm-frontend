@@ -176,7 +176,10 @@ export default function AppLayout({ children }) {
           position: "absolute",
           top: 0,
           width: "100%",
-          zIndex: 0
+          zIndex: 0,
+          borderBottom: 1,
+          borderStyle: "solid",
+          borderColor: useColorModeValue("gray.200", "gray.900")
         }}
       >
         <Box position="relative">{children}</Box>
@@ -184,7 +187,7 @@ export default function AppLayout({ children }) {
       {showLoadingModal && <LoadingModal text="Cerrando sesión"></LoadingModal>}
       <style jsx global>{`
         body {
-          background-color: var(--chakra-colors-gray-50);
+          background-color: var(--chakra-colors-accents-1);
         }
       `}</style>
     </Box>

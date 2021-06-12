@@ -326,8 +326,8 @@ function MembersTable({ data, error, onSortBy, status, isFetchingNewPage }) {
           {data?.data.length === 0 && (
             <Tr>
               <Td colSpan={getHeaders().length}>
-                <VStack p={4} my={4}>
-                  <Text color="gray.500" fontWeight="hairline">
+                <VStack p={4} my={4} spacing={4}>
+                  <Text color="gray.400" fontWeight="medium" fontSize="md">
                     Sin datos que mostrar
                   </Text>
                   <EmptyDataIcon boxSize="4rem" />
