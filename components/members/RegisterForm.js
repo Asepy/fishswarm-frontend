@@ -229,6 +229,7 @@ export default function RegisterForm(props) {
                       type="text"
                       placeholder="0991555555"
                       name="cellphone"
+                      maxLength={10}
                       {...field}
                     />
                     <FormErrorMessage>{form.errors.cellphone}</FormErrorMessage>
