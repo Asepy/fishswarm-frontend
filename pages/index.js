@@ -5,6 +5,7 @@ import RegisterForm from "components/members/RegisterForm";
 import PublicLayout from "components/ui/layout/PublicLayout";
 import Seo from "components/ui/layout/Seo";
 import { fetchDepartments } from "utils/useDepartments";
+import { fetchRubros } from "utils/useRubros";
 
 export default function index(props) {
   return (
@@ -21,7 +22,10 @@ export default function index(props) {
           pb="16"
         >
           <GridItem colSpan={{ xl: 3 }}>
-            <RegisterForm departments={props.departments} />
+            <RegisterForm
+              departments={props.departments}
+              rubros={props.rubros}
+            />
           </GridItem>
           <GridItem />
         </Grid>
@@ -31,10 +35,12 @@ export default function index(props) {
 }
 
 export async function getStaticProps() {
-  const response = await fetchDepartments();
+  const departmentResponse = await fetchDepartments();
+  const rubrosResponse = await fetchRubros();
   return {
     props: {
-      departments: response.data
+      departments: departmentResponse.data,
+      rubros: rubrosResponse.data
     }
   };
 }
