@@ -1,5 +1,5 @@
 import React from "react";
-
+import { animated, useTransition } from "react-spring";
 import {
   Box,
   Button,
@@ -22,6 +22,7 @@ import { Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import useDepartments from "utils/useDepartments";
 import { differenceInYears, parse } from "date-fns";
+import RubroSelect from "./RubroSelect";
 
 export default function RegisterForm(props) {
   const toast = useToast();
@@ -43,7 +44,9 @@ export default function RegisterForm(props) {
     numberEmployees: 0,
     website: "",
     annualTurnover: "",
-    tarroMiel: ""
+    tarroMiel: "",
+    rubroId: "",
+    memberDefinedRubro: ""
   };
 
   const CreateMemberSchema = Yup.object().shape({
@@ -107,7 +110,7 @@ export default function RegisterForm(props) {
     updateDepartment(e);
   };
 
-  const { departments = [] } = props;
+  const { departments = [], rubros = [] } = props;
   const { data: cities, status: citiesStatus } = citiesResult;
 
   return (
@@ -361,14 +364,10 @@ export default function RegisterForm(props) {
                   </FormControl>
                 )}
               </Field>
-              <Field name="sector">
-                {({ field }) => (
-                  <FormControl id="sector">
-                    <FormLabel>Especifique el Rubro (Opcional)</FormLabel>
-                    <Input type="text" name="sector" {...field} />
-                  </FormControl>
-                )}
-              </Field>
+              <FormControl id="rubroId">
+                <FormLabel>Rubro (Opcional)</FormLabel>
+                <EnterOrSelectRubro rubros={rubros}></EnterOrSelectRubro>
+              </FormControl>
               <Field name="numberEmployees">
                 {({ field }) => (
                   <FormControl id="numberEmployees">
@@ -440,5 +439,71 @@ export default function RegisterForm(props) {
         )}
       </Formik>
     </Box>
+  );
+}
+
+function EnterOrSelectRubro({ rubros, ...restProps }) {
+  const [selectedRubroId, setSelectedRubroId] = React.useState("");
+  const transitions = useTransition(selectedRubroId === "new", {
+    enter: {
+      y: 0,
+      opacity: 1
+    },
+    leave: {
+      y: -10,
+      opacity: 0
+    },
+    from: {
+      y: -10,
+      opacity: 0
+    }
+  });
+  function handleRubroChange(event) {
+    setSelectedRubroId(event.target.value);
+  }
+
+  return (
+    <Stack {...restProps}>
+      <Field name="rubroId">
+        {({ field, form }) => (
+          <RubroSelect
+            name="rubroId"
+            initialRubros={rubros}
+            {...field}
+            onChange={(e) => {
+              handleRubroChange(e);
+              const { value } = e.target;
+              if (value === "new") {
+                form.setFieldValue("rubroId", undefined);
+              } else {
+                field.onChange(e);
+              }
+            }}
+          >
+            <option value="">Seleccione un rubro</option>
+            <option value="new">
+              No está en el listado. Quiero especificar mi rubro
+            </option>
+          </RubroSelect>
+        )}
+      </Field>
+      {transitions(
+        (styles, item) =>
+          item && (
+            <animated.div style={styles}>
+              <Field name="memberDefinedRubro">
+                {({ field }) => (
+                  <Input
+                    autoFocus
+                    placeholder="Especifique el nombre de su rubro"
+                    name="memberDefinedRubro"
+                    {...field}
+                  />
+                )}
+              </Field>
+            </animated.div>
+          )
+      )}
+    </Stack>
   );
 }

@@ -2,43 +2,7 @@ import React from "react";
 import handleResponse from "./handleResponse";
 
 async function postMember(newMember) {
-  const {
-    name,
-    document,
-    surname,
-    birthdate,
-    cellphone,
-    email,
-    ruc,
-    cityId,
-    deparmentId,
-    gender,
-    annualTurnover,
-    businessName,
-    fancyBusinessName,
-    sector,
-    website,
-    numberEmployees
-  } = newMember;
-  const requiredValues = {
-    name,
-    document,
-    surname,
-    birthdate,
-    cellphone,
-    email,
-    ruc,
-    cityId,
-    deparmentId,
-    gender,
-    annualTurnover,
-    businessName,
-    fancyBusinessName,
-    sector,
-    website,
-    numberEmployees
-  };
-  const body = JSON.stringify(requiredValues);
+  const body = JSON.stringify(newMember);
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/members`, {
     method: "POST",
     mode: "cors",
