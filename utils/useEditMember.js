@@ -2,11 +2,13 @@ import { useState } from "react";
 import { useQueryClient } from "react-query";
 import getCurrentUserToken from "./getCurrentUserToken";
 import handleResponse from "./handleResponse";
+import removeEmptyString from "./removeEmptyStrings";
 import { FILTER_MEMBER_PAGED_QUERY_ID } from "./useFilterMember";
 
 async function editMemberToApi(idNumber, editMember) {
   const token = await getCurrentUserToken();
-  const body = JSON.stringify(editMember);
+  const cleanMember = removeEmptyString(editMember);
+  const body = JSON.stringify(cleanMember);
   const resp = await fetch(
     `${process.env.NEXT_PUBLIC_API_BASE}/members/${idNumber}`,
     {

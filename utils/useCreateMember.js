@@ -1,8 +1,10 @@
 import React from "react";
 import handleResponse from "./handleResponse";
+import removeEmptyString from "./removeEmptyStrings";
 
 async function postMember(newMember) {
-  const body = JSON.stringify(newMember);
+  const cleanMember = removeEmptyString(newMember);
+  const body = JSON.stringify(cleanMember);
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/members`, {
     method: "POST",
     mode: "cors",
