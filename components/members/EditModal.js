@@ -26,6 +26,8 @@ import { Form, Formik, Field } from "formik";
 import * as Yup from "yup";
 import useEditMember from "../../utils/useEditMember";
 import useDepartments from "utils/useDepartments";
+import RubroSelect from "./RubroSelect";
+import EnterOrSelectRubro from "./EnterOrSelectRubro";
 
 export default function EditModal({ closeModal, member }) {
   const toast = useToast();
@@ -46,7 +48,9 @@ export default function EditModal({ closeModal, member }) {
     sector: member?.sector || "",
     numberEmployees: member?.numberEmployees || 0,
     website: member?.website || "",
-    annualTurnover: member?.annualTurnover || ""
+    annualTurnover: member?.annualTurnover || "",
+    rubroId: member?.rubroId || "",
+    memberDefinedRubro: member?.memberDefinedRubro || ""
   });
   const { departmentResult, citiesResult, updateDepartment } = useDepartments({
     initialDepId: member?.departmentId
@@ -73,7 +77,7 @@ export default function EditModal({ closeModal, member }) {
       { idNumber: member.id_number, values },
       {
         onError: (error) => {
-          console.log(error.message);
+          console.error(error.message);
           const errorMessage =
             "Ocurrió un error al editar los datos del usuario.";
           toast({
@@ -106,10 +110,6 @@ export default function EditModal({ closeModal, member }) {
 
   const { data: departments } = departmentResult;
   const { data: cities, status: citiesStatus } = citiesResult;
-
-  console.log("departmentResult :: ", departmentResult);
-  console.log("citiesResult :: ", citiesResult);
-  console.log("cities :: ", cities);
 
   return (
     <>
@@ -213,7 +213,7 @@ export default function EditModal({ closeModal, member }) {
                         )}
                       </Field>
                       <Field name="departmentId">
-                        {({ field, form }) => (
+                        {({ field }) => (
                           <FormControl id="departmentId">
                             <FormLabel>Departamento</FormLabel>
                             <Select
@@ -235,11 +235,12 @@ export default function EditModal({ closeModal, member }) {
                         )}
                       </Field>
                       <Field name="cityId">
-                        {({ field, form }) => (
+                        {({ field }) => (
                           <FormControl id={"cityId"}>
                             <FormLabel>Ciudad</FormLabel>
                             <Select
                               {...field}
+                              isDisabled={citiesStatus === "loading"}
                               placeholder={
                                 citiesStatus === "loading"
                                   ? "Cargando..."
@@ -316,7 +317,7 @@ export default function EditModal({ closeModal, member }) {
                         )}
                       </Field>
                       <Field name="businessName">
-                        {({ field, form }) => (
+                        {({ field }) => (
                           <FormControl id={"businessName"}>
                             <FormLabel>Razón Social</FormLabel>
                             <Input {...field} name="businessName" />
@@ -324,23 +325,22 @@ export default function EditModal({ closeModal, member }) {
                         )}
                       </Field>
                       <Field name="fancyBusinessName">
-                        {({ field, form }) => (
+                        {({ field }) => (
                           <FormControl id={"fancyBusinessName"}>
                             <FormLabel>Nombre de Fantasía</FormLabel>
                             <Input {...field} name="fancyBusinessName" />
                           </FormControl>
                         )}
                       </Field>
-                      <Field name="sector">
-                        {({ field, form }) => (
-                          <FormControl id={"sector"}>
-                            <FormLabel>Especifique el Rubro</FormLabel>
-                            <Input {...field} name="sector" />
-                          </FormControl>
-                        )}
-                      </Field>
+                      <FormControl id="rubroId">
+                        <FormLabel>Rubro</FormLabel>
+                        <EnterOrSelectRubro
+                          selectName="rubroId"
+                          enterName="memberDefinedRubro"
+                        />
+                      </FormControl>
                       <Field name="numberEmployees">
-                        {({ field, form }) => (
+                        {({ field }) => (
                           <FormControl id={"numberEmployees"}>
                             <FormLabel>Cantidad de Empleados</FormLabel>
                             <Input {...field} name="numberEmployees" />
@@ -351,7 +351,7 @@ export default function EditModal({ closeModal, member }) {
                         )}
                       </Field>
                       <Field name="annualTurnover">
-                        {({ field, form }) => (
+                        {({ field }) => (
                           <FormControl id={"annualTurnover"}>
                             <FormLabel>Facturación del 2010</FormLabel>
                             <Select {...field} name="annualTurnover">
@@ -382,7 +382,7 @@ export default function EditModal({ closeModal, member }) {
                         )}
                       </Field>
                       <Field name="website">
-                        {({ field, form }) => (
+                        {({ field }) => (
                           <FormControl name="website">
                             <FormLabel>Sitio web o redes sociales</FormLabel>
                             <Input {...field} name="website" />
