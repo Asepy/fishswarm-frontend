@@ -28,13 +28,13 @@ export default function useRubros(options = {}) {
       return resp?.data || [];
     },
     {
-      enabled: initialRubros !== null,
+      enabled: initialRubros === null,
       ...queryOptions
     }
   );
   const { data } = rubrosQuery;
   return {
-    data: initialRubros ? initialRubros : data,
+    data: initialRubros !== null ? initialRubros : data,
     ...rubrosQuery
   };
 }

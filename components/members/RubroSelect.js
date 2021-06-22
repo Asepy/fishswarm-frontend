@@ -6,13 +6,14 @@ export default function RubroSelect({ children, initialRubros, ...props }) {
   const {
     data,
     loading = false,
+    status = "",
     error = null
   } = useRubros({
     initialRubros: initialRubros
   });
-  console.log({ initialRubros });
   return (
-    <Select isDisabled={loading || error} {...props}>
+    <Select isDisabled={loading || error || status === "loading"} {...props}>
+      {status === "loading" && <option value="">Cargando...</option>}
       {children}
       {data?.map((rubro) => (
         <option key={rubro.id} value={rubro.id}>
