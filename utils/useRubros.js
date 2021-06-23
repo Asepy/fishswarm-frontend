@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useQuery } from "react-query";
 import handleResponse from "./handleResponse";
 
@@ -13,7 +12,6 @@ export async function fetchRubros() {
   });
   const data = await handleResponse(resp);
   // eslint-disable-next-line no-console
-  console.log("response was:", data);
   return data;
 }
 
@@ -34,7 +32,7 @@ export default function useRubros(options = {}) {
   );
   const { data } = rubrosQuery;
   return {
-    data: initialRubros !== null ? initialRubros : data,
-    ...rubrosQuery
+    ...rubrosQuery,
+    data: initialRubros !== null ? initialRubros : data
   };
 }

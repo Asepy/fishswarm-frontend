@@ -70,8 +70,7 @@ export default function EnterOrSelectRubro({
       </Field>
       {transitions(
         (styles, item) =>
-          console.log({ item }) ||
-          (item && (
+          item && (
             <animated.div style={styles}>
               <Field name={enterName}>
                 {({ field }) => (
@@ -84,7 +83,7 @@ export default function EnterOrSelectRubro({
                 )}
               </Field>
             </animated.div>
-          ))
+          )
       )}
     </Stack>
   );
