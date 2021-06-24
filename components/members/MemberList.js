@@ -87,7 +87,6 @@ export default function MemberList() {
 
   const handleSubmitSearch = (event) => {
     event.preventDefault();
-    console.log("values :: ", values);
     onSearch(values);
   };
 

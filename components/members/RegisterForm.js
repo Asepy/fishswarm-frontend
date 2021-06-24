@@ -147,7 +147,12 @@ export default function RegisterForm(props) {
                       isInvalid={form.errors.name && form.touched.name}
                     >
                       <FormLabel>Nombres</FormLabel>
-                      <Input type="text" placeholder="Juan José" {...field} />
+                      <Input
+                        autoFocus
+                        type="text"
+                        placeholder="Juan José"
+                        {...field}
+                      />
                       <FormErrorMessage>{form.errors.name}</FormErrorMessage>
                     </FormControl>
                   )}
