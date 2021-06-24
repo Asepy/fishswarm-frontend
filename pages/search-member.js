@@ -131,7 +131,7 @@ function SearchResult({ result, ...rest }) {
             </Box>
           </Text>
         </VStack>
-        <BenefitsLogos mt={4} mb={12} />
+        <BenefitsLogos mt={6} mb={12} />
       </>
     );
   }
@@ -148,7 +148,7 @@ function SearchResult({ result, ...rest }) {
           size="md"
           bg="transparent"
           border="1px"
-          w="md"
+          width={{ base: "full", md: "md" }}
         >
           Registrarse
         </Button>
