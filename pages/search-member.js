@@ -1,12 +1,11 @@
 import React from "react";
 import Link from "next/link";
 import {
-  Alert,
-  AlertIcon,
   Button,
   SkeletonText,
   Heading,
   Input,
+  Icon,
   Stack,
   HStack,
   VStack,
@@ -14,6 +13,7 @@ import {
   Box
 } from "@chakra-ui/react";
 import { ArrowForwardIcon, SearchIcon } from "@chakra-ui/icons";
+import { AiOutlineSmile, AiOutlineFrown } from "react-icons/ai";
 import BirthDatePicker from "components/ui/BirthDatePicker";
 import Container from "components/ui/Container";
 import WaitingSearchIcon from "components/ui/svg/WaitingSearchIcon";
@@ -23,6 +23,7 @@ import useForm from "utils/useForm";
 import allEmptyValues from "utils/allEmptyValues";
 import Seo from "components/ui/layout/Seo";
 import ErrorAlert from "components/ui/ErrorAlert";
+import BenefitsLogos from "components/members/BenefitsLogos";
 
 export default function searchMember() {
   const { values, updateValue, updateValueByName } = useForm({
@@ -30,6 +31,7 @@ export default function searchMember() {
     birthdate: ""
   });
   const { isLoading, data, refetch, error } = useSearchMember(values);
+
   const handleSearch = (e) => {
     e.preventDefault();
     refetch();
@@ -38,14 +40,16 @@ export default function searchMember() {
   return (
     <PublicLayout>
       <Seo title="¿Soy Socio?"></Seo>
-      <Container centerContent py={4}>
-        <Stack spacing="8">
-          <Heading size="md" textAlign="center">
+      <Container w={{ md: "container.md" }} centerContent py={4}>
+        <Stack w="full" spacing="8">
+          <Heading size="sm" textAlign="center">
             Ingresá tus datos para saber si ya sos socio
           </Heading>
           <form onSubmit={handleSearch}>
             <FieldsStack>
               <Input
+                type="text"
+                autoFocus
                 value={values.document}
                 onChange={updateValue}
                 name="document"
@@ -71,12 +75,13 @@ export default function searchMember() {
               </Button>
             </FieldsStack>
           </form>
+
           {error && <ErrorAlert>{error.message}</ErrorAlert>}
           <SkeletonText
             isLoaded={!isLoading}
             textAlign="center"
             alignItems="center"
-            mt="8"
+            mt="4"
             noOfLines={4}
             spacing="4"
           >
@@ -108,42 +113,46 @@ function SearchResult({ result, ...rest }) {
   const { found } = result.data;
   if (found === true) {
     return (
-      <VStack spacing="8" {...rest}>
-        <Alert status="success">
-          <AlertIcon />
-          ¡Felicidades! Ya estás registrado como miembro.
-        </Alert>
-        <Text fontWeight="semibold" size="md" textAlign="center">
-          Podés consultar{" "}
-          <Box
-            as="a"
-            color="blue.400"
-            href="https://asepy.org/membresias/"
-            target="__blank"
-          >
-            nuestra página
-          </Box>{" "}
-          para saber los beneficions que tienen nuestros socios.
-        </Text>
-      </VStack>
+      <>
+        <VStack spacing="4" {...rest}>
+          <Icon as={AiOutlineSmile} w={16} h={16} color="green.400"></Icon>
+          <Heading size="md">
+            ¡Felicidades! Ya estás registrado como miembro.
+          </Heading>
+          <Text fontSize="lg" textAlign="center">
+            Estos son algunos de nuestros beneficios. Para ver más{" "}
+            <Box
+              as="a"
+              color="blue.400"
+              href="https://asepy.org/membresias/"
+              target="__blank"
+            >
+              visitá nuestra sección de beneficios.
+            </Box>
+          </Text>
+        </VStack>
+        <BenefitsLogos mt={4} mb={12} />
+      </>
     );
   }
   return (
-    <Stack spacing="8" {...rest}>
-      <Alert status="warning">
-        <AlertIcon></AlertIcon>
-        Aún no estas registrado, puedes utilizar el botón de abajo para hacerlo
-      </Alert>
+    <VStack spacing="4" {...rest}>
+      <Icon as={AiOutlineFrown} w={16} h={16} color="gray.400"></Icon>
+      <Heading size="md">Aún no estas registrado.</Heading>
+      <Text fontSize="lg" textAlign="center">
+        Puedes utilizar el botón de abajo para hacerlo.
+      </Text>
       <Link _hover={undefined} href="/">
         <Button
           rightIcon={<ArrowForwardIcon />}
           size="md"
           bg="transparent"
           border="1px"
+          w="md"
         >
           Registrarse
         </Button>
       </Link>
-    </Stack>
+    </VStack>
   );
 }
