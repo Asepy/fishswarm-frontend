@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, VStack } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import { animated, config, useTrail, useTransition } from "react-spring";
 
 const logoItems = [
