@@ -39,7 +39,8 @@
     "build": "next build",
     "start": "next start",
     "deploy": "aws s3 sync build/ s3://fischwarm-frontend --acl public-read",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "test": "jest --watch"
   },
   "eslintConfig": {
     "extends": [
@@ -60,11 +61,13 @@
     ]
   },
   "devDependencies": {
+    "babel-jest": "^27.0.5",
     "eslint": "^7.26.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-react": "^7.23.2",
     "husky": "^6.0.0",
+    "jest": "^27.0.5",
     "lint-staged": "^10.5.4",
     "prettier": "^2.3.0"
   },
