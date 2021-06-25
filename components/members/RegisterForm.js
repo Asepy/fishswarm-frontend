@@ -16,10 +16,9 @@ import {
   useToast,
   FormErrorMessage
 } from "@chakra-ui/react";
-import useCreateMember from "utils/useCreateMember";
 import { Field, Form, Formik } from "formik";
 import * as Yup from "yup";
-import { useDepartments } from "hooks/api";
+import { useDepartments, useCreateMember } from "hooks/api";
 import { differenceInYears, parse } from "date-fns";
 import EnterOrSelectRubro from "./EnterOrSelectRubro";
 

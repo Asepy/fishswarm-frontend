@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useQueryClient } from "react-query";
-import { handleResponse, getCurrentUserToken } from "./helpers/api.helpers";
-import { removeEmptyString } from "./helpers/object.helpers";
+import { handleResponse, getCurrentUserToken } from "utils/helpers/api.helpers";
+import { removeEmptyString } from "utils/helpers/object.helpers";
 
 import { FILTER_MEMBER_PAGED_QUERY_ID } from "./useFilterMember";
 
@@ -25,7 +25,7 @@ async function editMemberToApi(idNumber, editMember) {
   return handleResponse(resp);
 }
 
-export default function useEditMember() {
+export function useEditMember() {
   const [isLoading, setIsLoading] = useState(false);
   const queryClient = useQueryClient();
 

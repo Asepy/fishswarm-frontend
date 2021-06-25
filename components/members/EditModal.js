@@ -24,8 +24,7 @@ import {
 import { Form, Formik, Field } from "formik";
 import * as Yup from "yup";
 import { useForm } from "hooks/components";
-import useEditMember from "../../utils/useEditMember";
-import { useDepartments } from "hooks/api";
+import { useDepartments, useEditMember } from "hooks/api";
 import EnterOrSelectRubro from "./EnterOrSelectRubro";
 
 export default function EditModal({ closeModal, member }) {

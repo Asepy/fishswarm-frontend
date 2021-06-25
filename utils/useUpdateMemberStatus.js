@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useQueryClient } from "react-query";
 import { handleResponse, getCurrentUserToken } from "./helpers/api.helpers";
-import { FILTER_MEMBER_PAGED_QUERY_ID } from "./useFilterMember";
+import { FILTER_MEMBER_PAGED_QUERY_ID } from "hooks/api/useFilterMember";
 
 async function mutateMemberStatus(idNumber, editMember) {
   const token = await getCurrentUserToken();

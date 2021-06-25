@@ -1,6 +1,6 @@
-import React from "react";
-import { removeEmptyString } from "./helpers/object.helpers";
-import { handleResponse } from "./helpers/api.helpers";
+import { useState } from "react";
+import { removeEmptyString } from "utils/helpers/object.helpers";
+import { handleResponse } from "utils/helpers/api.helpers";
 
 async function postMember(newMember) {
   const cleanMember = removeEmptyString(newMember);
@@ -20,8 +20,8 @@ async function postMember(newMember) {
   return jsonResponse;
 }
 
-export default function useCreateMember() {
-  const [isLoading, setIsLoading] = React.useState(false);
+export function useCreateMember() {
+  const [isLoading, setIsLoading] = useState(false);
   const mutate = async (values, options) => {
     setIsLoading(true);
     try {

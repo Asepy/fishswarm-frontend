@@ -36,13 +36,11 @@ import {
   ChevronUpIcon
 } from "@chakra-ui/icons";
 
-import { useFilterMemberPaginated } from "utils/useFilterMember";
-
 import SkeletonLines from "components/ui/SkeletonLines";
 import ErrorAlert from "components/ui/ErrorAlert";
 import EditModal from "./EditModal";
 import { formatISODate } from "utils/helpers/date.helpers";
-import { useDepartments } from "hooks/api";
+import { useDepartments, useFilterMemberPaginated } from "hooks/api";
 import { useFocus, useTable, useForm } from "hooks/components";
 import LoadingOverlay from "components/ui/LoadingOverlay";
 import MemberStatusTag from "./MemberStatusTag";

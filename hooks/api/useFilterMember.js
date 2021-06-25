@@ -1,7 +1,7 @@
 import { useState, useMemo, useReducer } from "react";
 import { useQuery } from "react-query";
-import { handleResponse, getCurrentUserToken } from "./helpers/api.helpers";
-import { serializeToUri } from "./helpers/object.helpers";
+import { handleResponse, getCurrentUserToken } from "utils/helpers/api.helpers";
+import { serializeToUri } from "utils/helpers/object.helpers";
 
 export const FILTER_MEMBER_QUERY_ID = "query:filter-members";
 export const FILTER_MEMBER_PAGED_QUERY_ID = "query:filter-members-paginated";
@@ -43,7 +43,7 @@ async function fetchFilteredMembers({
   return data;
 }
 
-export default function useFilterMember({ page }) {
+export function useFilterMember({ page }) {
   return useQuery([FILTER_MEMBER_QUERY_ID, page], () =>
     fetchFilteredMembers({ page })
   );
@@ -57,11 +57,6 @@ const searchInitialState = {
   trigger: false,
   fetching: false
 };
-
-// const validName = new RegExp(
-//   "^[A-Za-zñÑäÄëËïÏöÖüÜáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ]+$"
-// );
-// const validRuc = new RegExp("^([0-9]*)-[0-9]$");
 
 function searchReducer(state, action) {
   if (action.type === "trigger") {
