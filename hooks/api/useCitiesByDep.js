@@ -1,9 +1,9 @@
 import { useQuery } from "react-query";
-import { handleResponse } from "./helpers/api.helpers";
+import { handleResponse } from "utils/helpers/api.helpers";
 
-export const CITIES_BY_DEP_QUERY = "query:citiesByDep";
+const CITIES_BY_DEP_QUERY = "query:citiesByDep";
 
-export async function fetchCities({ depId }) {
+async function fetchCities({ depId }) {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_BASE}/deparments/${depId}/cities`,
     {
@@ -20,7 +20,7 @@ export async function fetchCities({ depId }) {
   return data;
 }
 
-export default function useCitiesByDep({ depId }, options) {
+export function useCitiesByDep({ depId }, options) {
   return useQuery(
     [CITIES_BY_DEP_QUERY, depId],
     async () => {

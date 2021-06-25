@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { useQuery } from "react-query";
-import { handleResponse } from "./helpers/api.helpers";
-
-import useCitiesByDep from "./useCitiesByDep";
+import { handleResponse } from "utils/helpers/api.helpers";
+import { useCitiesByDep } from "./useCitiesByDep";
 
 export async function fetchDepartments() {
   const resp = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/deparments`, {
@@ -19,9 +18,9 @@ export async function fetchDepartments() {
   return data;
 }
 
-export const DEPARTMENTS_QUERY_ID = "query:departments";
+const DEPARTMENTS_QUERY_ID = "query:departments";
 
-export default function useDepartments(departmentOptions = {}, citiesOptions) {
+export function useDepartments(departmentOptions = {}, citiesOptions) {
   const { initialDepId, ...restDepOptions } = departmentOptions;
   const [selectedDepId, setSelectedDepId] = useState(initialDepId);
   const citiesQuery = useCitiesByDep(

@@ -19,7 +19,7 @@ import {
 import useCreateMember from "utils/useCreateMember";
 import { Field, Form, Formik } from "formik";
 import * as Yup from "yup";
-import useDepartments from "utils/useDepartments";
+import { useDepartments } from "hooks/api";
 import { differenceInYears, parse } from "date-fns";
 import EnterOrSelectRubro from "./EnterOrSelectRubro";
 
