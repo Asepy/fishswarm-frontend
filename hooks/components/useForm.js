@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function useForm(defaults) {
+export function useForm(defaults) {
   const [values, setValues] = useState(defaults);
 
   function resetValues(values) {

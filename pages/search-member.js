@@ -18,7 +18,7 @@ import Container from "components/ui/Container";
 import WaitingSearchIcon from "components/ui/svg/WaitingSearchIcon";
 import PublicLayout from "components/ui/layout/PublicLayout";
 import useSearchMember from "utils/useSearchMember";
-import useForm from "utils/useForm";
+import { useForm } from "hooks/components";
 import {
   allEmptyValues,
   allNonEmptyValues

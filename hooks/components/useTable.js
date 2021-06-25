@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function useTable({ columns }) {
+export function useTable({ columns }) {
   const [headersInternal, setHeadersInternal] = useState(() => {
     return columns.reduce((prev, curr) => {
       return {

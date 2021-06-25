@@ -21,12 +21,11 @@ import {
   useToast,
   FormErrorMessage
 } from "@chakra-ui/react";
-import useForm from "../../utils/useForm";
 import { Form, Formik, Field } from "formik";
 import * as Yup from "yup";
+import { useForm } from "hooks/components";
 import useEditMember from "../../utils/useEditMember";
 import useDepartments from "utils/useDepartments";
-import RubroSelect from "./RubroSelect";
 import EnterOrSelectRubro from "./EnterOrSelectRubro";
 
 export default function EditModal({ closeModal, member }) {
