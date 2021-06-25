@@ -1,6 +1,7 @@
 import React from "react";
 import { useQueryClient } from "react-query";
-import handleResponse from "./handleResponse";
+import { handleResponse } from "./helpers/api.helpers";
+
 import { FILTER_MEMBER_PAGED_QUERY_ID } from "./useFilterMember";
 
 async function deleteMember(idNumber) {

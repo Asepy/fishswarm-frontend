@@ -1,8 +1,8 @@
 import { useState, useMemo, useReducer } from "react";
 import { useQuery } from "react-query";
-import getCurrentUserToken from "./getCurrentUserToken";
-import handleResponse from "./handleResponse";
-import serialize from "./serialize";
+import { handleResponse, getCurrentUserToken } from "./helpers/api.helpers";
+
+import { serializeToUri } from "./helpers/object.helpers";
 
 export const FILTER_MEMBER_QUERY_ID = "query:filter-members";
 export const FILTER_MEMBER_PAGED_QUERY_ID = "query:filter-members-paginated";
@@ -16,7 +16,7 @@ async function fetchFilteredMembers({
   sortBy
 }) {
   const token = await getCurrentUserToken();
-  const queryParams = serialize({
+  const queryParams = serializeToUri({
     page,
     searchTerm,
     departmentId,

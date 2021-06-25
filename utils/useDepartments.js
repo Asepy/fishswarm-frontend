@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useQuery } from "react-query";
-import handleResponse from "./handleResponse";
+import { handleResponse } from "./helpers/api.helpers";
+
 import useCitiesByDep from "./useCitiesByDep";
 
 export async function fetchDepartments() {

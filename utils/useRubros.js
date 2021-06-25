@@ -1,5 +1,5 @@
 import { useQuery } from "react-query";
-import handleResponse from "./handleResponse";
+import { handleResponse } from "./helpers/api.helpers";
 
 export async function fetchRubros() {
   const resp = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/rubros`, {

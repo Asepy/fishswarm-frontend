@@ -1,9 +1,8 @@
 import { useState } from "react";
-import formatDate from "./formatDate";
-import handleResponse from "./handleResponse";
+import { handleResponse } from "./helpers/api.helpers";
 
 async function searchMember({ document, birthdate }) {
-  const dateAsStr = formatDate(birthdate);
+  const dateAsStr = birthdate;
   const resp = await fetch(
     `${process.env.NEXT_PUBLIC_API_BASE}/members/validate?document=${document}&birthdate=${dateAsStr}`,
     {

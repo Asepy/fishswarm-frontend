@@ -14,19 +14,21 @@ import {
 } from "@chakra-ui/react";
 import { ArrowForwardIcon, SearchIcon } from "@chakra-ui/icons";
 import { AiOutlineSmile, AiOutlineFrown } from "react-icons/ai";
-import BirthDatePicker from "components/ui/BirthDatePicker";
 import Container from "components/ui/Container";
 import WaitingSearchIcon from "components/ui/svg/WaitingSearchIcon";
 import PublicLayout from "components/ui/layout/PublicLayout";
 import useSearchMember from "utils/useSearchMember";
 import useForm from "utils/useForm";
-import allEmptyValues from "utils/allEmptyValues";
+import {
+  allEmptyValues,
+  allNonEmptyValues
+} from "utils/helpers/object.helpers";
 import Seo from "components/ui/layout/Seo";
 import ErrorAlert from "components/ui/ErrorAlert";
 import BenefitsLogos from "components/members/BenefitsLogos";
 
 export default function searchMember() {
-  const { values, updateValue, updateValueByName } = useForm({
+  const { values, updateValue } = useForm({
     document: "",
     birthdate: ""
   });
@@ -56,13 +58,15 @@ export default function searchMember() {
                 placeholder="Cédula"
                 isRequired
               ></Input>
-              <BirthDatePicker
+              <Input
+                type="date"
                 name="birthdate"
                 placeholder="Fecha de Nacimiento"
-                selectedDate={values.birthdate}
-                onChange={(date) => updateValueByName("birthdate", date)}
-              ></BirthDatePicker>
+                value={values.birthdate}
+                onChange={updateValue}
+              ></Input>
               <Button
+                isDisabled={!allNonEmptyValues(values)}
                 variant="primary"
                 px="12"
                 onClick={handleSearch}

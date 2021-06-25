@@ -1,5 +1,5 @@
 import { useQuery } from "react-query";
-import handleResponse from "./handleResponse";
+import { handleResponse } from "./helpers/api.helpers";
 
 export const CITIES_BY_DEP_QUERY = "query:citiesByDep";
 

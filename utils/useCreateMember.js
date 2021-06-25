@@ -1,6 +1,6 @@
 import React from "react";
-import handleResponse from "./handleResponse";
-import removeEmptyString from "./removeEmptyStrings";
+import { removeEmptyString } from "./helpers/object.helpers";
+import { handleResponse } from "./helpers/api.helpers";
 
 async function postMember(newMember) {
   const cleanMember = removeEmptyString(newMember);

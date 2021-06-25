@@ -42,7 +42,7 @@ import SkeletonLines from "components/ui/SkeletonLines";
 import ErrorAlert from "components/ui/ErrorAlert";
 import EditModal from "./EditModal";
 import DeactivateModal from "./DeactivateModal";
-import { formatISODate } from "utils/formatDate";
+import { formatISODate } from "utils/helpers/date.helpers";
 import useDepartments from "utils/useDepartments";
 import useForm from "utils/useForm";
 import useFocus from "utils/useFocus";

@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useQueryClient } from "react-query";
-import getCurrentUserToken from "./getCurrentUserToken";
-import handleResponse from "./handleResponse";
-import removeEmptyString from "./removeEmptyStrings";
+import { handleResponse, getCurrentUserToken } from "./helpers/api.helpers";
+import { removeEmptyString } from "./helpers/object.helpers";
+
 import { FILTER_MEMBER_PAGED_QUERY_ID } from "./useFilterMember";
 
 async function editMemberToApi(idNumber, editMember) {
