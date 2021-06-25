@@ -1,7 +1,6 @@
 import { useState, useMemo, useReducer } from "react";
 import { useQuery } from "react-query";
 import { handleResponse, getCurrentUserToken } from "./helpers/api.helpers";
-
 import { serializeToUri } from "./helpers/object.helpers";
 
 export const FILTER_MEMBER_QUERY_ID = "query:filter-members";
