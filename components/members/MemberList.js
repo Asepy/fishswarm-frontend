@@ -41,7 +41,6 @@ import { useFilterMemberPaginated } from "utils/useFilterMember";
 import SkeletonLines from "components/ui/SkeletonLines";
 import ErrorAlert from "components/ui/ErrorAlert";
 import EditModal from "./EditModal";
-import DeactivateModal from "./DeactivateModal";
 import { formatISODate } from "utils/helpers/date.helpers";
 import useDepartments from "utils/useDepartments";
 import { useFocus, useTable, useForm } from "hooks/components";
@@ -243,7 +242,6 @@ const columns = [
 
 function MembersTable({ data, error, onSortBy, status, isFetchingNewPage }) {
   const [showEditModal, setShowEditModal] = React.useState(false);
-  const [showDeactivateModal, setShowDeactivateModal] = React.useState(false);
   const [showChangeStatusModal, setShowChangeStatusModal] =
     React.useState(false);
   const [associate, setAssociate] = React.useState();
@@ -391,13 +389,7 @@ function MembersTable({ data, error, onSortBy, status, isFetchingNewPage }) {
               member={associate}
             />
           )}
-          {showDeactivateModal && (
-            <DeactivateModal
-              associate={associate}
-              closeModal={() => setShowDeactivateModal(false)}
-              text="¿Está seguro que desea desactivar al usuario?"
-            />
-          )}
+
           {showChangeStatusModal && (
             <EditStatusModal
               onClose={() => setShowChangeStatusModal(false)}
