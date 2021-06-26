@@ -163,8 +163,9 @@ function BenefitsLogosMediumScreen({
 function BenefitsLogosMobile(props) {
   const trail = useTrail(logoItems.length, {
     from: { marginLeft: -20, opacity: 0, transform: "translate3d(0,-40px,0)" },
-    to: { marginLeft: 0, opacity: 1, transform: "translate3d(0,0px,0)" },
-    config: config.slow
+    to: { marginLeft: 20, opacity: 1, transform: "translate3d(0,0px,0)" },
+    config: config.slow,
+    delay: 1000
   });
 
   return (
