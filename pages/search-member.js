@@ -33,7 +33,6 @@ export default function searchMember() {
     birthdate: ""
   });
   const { isLoading, data, refetch, error } = useSearchMember(values);
-
   const handleSearch = (e) => {
     e.preventDefault();
     refetch();
@@ -42,7 +41,7 @@ export default function searchMember() {
   return (
     <PublicLayout>
       <Seo title="¿Soy Socio?"></Seo>
-      <Container w={{ md: "container.md" }} centerContent py={4}>
+      <Container w={{ md: "container.md" }} height="100vh" centerContent pb={4}>
         <Stack w="full" spacing="8">
           <Heading size="sm" textAlign="center">
             Ingresá tus datos para saber si ya sos socio
@@ -81,19 +80,24 @@ export default function searchMember() {
           </form>
 
           {error && <ErrorAlert>{error.message}</ErrorAlert>}
-          <SkeletonText
-            isLoaded={!isLoading}
-            textAlign="center"
-            alignItems="center"
-            mt="4"
-            noOfLines={4}
-            spacing="4"
-          >
-            {(!data || allEmptyValues(values)) && (
-              <WaitingSearchIcon mt={6} boxSize={{ base: "14rem", md: "xs" }} />
-            )}
-            {data && <SearchResult mt={6} result={data} />}
-          </SkeletonText>
+          <Box>
+            <SkeletonText
+              isLoaded={!isLoading}
+              textAlign="center"
+              alignItems="center"
+              mt="2"
+              noOfLines={4}
+              spacing="4"
+            >
+              {(!data || allEmptyValues(values)) && (
+                <WaitingSearchIcon
+                  mt={6}
+                  boxSize={{ base: "14rem", md: "xs" }}
+                />
+              )}
+              {data && <SearchResult mt={2} result={data} />}
+            </SkeletonText>
+          </Box>
         </Stack>
       </Container>
     </PublicLayout>
@@ -118,7 +122,7 @@ function SearchResult({ result, ...rest }) {
   if (found === true) {
     return (
       <>
-        <VStack spacing="4" {...rest}>
+        <VStack spacing={{ base: 6, md: 4 }} {...rest}>
           <Icon as={AiOutlineSmile} w={16} h={16} color="green.400"></Icon>
           <Heading size="md">
             ¡Felicidades! Ya estás registrado como miembro.
@@ -135,7 +139,7 @@ function SearchResult({ result, ...rest }) {
             </Box>
           </Text>
         </VStack>
-        <BenefitsLogos mt={6} mb={12} />
+        <BenefitsLogos mt={{ base: 6, md: 4 }} mb={12} />
       </>
     );
   }
