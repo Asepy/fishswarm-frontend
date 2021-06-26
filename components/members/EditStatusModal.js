@@ -30,7 +30,7 @@ import { es } from "date-fns/locale";
 import MemberStatusTag from "./MemberStatusTag";
 import { formatISODate } from "utils/helpers/date.helpers";
 import { useSelectMemberStatus } from "hooks/components";
-import useUpdateMemberStatus from "utils/useUpdateMemberStatus";
+import { useUpdateMemberStatus } from "hooks/api";
 
 export default function EditStatusModal({ onClose, member }) {
   const toast = useToast();

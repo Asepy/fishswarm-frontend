@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQueryClient } from "react-query";
-import { handleResponse, getCurrentUserToken } from "./helpers/api.helpers";
+import { handleResponse, getCurrentUserToken } from "utils/helpers/api.helpers";
 import { FILTER_MEMBER_PAGED_QUERY_ID } from "hooks/api/useFilterMember";
 
 async function mutateMemberStatus(idNumber, editMember) {
@@ -22,7 +22,7 @@ async function mutateMemberStatus(idNumber, editMember) {
   return handleResponse(resp);
 }
 
-export default function useUpdateMemberStatus() {
+export function useUpdateMemberStatus() {
   const [isLoading, setIsLoading] = useState(false);
   const queryClient = useQueryClient();
 
