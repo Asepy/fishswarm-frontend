@@ -17,7 +17,7 @@ import { AiOutlineSmile, AiOutlineFrown } from "react-icons/ai";
 import Container from "components/ui/Container";
 import WaitingSearchIcon from "components/ui/svg/WaitingSearchIcon";
 import PublicLayout from "components/ui/layout/PublicLayout";
-import useSearchMember from "utils/useSearchMember";
+import { useSearchMember } from "hooks/api";
 import { useForm } from "hooks/components";
 import {
   allEmptyValues,

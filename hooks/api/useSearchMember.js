@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { handleResponse } from "./helpers/api.helpers";
+import { handleResponse } from "utils/helpers/api.helpers";
 
 async function searchMember({ document, birthdate }) {
   const dateAsStr = birthdate;
@@ -20,7 +20,7 @@ async function searchMember({ document, birthdate }) {
   return jsonResp;
 }
 
-export default function useSearchMember({ document, birthdate }) {
+export function useSearchMember({ document, birthdate }) {
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState();
   const [error, setError] = useState();

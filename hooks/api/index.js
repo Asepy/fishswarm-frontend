@@ -4,7 +4,7 @@ import { useCreateMember } from "./useCreateMember";
 import { useEditMember } from "./useEditMember";
 import { useFilterMemberPaginated } from "./useFilterMember";
 import { useRubros, fetchRubros } from "./useRubros";
-
+import { useSearchMember } from "./useSearchMember";
 export {
   fetchDepartments,
   useDepartments,
@@ -13,5 +13,6 @@ export {
   useEditMember,
   useFilterMemberPaginated,
   useRubros,
-  fetchRubros
+  fetchRubros,
+  useSearchMember
 };
