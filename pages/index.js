@@ -4,8 +4,7 @@ import Container from "components/ui/Container";
 import RegisterForm from "components/members/RegisterForm";
 import PublicLayout from "components/ui/layout/PublicLayout";
 import Seo from "components/ui/layout/Seo";
-import { fetchDepartments } from "hooks/api";
-import { fetchRubros } from "utils/useRubros";
+import { fetchDepartments, fetchRubros } from "hooks/api";
 
 export default function index(props) {
   return (

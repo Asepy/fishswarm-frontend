@@ -3,6 +3,7 @@ import { useCitiesByDep } from "./useCitiesByDep";
 import { useCreateMember } from "./useCreateMember";
 import { useEditMember } from "./useEditMember";
 import { useFilterMemberPaginated } from "./useFilterMember";
+import { useRubros, fetchRubros } from "./useRubros";
 
 export {
   fetchDepartments,
@@ -10,5 +11,7 @@ export {
   useCitiesByDep,
   useCreateMember,
   useEditMember,
-  useFilterMemberPaginated
+  useFilterMemberPaginated,
+  useRubros,
+  fetchRubros
 };

@@ -1,6 +1,6 @@
 import React from "react";
 import { Select } from "@chakra-ui/react";
-import useRubros from "utils/useRubros";
+import { useRubros } from "hooks/api";
 
 export default function RubroSelect({ children, initialRubros, ...props }) {
   const {

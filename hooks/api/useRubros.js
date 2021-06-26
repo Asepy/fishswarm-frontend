@@ -1,5 +1,5 @@
 import { useQuery } from "react-query";
-import { handleResponse } from "./helpers/api.helpers";
+import { handleResponse } from "utils/helpers/api.helpers";
 
 export async function fetchRubros() {
   const resp = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/rubros`, {
@@ -15,9 +15,9 @@ export async function fetchRubros() {
   return data;
 }
 
-export const RUBROS_QUERY_ID = "query:rubros";
+const RUBROS_QUERY_ID = "query:rubros";
 
-export default function useRubros(options = {}) {
+export function useRubros(options = {}) {
   const { initialRubros = null, queryOptions } = options;
   const rubrosQuery = useQuery(
     RUBROS_QUERY_ID,
