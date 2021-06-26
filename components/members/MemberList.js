@@ -41,11 +41,15 @@ import ErrorAlert from "components/ui/ErrorAlert";
 import EditModal from "./EditModal";
 import { formatISODate } from "utils/helpers/date.helpers";
 import { useDepartments, useFilterMemberPaginated } from "hooks/api";
-import { useFocus, useTable, useForm } from "hooks/components";
+import {
+  useFocus,
+  useTable,
+  useForm,
+  useSelectMemberStatus
+} from "hooks/components";
 import LoadingOverlay from "components/ui/LoadingOverlay";
 import MemberStatusTag from "./MemberStatusTag";
 import EditStatusModal from "./EditStatusModal";
-import useSelectMemberStatus from "utils/useSelectMemberStatus";
 import EmptyDataIcon from "components/ui/svg/EmptyDataIcon";
 
 const initialSearchFormValues = {

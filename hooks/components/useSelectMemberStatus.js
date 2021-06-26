@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export const MEMBER_STATUS_OPTIONS = [
+const MEMBER_STATUS_OPTIONS = [
   { value: "PENDING", label: "Pendiente" },
   { value: "ACTIVE", label: "Activo" },
   { value: "INACTIVE", label: "Inactivo" },
@@ -30,7 +30,7 @@ const STATUS_TO_VALID_OPTIONS = {
   ]
 };
 
-export default function useSelectMemberStatus(options = {}) {
+export function useSelectMemberStatus(options = {}) {
   const { currentStatus = null } = options;
   const [selectedStatus, setSelectedStatus] = useState();
   const [validOptions, setValidOptions] = useState(() => {

@@ -27,9 +27,9 @@ import { ChevronDownIcon } from "@chakra-ui/icons";
 import { formatDistance, parseISO } from "date-fns";
 import { es } from "date-fns/locale";
 
-import { formatISODate } from "utils/helpers/date.helpers";
 import MemberStatusTag from "./MemberStatusTag";
-import useSelectMemberStatus from "utils/useSelectMemberStatus";
+import { formatISODate } from "utils/helpers/date.helpers";
+import { useSelectMemberStatus } from "hooks/components";
 import useUpdateMemberStatus from "utils/useUpdateMemberStatus";
 
 export default function EditStatusModal({ onClose, member }) {
