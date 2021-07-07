@@ -21,7 +21,10 @@ import * as Yup from "yup";
 import { useDepartments, useCreateMember } from "hooks/api";
 import { differenceInYears, parse } from "date-fns";
 import EnterOrSelectRubro from "./EnterOrSelectRubro";
+import PlusMembershipFields from "./PlusMemberShipFields";
 
+const FIELDS_SPACING = { base: "12px", md: "24px" };
+const FORM_SECTION_PADDING_LEFT = { md: "10" };
 export default function RegisterForm(props) {
   const toast = useToast();
   const { isLoading, mutate: createMember } = useCreateMember();
@@ -44,7 +47,10 @@ export default function RegisterForm(props) {
     annualTurnover: "",
     tarroMiel: "",
     rubroId: "",
-    memberDefinedRubro: ""
+    memberDefinedRubro: "",
+    membershipType: "NORMAL",
+    plusBillingAddress: "",
+    plusPaymentMethod: ""
   };
 
   const CreateMemberSchema = Yup.object().shape({
@@ -66,7 +72,16 @@ export default function RegisterForm(props) {
       .matches(/^09.*$/i, "Debe empezar con '09'")
       .length(10, "Mímimo 10 dígitos"),
     ruc: Yup.string().required("El RUC es requerido"),
-    cityId: Yup.number().required("Ciudad es requerido")
+    cityId: Yup.number().required("Ciudad es requerido"),
+    membershipType: Yup.string(),
+    plusBillingAddress: Yup.string().when("membershipType", {
+      is: "PLUS",
+      then: Yup.string().required("Dirección de facturación es requerida")
+    }),
+    plusPaymentMethod: Yup.string().when("membershipType", {
+      is: "PLUS",
+      then: Yup.string().required("Modalidad de pago es requerida")
+    })
   });
 
   const { citiesResult, updateDepartment } = useDepartments(
@@ -134,9 +149,9 @@ export default function RegisterForm(props) {
               </Heading>
             </HStack>
             <Stack
-              spacing={{ base: "12px", md: "24px" }}
+              spacing={FIELDS_SPACING}
               my={8}
-              pl={{ md: "10" }}
+              pl={FORM_SECTION_PADDING_LEFT}
             >
               <Box display={{ md: "flex" }}>
                 <Field name="name">
@@ -322,9 +337,9 @@ export default function RegisterForm(props) {
               </Heading>
             </HStack>
             <Stack
-              spacing={{ base: "12px", md: "24px" }}
+              spacing={FIELDS_SPACING}
               mt="8"
-              pl={{ md: "10" }}
+              pl={FORM_SECTION_PADDING_LEFT}
             >
               <Field name="ruc">
                 {({ field, form }) => (
@@ -429,6 +444,58 @@ export default function RegisterForm(props) {
                   </FormControl>
                 )}
               </Field>
+              <Divider></Divider>
+            </Stack>
+            <Stack
+              spacing={FIELDS_SPACING}
+              mt="8"
+              pl={FORM_SECTION_PADDING_LEFT}
+            >
+              <PlusMembershipFields spacing={FIELDS_SPACING}>
+                <Field name="plusPaymentMethod">
+                  {({ field, form }) => (
+                    <FormControl
+                      id="plusPaymentMethod"
+                      isInvalid={
+                        form.errors.plusPaymentMethod &&
+                        form.touched.plusPaymentMethod
+                      }
+                    >
+                      <FormLabel>Modalidad de Pago</FormLabel>
+                      <Select placeholder="Seleccione" {...field}>
+                        <option value="debito-automatico-mensual-de-tarjeta-de-credito">
+                          Débito automático mensual de tarjeta de crédito
+                        </option>
+                        <option value="pago-anual">Pago Anual</option>
+                      </Select>
+                      <FormErrorMessage>
+                        {form.errors.plusPaymentMethod}
+                      </FormErrorMessage>
+                    </FormControl>
+                  )}
+                </Field>
+                <Field name="plusBillingAddress">
+                  {({ field, form }) => (
+                    <FormControl
+                      id="plusBillingAddress"
+                      isInvalid={
+                        form.errors.plusBillingAddress &&
+                        form.touched.plusBillingAddress
+                      }
+                    >
+                      <FormLabel>Dirección de Facturación</FormLabel>
+                      <Input
+                        placeholder="San Martin c/ Mcal. López 555"
+                        {...field}
+                      />
+                      <FormErrorMessage>
+                        {form.errors.plusBillingAddress}
+                      </FormErrorMessage>
+                    </FormControl>
+                  )}
+                </Field>
+              </PlusMembershipFields>
+
               <Box my="8">
                 <Divider></Divider>
               </Box>

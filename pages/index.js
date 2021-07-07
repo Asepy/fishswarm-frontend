@@ -20,7 +20,7 @@ export default function index(props) {
           gap={4}
           pb="16"
         >
-          <GridItem colSpan={{ xl: 3 }}>
+          <GridItem colSpan={{ xl: 4 }}>
             <RegisterForm
               departments={props.departments}
               rubros={props.rubros}

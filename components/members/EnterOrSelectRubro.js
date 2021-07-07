@@ -10,7 +10,7 @@ export default function EnterOrSelectRubro({
   enterName,
   ...restProps
 }) {
-  const [selectedRubroId, setSelectedRubroId] = React.useState("");
+  const [, setSelectedRubroId] = React.useState("");
   const [, , selectHelpers] = useField(selectName);
   const [, enterMeta, enterHelpers] = useField(enterName);
   const [toggle, setToggle] = React.useState(() => {
@@ -30,11 +30,6 @@ export default function EnterOrSelectRubro({
       opacity: 0
     }
   });
-
-  function showInput() {
-    console.log({ enterMeta });
-    return selectedRubroId === "new" || enterMeta.initalValue;
-  }
 
   function handleSelectChange(event) {
     const { value } = event.target;
