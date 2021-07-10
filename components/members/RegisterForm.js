@@ -48,7 +48,7 @@ export default function RegisterForm(props) {
     tarroMiel: "",
     rubroId: "",
     memberDefinedRubro: "",
-    membershipType: "NORMAL",
+    checkedPlus: false,
     plusBillingAddress: "",
     plusPaymentMethod: ""
   };
@@ -73,13 +73,13 @@ export default function RegisterForm(props) {
       .length(10, "Mímimo 10 dígitos"),
     ruc: Yup.string().required("El RUC es requerido"),
     cityId: Yup.number().required("Ciudad es requerido"),
-    membershipType: Yup.string(),
-    plusBillingAddress: Yup.string().when("membershipType", {
-      is: "PLUS",
+    checkedPlus: Yup.boolean(),
+    plusBillingAddress: Yup.string().when("checkedPlus", {
+      is: true,
       then: Yup.string().required("Dirección de facturación es requerida")
     }),
-    plusPaymentMethod: Yup.string().when("membershipType", {
-      is: "PLUS",
+    plusPaymentMethod: Yup.string().when("checkedPlus", {
+      is: true,
       then: Yup.string().required("Modalidad de pago es requerida")
     })
   });
@@ -462,7 +462,7 @@ export default function RegisterForm(props) {
                       }
                     >
                       <FormLabel>Modalidad de Pago</FormLabel>
-                      <Select placeholder="Seleccione" {...field}>
+                      <Select placeholder="Seleccione modalidad" {...field}>
                         <option value="debito-automatico-mensual-de-tarjeta-de-credito">
                           Débito automático mensual de tarjeta de crédito
                         </option>

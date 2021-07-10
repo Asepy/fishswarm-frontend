@@ -10,10 +10,12 @@ import {
   Stack,
   Tag,
   TagLabel,
-  Text
+  Text,
+  Box
 } from "@chakra-ui/react";
-import { useField } from "formik";
+import { useField, Field } from "formik";
 import styled from "@emotion/styled";
+import CirclesPatternSvg from "components/ui/svg/CirclesPatternSvg";
 
 const FieldsWrapper = styled.div`
   background-color: var(--chakra-colors-accents-1);
@@ -25,16 +27,9 @@ const FieldsWrapper = styled.div`
 `;
 
 export default function PlusMembershipFields({ children, ...restProps }) {
-  const [, membershipTypeMeta, membershipTypeHelpers] =
-    useField("membershipType");
   const [, , methodHelpers] = useField("plusPaymentMethod");
   const [, , billingHelpers] = useField("plusBillingAddress");
-  const [socioPlusChecked, setSocioPlusChecked] = React.useState(() => {
-    return membershipTypeMeta.initialValue === "PLUS";
-  });
-  const [toggle, setToggle] = React.useState(() => {
-    return membershipTypeMeta.initialValue === "PLUS";
-  });
+  const [toggle, setToggle] = React.useState(false);
   const transitions = useTransition(toggle, {
     enter: {
       y: 0,
@@ -53,8 +48,6 @@ export default function PlusMembershipFields({ children, ...restProps }) {
   function handleCheckSocioPlus(event) {
     const { checked } = event.target;
     setToggle(checked);
-    setSocioPlusChecked(checked);
-    membershipTypeHelpers.setValue(checked ? "PLUS" : "NORMAL");
     if (!checked) {
       billingHelpers.setValue(undefined);
       methodHelpers.setValue(undefined);
@@ -86,28 +79,42 @@ export default function PlusMembershipFields({ children, ...restProps }) {
             </Stack>
           </GridItem>
           <GridItem colSpan={2}>
-            <Center m="0 auto" h="full">
-              <Tag
-                variant="solid"
-                size="lg"
-                borderRadius="full"
-                colorScheme="teal"
-              >
-                <TagLabel>
-                  <Heading size="md">Plus</Heading>{" "}
-                </TagLabel>
-              </Tag>
-            </Center>
+            <Box h="full" position="relative">
+              <Box position="absolute" bottom="0" right="0">
+                <CirclesPatternSvg />
+              </Box>
+              <Center h="full" position="relative">
+                <Tag
+                  variant="solid"
+                  size="lg"
+                  borderRadius="2xl"
+                  colorScheme="teal"
+                  px={4}
+                  py={2}
+                >
+                  <TagLabel>
+                    <Heading size="lg">Plus</Heading>
+                  </TagLabel>
+                </Tag>
+              </Center>
+            </Box>
           </GridItem>
         </Grid>
-        <Flex justify="space-between" flexDir="row">
-          <Checkbox
-            size="lg"
-            value={socioPlusChecked}
-            onChange={handleCheckSocioPlus}
-          >
-            <Heading size="sm">Quiero ser Socio Plus</Heading>
-          </Checkbox>
+        <Flex justify="space-between">
+          <Field name="checkedPlus">
+            {({ field }) => (
+              <Checkbox
+                size="lg"
+                {...field}
+                onChange={(e) => {
+                  field.onChange(e);
+                  handleCheckSocioPlus(e);
+                }}
+              >
+                <Heading size="sm">Quiero ser Socio Plus</Heading>
+              </Checkbox>
+            )}
+          </Field>
         </Flex>
         {transitions(
           (styles, item) =>
