@@ -25,7 +25,9 @@ import {
   Divider,
   useRadio,
   useRadioGroup,
-  VStack
+  VStack,
+  Spacer,
+  TagLeftIcon
 } from "@chakra-ui/react";
 
 import { FaEllipsisV } from "react-icons/fa";
@@ -33,7 +35,8 @@ import {
   SearchIcon,
   CloseIcon,
   ChevronDownIcon,
-  ChevronUpIcon
+  ChevronUpIcon,
+  CheckIcon
 } from "@chakra-ui/icons";
 
 import SkeletonLines from "components/ui/SkeletonLines";
@@ -51,6 +54,8 @@ import LoadingOverlay from "components/ui/LoadingOverlay";
 import MemberStatusTag from "./MemberStatusTag";
 import EditStatusModal from "./EditStatusModal";
 import EmptyDataIcon from "components/ui/svg/EmptyDataIcon";
+import MembershipType from "./MembershipType";
+import CardRadioGroup from "components/ui/CardRadioGroup";
 
 const initialSearchFormValues = {
   searchTerm: "",
@@ -229,6 +234,7 @@ function PageSection(props) {
 const columns = [
   // Incluye nombre y apellido pero le damos relevancia al apellido
   { title: "Nombre", accessor: "surname", sortable: true },
+
   {
     title: "Cédula de Identidad",
     accessor: "national_id",
@@ -334,15 +340,8 @@ function MembersTable({ data, error, onSortBy, status, isFetchingNewPage }) {
           )}
           {data?.data.map((member) => (
             <Tr key={member.id_number}>
-              <Td w="20%">
-                <Stack>
-                  <span>
-                    {member.name} {member.surname}
-                  </span>
-                  <Box as="span" fontSize="xs" color="gray.500">
-                    {member.mail_id}
-                  </Box>
-                </Stack>
+              <Td w="30%">
+                <MemberCell member={member} />
               </Td>
               <Td isNumeric w="15%">
                 {member.national_id}
@@ -361,6 +360,7 @@ function MembersTable({ data, error, onSortBy, status, isFetchingNewPage }) {
               <Td w="20%">
                 {formatISODate(member.startDate, "dd-MM-yyyy HH:mm")}
               </Td>
+
               <Td w="5%" textAlign="center">
                 <MemberStatusTag status={member.status} />
               </Td>
@@ -401,6 +401,23 @@ function MembersTable({ data, error, onSortBy, status, isFetchingNewPage }) {
         </Tbody>
       </Table>
     </Box>
+  );
+}
+
+function MemberCell({ member }) {
+  const { name, surname, mail_id, membershipType } = member;
+  return (
+    <Stack>
+      <HStack spacing={4}>
+        <span>
+          {name} {surname}
+        </span>
+        {membershipType && <MembershipType membershipType={membershipType} />}
+      </HStack>
+      <Box as="span" fontSize="xs" color="gray.500">
+        {mail_id}
+      </Box>
+    </Stack>
   );
 }
 
@@ -459,68 +476,5 @@ function SimplePaginator({
         </Flex>
       </Flex>
     </>
-  );
-}
-
-// TODO: Move to another file when stable
-function CardRadioGroup({
-  options,
-  name,
-  defaultValue = "",
-  onChange = () => {},
-  value
-}) {
-  const { getRootProps, getRadioProps } = useRadioGroup({
-    name,
-    defaultValue,
-    onChange,
-    value
-  });
-
-  const group = getRootProps();
-  return (
-    <HStack {...group}>
-      {options.map(({ value, label }) => {
-        const radio = getRadioProps({ value });
-        return (
-          <RadioCard key={value} {...radio}>
-            {label}
-          </RadioCard>
-        );
-      })}
-    </HStack>
-  );
-}
-
-function RadioCard(props) {
-  const { getInputProps, getCheckboxProps } = useRadio(props);
-
-  const input = getInputProps();
-  const checkbox = getCheckboxProps();
-
-  return (
-    <Box as="label">
-      <input {...input} />
-      <Box
-        {...checkbox}
-        fontSize="xs"
-        cursor="pointer"
-        borderWidth="1px"
-        borderRadius="md"
-        boxShadow="md"
-        _checked={{
-          bg: "teal.400",
-          color: "white",
-          borderColor: "teal.400"
-        }}
-        _focus={{
-          boxShadow: "outline"
-        }}
-        px={2}
-        py={1}
-      >
-        {props.children}
-      </Box>
-    </Box>
   );
 }
