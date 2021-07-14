@@ -1,8 +1,8 @@
 import React from "react";
-import { Tag, TagLabel, TagLeftIcon } from "@chakra-ui/react";
+import { Spinner, Tag, TagLabel, TagLeftIcon } from "@chakra-ui/react";
 import { CheckIcon } from "@chakra-ui/icons";
 
-const statusMap = {
+const membershipMap = {
   PLUS_PENDIENTE: {
     label: "Plus Pendiente",
     props: { colorScheme: "teal", variant: "outline" }
@@ -13,18 +13,24 @@ const statusMap = {
   }
 };
 
-function getUIMembership(status) {
-  return statusMap[status.toUpperCase()];
+function getUIMembership(membership) {
+  return membershipMap[membership.toUpperCase()];
 }
 
-export default function MembershipType({ membershipType, selected = false }) {
+export default function MembershipType({
+  membershipType,
+  selected = false,
+  loading = false,
+  ...restProps
+}) {
   const uiMembership = getUIMembership(membershipType);
   if (!uiMembership) {
     return null;
   }
   return (
-    <Tag size="sm" {...uiMembership.props}>
-      {selected && <TagLeftIcon as={CheckIcon}></TagLeftIcon>}
+    <Tag {...restProps} {...uiMembership.props}>
+      {loading && <Spinner size="sm" mr={2} />}
+      {selected && !loading && <TagLeftIcon as={CheckIcon}></TagLeftIcon>}
       <TagLabel>{uiMembership.label}</TagLabel>
     </Tag>
   );

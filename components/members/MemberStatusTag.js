@@ -1,5 +1,5 @@
 import React from "react";
-import { Tag, TagLabel, TagLeftIcon } from "@chakra-ui/react";
+import { Spinner, Tag, TagLabel, TagLeftIcon } from "@chakra-ui/react";
 import { CheckIcon } from "@chakra-ui/icons";
 
 const statusMap = {
@@ -13,11 +13,16 @@ function getUIMemberStatus(status) {
   return statusMap[status.toUpperCase()];
 }
 
-export default function MemberStatusTag({ status, selected = false }) {
+export default function MemberStatusTag({
+  status,
+  selected = false,
+  loading = false
+}) {
   const uiStatus = getUIMemberStatus(status);
   return (
     <Tag borderRadius="full" colorScheme={uiStatus.color}>
-      {selected && <TagLeftIcon as={CheckIcon}></TagLeftIcon>}
+      {loading && <Spinner size="sm" mr={2} />}
+      {selected && !loading && <TagLeftIcon as={CheckIcon}></TagLeftIcon>}
       <TagLabel>{uiStatus.label}</TagLabel>
     </Tag>
   );
