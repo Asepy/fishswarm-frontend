@@ -23,11 +23,7 @@ import {
   InputGroup,
   HStack,
   Divider,
-  useRadio,
-  useRadioGroup,
-  VStack,
-  Spacer,
-  TagLeftIcon
+  VStack
 } from "@chakra-ui/react";
 
 import { FaEllipsisV } from "react-icons/fa";
@@ -35,8 +31,7 @@ import {
   SearchIcon,
   CloseIcon,
   ChevronDownIcon,
-  ChevronUpIcon,
-  CheckIcon
+  ChevronUpIcon
 } from "@chakra-ui/icons";
 
 import SkeletonLines from "components/ui/SkeletonLines";
@@ -56,6 +51,7 @@ import EditStatusModal from "./EditStatusModal";
 import EmptyDataIcon from "components/ui/svg/EmptyDataIcon";
 import MembershipType from "./MembershipType";
 import CardRadioGroup from "components/ui/CardRadioGroup";
+import PageSection from "components/ui/PageSection";
 
 const initialSearchFormValues = {
   searchTerm: "",
@@ -225,10 +221,6 @@ export default function MemberList() {
       </Stack>
     </Box>
   );
-}
-
-function PageSection(props) {
-  return <Stack bg="white" boxShadow="md" borderRadius="lg" {...props} />;
 }
 
 const columns = [
@@ -412,7 +404,9 @@ function MemberCell({ member }) {
         <span>
           {name} {surname}
         </span>
-        {membershipType && <MembershipType membershipType={membershipType} />}
+        {membershipType && (
+          <MembershipType size="sm" membershipType={membershipType} />
+        )}
       </HStack>
       <Box as="span" fontSize="xs" color="gray.500">
         {mail_id}

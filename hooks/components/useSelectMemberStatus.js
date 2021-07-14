@@ -30,14 +30,13 @@ const STATUS_TO_VALID_OPTIONS = {
   ]
 };
 
-export function useSelectMemberStatus(options = {}) {
-  const { currentStatus = null } = options;
+export function useSelectMemberStatus(initialStatus) {
   const [selectedStatus, setSelectedStatus] = useState();
   const [validOptions, setValidOptions] = useState(() => {
-    if (currentStatus === null) {
+    if (initialStatus == null) {
       return MEMBER_STATUS_OPTIONS;
     }
-    return STATUS_TO_VALID_OPTIONS[currentStatus].map((option) => ({
+    return STATUS_TO_VALID_OPTIONS[initialStatus].map((option) => ({
       ...option,
       selected: false,
       onClick: makeOnClickOption(option)
@@ -46,20 +45,25 @@ export function useSelectMemberStatus(options = {}) {
 
   function makeOnClickOption({ value }) {
     return () => {
-      setSelectedStatus(value);
-      setValidOptions((prevOptions) => {
-        const selectedIndex = prevOptions.findIndex(
-          (prevOpt) => prevOpt.value === value
-        );
-        return prevOptions.map((opt, index) => {
-          if (index === selectedIndex) {
-            return { ...opt, selected: true };
-          }
-          return { ...opt, selected: false };
-        });
-      });
+      updateSelectedStatus(value);
     };
   }
 
-  return { statusOptions: validOptions, selectedStatus };
+  function updateSelectedStatus(value) {
+    setSelectedStatus(value);
+    setValidOptions(() => {
+      return STATUS_TO_VALID_OPTIONS[value].map((option) => ({
+        ...option,
+        selected: false,
+        onClick: makeOnClickOption(option)
+      }));
+    });
+  }
+
+  return {
+    statusOptions: validOptions,
+    selectedStatus,
+    updateSelectedStatus,
+    initialStatus
+  };
 }
