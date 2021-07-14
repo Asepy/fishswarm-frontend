@@ -22,6 +22,7 @@ import { useDepartments, useCreateMember } from "hooks/api";
 import { differenceInYears, parse } from "date-fns";
 import EnterOrSelectRubro from "./EnterOrSelectRubro";
 import PlusMembershipFields from "./PlusMemberShipFields";
+import { PAYMENT_METHOD_OPTIONS } from "utils/constants";
 
 const FIELDS_SPACING = { base: "12px", md: "24px" };
 const FORM_SECTION_PADDING_LEFT = { md: "10" };
@@ -463,10 +464,11 @@ export default function RegisterForm(props) {
                     >
                       <FormLabel>Modalidad de Pago</FormLabel>
                       <Select placeholder="Seleccione modalidad" {...field}>
-                        <option value="debito-automatico-mensual-de-tarjeta-de-credito">
-                          Débito automático mensual de tarjeta de crédito
-                        </option>
-                        <option value="pago-anual">Pago Anual</option>
+                        {PAYMENT_METHOD_OPTIONS.map(({ value, label }) => (
+                          <option value={value} key={value}>
+                            {label}
+                          </option>
+                        ))}
                       </Select>
                       <FormErrorMessage>
                         {form.errors.plusPaymentMethod}
