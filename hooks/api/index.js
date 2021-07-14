@@ -6,6 +6,7 @@ import { useFilterMemberPaginated } from "./useFilterMember";
 import { useRubros, fetchRubros } from "./useRubros";
 import { useSearchMember } from "./useSearchMember";
 import { useUpdateMemberStatus } from "./useUpdateMemberStatus";
+import { useUpdateMembershipType } from "./useUpdateMembershipType";
 export {
   fetchDepartments,
   useDepartments,
@@ -16,5 +17,6 @@ export {
   useRubros,
   fetchRubros,
   useSearchMember,
-  useUpdateMemberStatus
+  useUpdateMemberStatus,
+  useUpdateMembershipType
 };
