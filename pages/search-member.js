@@ -26,6 +26,7 @@ import {
 import Seo from "components/ui/layout/Seo";
 import ErrorAlert from "components/ui/ErrorAlert";
 import BenefitsLogos from "components/members/BenefitsLogos";
+import Confetti from "components/members/Confetti";
 
 export default function searchMember() {
   const { values, updateValue } = useForm({
@@ -122,6 +123,8 @@ function SearchResult({ result, ...rest }) {
   if (found === true) {
     return (
       <>
+        <Confetti show={true} />
+
         <VStack spacing={{ base: 6, md: 4 }} {...rest}>
           <Icon as={AiOutlineSmile} w={16} h={16} color="green.400"></Icon>
           <Heading size="md">
