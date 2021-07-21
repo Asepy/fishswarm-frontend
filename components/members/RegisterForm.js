@@ -318,6 +318,9 @@ export default function RegisterForm(props) {
                     <Select placeholder="Sexo" name="gender" {...field}>
                       <option value="Masculino">Masculino</option>
                       <option value="Femenino">Femenino</option>
+                      <option value="Prefiero no decirlo">
+                        Prefiero no decirlo
+                      </option>
                     </Select>
                   </FormControl>
                 )}
