@@ -29,13 +29,14 @@ import {
   testValidDateMember
 } from "utils/helpers/date.helpers";
 import { useScrollTo } from "hooks/components";
+import { config } from "react-spring";
 
 const FIELDS_SPACING = { base: "12px", md: "24px" };
 const FORM_SECTION_PADDING_LEFT = { md: "10" };
 
 export default function RegisterForm(props) {
   const toast = useToast();
-  const { scrollTo } = useScrollTo({ mass: 1, tension: 180, friction: 12 });
+  const { scrollTo } = useScrollTo(config.slow);
 
   const { isLoading, mutate: createMember } = useCreateMember();
   const initialState = {
