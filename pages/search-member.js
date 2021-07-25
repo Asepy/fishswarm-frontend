@@ -13,7 +13,9 @@ import {
   Box,
   FormControl,
   FormLabel,
-  InputGroup
+  InputGroup,
+  Tag,
+  Tooltip
 } from "@chakra-ui/react";
 import { ArrowForwardIcon, SearchIcon } from "@chakra-ui/icons";
 import { AiOutlineSmile, AiOutlineFrown } from "react-icons/ai";
@@ -30,6 +32,7 @@ import Seo from "components/ui/layout/Seo";
 import ErrorAlert from "components/ui/ErrorAlert";
 import BenefitsLogos from "components/members/BenefitsLogos";
 import Confetti from "components/members/Confetti";
+import MembershipType from "components/members/MembershipType";
 
 export default function searchMember() {
   const { values, updateValue } = useForm({
@@ -162,7 +165,7 @@ function FieldsStack({ children, ...restProps }) {
 }
 
 function SearchResult({ result, ...rest }) {
-  const { found } = result.data;
+  const { found, membershipType } = result.data;
   if (found === true) {
     return (
       <>
@@ -170,8 +173,10 @@ function SearchResult({ result, ...rest }) {
         <VStack spacing={{ base: 6, md: 4 }} {...rest}>
           <Icon as={AiOutlineSmile} w={16} h={16} color="green.400"></Icon>
           <Heading size="md">
-            ¡Felicidades! Ya estás registrado como miembro.
+            ¡Felicidades! Ya estás registrado como{" "}
+            <Category membershipType={membershipType} />
           </Heading>
+
           <Text fontSize="lg" textAlign="center">
             Estos son algunos de nuestros beneficios. Para ver más{" "}
             <Box
@@ -207,5 +212,21 @@ function SearchResult({ result, ...rest }) {
         </Button>
       </Link>
     </VStack>
+  );
+}
+
+function Category({ membershipType }) {
+  if (!membershipType || membershipType === "NORMAL") {
+    return (
+      <Tooltip
+        label="Membresía básica con acceso a todos los beneficios."
+        aria-label="Información de membresía"
+      >
+        <Tag cursor="pointer">Socio Activo</Tag>
+      </Tooltip>
+    );
+  }
+  return (
+    <MembershipType tooltipDisabled={false} membershipType={membershipType} />
   );
 }
