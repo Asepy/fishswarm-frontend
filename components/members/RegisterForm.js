@@ -14,26 +14,35 @@ import {
   Tag,
   TagLabel,
   useToast,
-  FormErrorMessage
+  FormErrorMessage,
+  InputGroup
 } from "@chakra-ui/react";
-import { Field, Form, Formik } from "formik";
+import { Field, Form, Formik, getIn } from "formik";
 import * as Yup from "yup";
 import { useDepartments, useCreateMember } from "hooks/api";
-import { differenceInYears, parse } from "date-fns";
 import EnterOrSelectRubro from "./EnterOrSelectRubro";
 import PlusMembershipFields from "./PlusMemberShipFields";
 import { PAYMENT_METHOD_OPTIONS } from "utils/constants";
+import {
+  formatDateMembers,
+  isAdult,
+  testValidDateMember
+} from "utils/helpers/date.helpers";
+import { useScrollTo } from "hooks/components";
 
 const FIELDS_SPACING = { base: "12px", md: "24px" };
 const FORM_SECTION_PADDING_LEFT = { md: "10" };
+
 export default function RegisterForm(props) {
   const toast = useToast();
+  const { scrollTo } = useScrollTo({ mass: 1, tension: 180, friction: 12 });
+
   const { isLoading, mutate: createMember } = useCreateMember();
   const initialState = {
     name: "",
     surname: "",
     document: "",
-    birthdate: "",
+    birthdate: { day: "", month: "", year: "" },
     gender: "",
     deparmentId: "",
     cityId: "",
@@ -60,13 +69,27 @@ export default function RegisterForm(props) {
     email: Yup.string()
       .email("Email inválido")
       .required("El email es requerido"),
-    birthdate: Yup.string()
-      .required("La fecha de nacimiento es requerida")
-      .test("mayor-de-edad", "Debe ser mayor de 18 años", (value) => {
-        const dateBorn = parse(value, "yyyy-MM-dd", new Date());
-        const today = new Date();
-        return differenceInYears(today, dateBorn) >= 18;
-      }),
+    birthdate: Yup.object().shape({
+      day: Yup.number()
+        .typeError("Día debe ser un número")
+        .required("Día es requerido")
+        .test("valid-day", "Día inválido", (value) =>
+          testValidDateMember({ day: value })
+        ),
+      month: Yup.number()
+        .typeError("Mes debe ser un número")
+        .required("Mes es requerido")
+        .test("valid-month", "Mes inválido", (value) =>
+          testValidDateMember({ month: value })
+        ),
+      year: Yup.number()
+        .typeError("Año debe ser un número")
+        .required("Año es requerido")
+        .test("mayor-de-edad", "Debe ser mayor de 18 años", isAdult)
+        .test("valid-year", "Año inválido", (value) =>
+          testValidDateMember({ year: value })
+        )
+    }),
     document: Yup.string().required("La cédula es requerida"),
     cellphone: Yup.string()
       .required("El número de celular es requerido")
@@ -92,8 +115,13 @@ export default function RegisterForm(props) {
     { staleTime: Infinity }
   );
 
-  const handleSubmit = async (values) => {
-    createMember(values, {
+  const handleSubmit = async (values, actions) => {
+    const { birthdate } = values;
+    const processedValues = {
+      ...values,
+      birthdate: formatDateMembers(birthdate)
+    };
+    createMember(processedValues, {
       onError: (error) => {
         console.error(error.message);
         const errorMessage =
@@ -116,6 +144,9 @@ export default function RegisterForm(props) {
           duration: 9000,
           isClosable: true
         });
+        actions.resetForm();
+        // scroll to top of form
+        scrollTo();
       }
     });
   };
@@ -132,7 +163,7 @@ export default function RegisterForm(props) {
       <Formik
         initialValues={initialState}
         validationSchema={CreateMemberSchema}
-        onSubmit={(values) => handleSubmit(values)}
+        onSubmit={(values, actions) => handleSubmit(values, actions)}
       >
         {() => (
           <Form name="form">
@@ -209,20 +240,86 @@ export default function RegisterForm(props) {
                   </FormControl>
                 )}
               </Field>
-              <Field name="birthdate">
-                {({ field, form }) => (
-                  <FormControl
-                    id="birthdate"
-                    isInvalid={form.errors.birthdate && form.touched.birthdate}
-                  >
-                    <FormLabel htmlFor="birthdate">
-                      Fecha de Nacimiento
-                    </FormLabel>
-                    <Input id="birthdate" type="date" {...field} />
-                    <FormErrorMessage>{form.errors.birthdate}</FormErrorMessage>
-                  </FormControl>
-                )}
-              </Field>
+              <fieldset>
+                <FormLabel>Fecha de Nacimiento</FormLabel>
+                <InputGroup width="25%">
+                  <Field name="birthdate.day">
+                    {({ field, form }) => (
+                      <FormControl
+                        id="birthdate.day"
+                        isInvalid={
+                          getIn(form.errors, "birthdate.day") &&
+                          getIn(form.touched, "birthdate.day")
+                        }
+                      >
+                        <FormLabel fontSize="sm">Día</FormLabel>
+                        <Input
+                          width="16"
+                          type="text"
+                          placeholder="DD"
+                          name="birthdate.day"
+                          maxLength={2}
+                          {...field}
+                        />
+                        <FormErrorMessage>
+                          {getIn(form.errors, "birthdate.day")}
+                        </FormErrorMessage>
+                      </FormControl>
+                    )}
+                  </Field>
+                  <Field name="birthdate.month">
+                    {({ field, form }) => (
+                      <FormControl
+                        ml="4"
+                        id="birthdate.month"
+                        isInvalid={
+                          getIn(form.errors, "birthdate.month") &&
+                          getIn(form.touched, "birthdate.month")
+                        }
+                      >
+                        <FormLabel fontSize="sm">Mes</FormLabel>
+                        <Input
+                          width="16"
+                          type="text"
+                          placeholder="MM"
+                          name="birthdate.month"
+                          maxLength={2}
+                          {...field}
+                        />
+                        <FormErrorMessage>
+                          {getIn(form.errors, "birthdate.month")}
+                        </FormErrorMessage>
+                      </FormControl>
+                    )}
+                  </Field>
+                  <Field name="birthdate.year">
+                    {({ field, form }) => (
+                      <FormControl
+                        ml="4"
+                        id="birthdate.year"
+                        isInvalid={
+                          getIn(form.errors, "birthdate.year") &&
+                          getIn(form.touched, "birthdate.year")
+                        }
+                      >
+                        <FormLabel fontSize="sm">Año</FormLabel>
+                        <Input
+                          width="24"
+                          type="text"
+                          placeholder="AAAA"
+                          maxLength={4}
+                          name="birthdate.year"
+                          {...field}
+                        />
+                        <FormErrorMessage>
+                          {getIn(form.errors, "birthdate.year")}
+                        </FormErrorMessage>
+                      </FormControl>
+                    )}
+                  </Field>
+                </InputGroup>
+              </fieldset>
+
               <Field name="email">
                 {({ field, form }) => (
                   <FormControl
