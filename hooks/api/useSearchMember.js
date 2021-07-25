@@ -20,15 +20,15 @@ async function searchMember({ document, birthdate }) {
   return jsonResp;
 }
 
-export function useSearchMember({ document, birthdate }) {
+export function useSearchMember() {
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState();
   const [error, setError] = useState();
-  const refetch = async () => {
+  const refetch = async (values) => {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await searchMember({ document, birthdate });
+      const response = await searchMember(values);
       setData(response);
     } catch (error) {
       setError(error);

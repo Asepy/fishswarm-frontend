@@ -10,7 +10,10 @@ import {
   HStack,
   VStack,
   Text,
-  Box
+  Box,
+  FormControl,
+  FormLabel,
+  InputGroup
 } from "@chakra-ui/react";
 import { ArrowForwardIcon, SearchIcon } from "@chakra-ui/icons";
 import { AiOutlineSmile, AiOutlineFrown } from "react-icons/ai";
@@ -31,12 +34,21 @@ import Confetti from "components/members/Confetti";
 export default function searchMember() {
   const { values, updateValue } = useForm({
     document: "",
-    birthdate: ""
+    month: "",
+    day: "",
+    year: ""
   });
+
   const { isLoading, data, refetch, error } = useSearchMember(values);
+
   const handleSearch = (e) => {
     e.preventDefault();
-    refetch();
+    const { document, month, day, year } = values;
+    const processedValues = {
+      document: document,
+      birthdate: `${year}-${month}-${day}`
+    };
+    refetch(processedValues);
   };
 
   return (
@@ -48,24 +60,55 @@ export default function searchMember() {
             Ingresá tus datos para saber si ya sos socio
           </Heading>
           <form onSubmit={handleSearch}>
-            <FieldsStack>
-              <Input
-                type="text"
-                autoFocus
-                value={values.document}
-                onChange={updateValue}
-                name="document"
-                placeholder="Cédula"
-                isRequired
-              ></Input>
-              <Input
-                type="date"
-                name="birthdate"
-                placeholder="Fecha de Nacimiento"
-                value={values.birthdate}
-                onChange={updateValue}
-              ></Input>
+            <FieldsStack spacing={6}>
+              <FormControl>
+                <FormLabel>Cédula</FormLabel>
+                <Input
+                  type="text"
+                  autoFocus
+                  value={values.document}
+                  onChange={updateValue}
+                  name="document"
+                  placeholder="Cédula"
+                  isRequired
+                ></Input>
+              </FormControl>
+              <FormControl>
+                <FormLabel>Fecha de Nacimiento</FormLabel>
+                <InputGroup>
+                  <Input
+                    placeholder="DD"
+                    value={values.day}
+                    name="day"
+                    onChange={updateValue}
+                    type="text"
+                    minLength={1}
+                    maxLength={2}
+                  ></Input>
+                  <Input
+                    ml={2}
+                    placeholder="MM"
+                    value={values.month}
+                    name="month"
+                    onChange={updateValue}
+                    type="text"
+                    minLength={1}
+                    maxLength={2}
+                  ></Input>
+                  <Input
+                    ml={2}
+                    placeholder="AAAA"
+                    value={values.year}
+                    name="year"
+                    onChange={updateValue}
+                    minLength={4}
+                    maxLength={4}
+                  ></Input>
+                </InputGroup>
+              </FormControl>
+
               <Button
+                alignSelf="flex-end"
                 isDisabled={!allNonEmptyValues(values)}
                 variant="primary"
                 px="12"
@@ -105,13 +148,13 @@ export default function searchMember() {
   );
 }
 
-function FieldsStack({ children }) {
+function FieldsStack({ children, ...restProps }) {
   return (
     <>
-      <HStack spacing={4} display={{ base: "none", md: "flex" }}>
+      <HStack spacing={4} display={{ base: "none", md: "flex" }} {...restProps}>
         {children}
       </HStack>
-      <Stack spacing={4} display={{ md: "none" }}>
+      <Stack spacing={4} display={{ md: "none" }} {...restProps}>
         {children}
       </Stack>
     </>
