@@ -3,25 +3,24 @@ import "configureAmplify";
 import { Auth } from "aws-amplify";
 import { Flex, Text, VStack } from "@chakra-ui/layout";
 import SignIn from "./SignIn";
-import SignUp from "./SignUp";
-import ForgotPassword from "./ForgotPassword";
-import ForgotPasswordSubmit from "./ForgotPasswordSubmit";
-import ConfirmSignUp from "./ConfirmSignUp";
+import ChangePassword from "./ChangePassword";
 
 function AuthenticationFlow(props) {
   const [uiState, setUiState] = useState(null);
   const [formState, setFormState] = useState({
     email: "",
     password: "",
-    authCode: ""
+    newPassword: ""
   });
-  const { email, password, authCode } = formState;
+  const { email, password, newPassword } = formState;
   const [isLoading, setIsLoading] = React.useState(false);
   const [error, setError] = React.useState();
+  const [signedInUser, setSignedInUser] = React.useState();
 
   useEffect(() => {
     checkUser();
   }, []);
+
   async function checkUser() {
     console.log("checking user...");
     try {
@@ -35,25 +34,11 @@ function AuthenticationFlow(props) {
   function onChange(e) {
     setFormState({ ...formState, [e.target.name]: e.target.value });
   }
-  async function signUp() {
+  async function changePassword() {
     try {
       setError(null);
       setIsLoading(true);
-      await Auth.signUp({ username: email, password, attributes: { email } });
-      setUiState("confirmSignUp");
-    } catch (err) {
-      console.log({ err });
-      setError(err);
-    } finally {
-      setIsLoading(false);
-    }
-  }
-  async function confirmSignUp() {
-    try {
-      setError(null);
-      setIsLoading(true);
-      await await Auth.confirmSignUp(email, authCode);
-      await Auth.signIn(email, password);
+      await Auth.completeNewPassword(signedInUser, newPassword);
       setUiState("signedIn");
     } catch (err) {
       console.error({ err });
@@ -66,34 +51,13 @@ function AuthenticationFlow(props) {
     try {
       setError(null);
       setIsLoading(true);
-      await Auth.signIn(email, password);
-      setUiState("signedIn");
-    } catch (err) {
-      console.error({ err });
-      setError(err);
-    } finally {
-      setIsLoading(false);
-    }
-  }
-  async function forgotPassword() {
-    try {
-      setError(null);
-      setIsLoading(true);
-      await Auth.forgotPassword(email);
-      setUiState("forgotPasswordSubmit");
-    } catch (err) {
-      console.error({ err });
-      setError(error);
-    } finally {
-      setIsLoading(false);
-    }
-  }
-  async function forgotPasswordSubmit() {
-    try {
-      setError(null);
-      setIsLoading(true);
-      await Auth.forgotPasswordSubmit(email, authCode, password);
-      setUiState("signIn");
+      const user = await Auth.signIn(email, password);
+      setSignedInUser(user);
+      if (user.challengeName === "NEW_PASSWORD_REQUIRED") {
+        setUiState("changePassword");
+      } else {
+        setUiState("signedIn");
+      }
     } catch (err) {
       console.error({ err });
       setError(err);
@@ -120,50 +84,22 @@ function AuthenticationFlow(props) {
         spacing={4}
       >
         {!uiState ||
-          (uiState === "loading" && (
-            <Text fontWeight="bold">Cargando ...</Text>
-          ))}
-        {uiState === "signUp" && (
-          <SignUp
+          (uiState === "loading" && <Text fontWeight="bold">Cargando...</Text>)}
+        {uiState === "changePassword" && (
+          <ChangePassword
             setUiState={setUiState}
             onChange={onChange}
-            signUp={signUp}
+            changePassword={changePassword}
             isLoading={isLoading}
             error={error}
           />
         )}
-        {uiState === "confirmSignUp" && (
-          <ConfirmSignUp
-            setUiState={setUiState}
-            onChange={onChange}
-            confirmSignUp={confirmSignUp}
-            isLoading={isLoading}
-            error={error}
-          />
-        )}
+
         {uiState === "signIn" && (
           <SignIn
             setUiState={setUiState}
             onChange={onChange}
             signIn={signIn}
-            isLoading={isLoading}
-            error={error}
-          />
-        )}
-        {uiState === "forgotPassword" && (
-          <ForgotPassword
-            setUiState={setUiState}
-            onChange={onChange}
-            forgotPassword={forgotPassword}
-            isLoading={isLoading}
-            error={error}
-          />
-        )}
-        {uiState === "forgotPasswordSubmit" && (
-          <ForgotPasswordSubmit
-            setUiState={setUiState}
-            onChange={onChange}
-            forgotPasswordSubmit={forgotPasswordSubmit}
             isLoading={isLoading}
             error={error}
           />

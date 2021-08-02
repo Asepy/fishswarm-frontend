@@ -4,13 +4,7 @@ import { LockIcon } from "@chakra-ui/icons";
 import Logo from "components/ui/Logo";
 import NextLink from "next/link";
 
-export default function SignIn({
-  onChange,
-  setUiState,
-  signIn,
-  error,
-  isLoading,
-}) {
+export default function SignIn({ onChange, signIn, error, isLoading }) {
   return (
     <>
       <Logo width="200px"></Logo>
@@ -41,19 +35,7 @@ export default function SignIn({
       >
         Ingresar
       </Button>
-      <Text fontSize="sm">
-        ¿No tenés una cuenta?
-        <Box
-          as="span"
-          onClick={() => setUiState("signUp")}
-          role="button"
-          cursor="pointer"
-          color="pink.600"
-          ml="2"
-        >
-          Registráte.
-        </Box>
-      </Text>
+
       <Divider></Divider>
       <NextLink href="/">
         <Box as="a" fontSize="sm" cursor="pointer">

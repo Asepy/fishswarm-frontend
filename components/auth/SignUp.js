@@ -8,7 +8,7 @@ export default function SignUp({
   setUiState,
   signUp,
   isLoading,
-  error,
+  error
 }) {
   return (
     <>
