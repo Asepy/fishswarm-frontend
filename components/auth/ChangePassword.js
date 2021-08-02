@@ -13,7 +13,7 @@ export default function ChangePassword({
     <>
       <Logo width="200px"></Logo>
       <Heading alignSelf="start" size="md">
-        Favor ingrese una nueva contraseña antes de ingresar
+        Favor ingrese una nueva contraseña antes de acceder
       </Heading>
       {error && <Text color="red.500">{error.message}</Text>}
       <Input
