@@ -5,9 +5,9 @@
 
 > Aplicación de registro y consulta de socios
 
-### 👩‍ [Sitio de Registro de Socios](https://fischwarm-frontend.s3.sa-east-1.amazonaws.com/index.html)
+### 👩‍ [Sitio de Registro de Socios](http://fischwarm-frontend.s3-website-sa-east-1.amazonaws.com)
 
-### 📈 [Aplicación Backoffice](https://fischwarm-frontend.s3.sa-east-1.amazonaws.com/app.html)
+### 📈 [Aplicación Backoffice](http://fischwarm-frontend.s3-website-sa-east-1.amazonaws.com/app)
 
 ## Configuración de entorno
 
