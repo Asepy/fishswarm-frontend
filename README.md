@@ -9,6 +9,11 @@
 
 ### 📈 [Aplicación Backoffice](http://fischwarm-frontend.s3-website-sa-east-1.amazonaws.com/app)
 
+URLs desarrollo
+
+- [Registro](http://fischwarm-frontend-dev.s3-website-sa-east-1.amazonaws.com)
+- [Backoffice](http://fischwarm-frontend-dev.s3-website-sa-east-1.amazonaws.com/app)
+
 ## Configuración de entorno
 
 Luego de clonar se debe crear el archivo:

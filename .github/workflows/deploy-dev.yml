@@ -2,7 +2,7 @@ name: CD
 
 on:
   push:
-    branches: [master]
+    branches: [develop]
   pull_request:
     types: [closed]
   workflow_dispatch:
@@ -19,12 +19,12 @@ jobs:
       - name: Building
         run: npm run build
         env:
-          NEXT_PUBLIC_API_BASE: ${{ secrets.API_BASE }}
-          NEXT_PUBLIC_API_KEY: ${{ secrets.API_KEY }}
-          NEXT_PUBLIC_SITE_URL: ${{ secrets.PUBLIC_SITE_URL }}
+          NEXT_PUBLIC_API_BASE: ${{ secrets.DEV_API_BASE }}
+          NEXT_PUBLIC_API_KEY: ${{ secrets.DEV_API_KEY }}
+          NEXT_PUBLIC_SITE_URL: ${{ secrets.DEV_PUBLIC_SITE_URL }}
       - uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_KEY }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET }}
           aws-region: sa-east-1
-      - run: aws s3 sync ./out s3://fischwarm-frontend --acl public-read
+      - run: aws s3 sync ./out s3://fischwarm-frontend-dev --acl public-read
