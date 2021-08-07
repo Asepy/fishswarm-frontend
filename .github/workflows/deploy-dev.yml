@@ -28,3 +28,5 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET }}
           aws-region: sa-east-1
       - run: aws s3 sync ./out s3://form.demo.marcosechague.com --acl public-read
+      - run: aws s3 sync ./out s3://www.form.demo.marcosechague.com --acl public-read
+
