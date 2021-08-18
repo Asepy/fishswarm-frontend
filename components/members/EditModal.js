@@ -77,6 +77,7 @@ export default function EditModal({ closeModal, member }) {
         onError: (error) => {
           console.error(error.message);
           const errorMessage =
+            error.message ||
             "Ocurrió un error al editar los datos del usuario.";
           toast({
             position: "top",
