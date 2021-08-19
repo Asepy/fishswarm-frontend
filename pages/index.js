@@ -9,7 +9,7 @@ import { fetchDepartments, fetchRubros } from "hooks/api";
 export default function index(props) {
   return (
     <PublicLayout>
-      <Seo title="Asociáte"></Seo>
+      <Seo title="Asociáte - Prueba CF"></Seo>
       <Container py={4}>
         <Grid
           templateColumns={{

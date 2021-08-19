@@ -1,6 +1,7 @@
 asepyFishSwarm:
   component: "@sls-next/serverless-component@1.19.0"
   inputs:
+    domain: "form.demo.marcosechague.com"
     memory:
       defaultLambda: 2048
       apiLambda: 2048
