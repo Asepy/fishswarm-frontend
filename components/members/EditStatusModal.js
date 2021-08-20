@@ -61,15 +61,17 @@ export default function EditStatusModal({ onClose, member }) {
               <Box as="span">Registrado</Box>
               &nbsp;
               <Box as="span" cursor="pointer" fontWeight="semibold">
-                <Tooltip
-                  label={formatISODate(member.startDate, "dd-MM-yyyy HH:mm")}
-                  aria-label="Fecha de registro"
-                >
-                  {formatDistance(parseISO(member.startDate), new Date(), {
-                    addSuffix: true,
-                    locale: es
-                  })}
-                </Tooltip>
+                {member.startDate ? (
+                  <Tooltip
+                    label={formatISODate(member.startDate, "dd-MM-yyyy HH:mm")}
+                    aria-label="Fecha de registro"
+                  >
+                    {formatDistance(parseISO(member.startDate), new Date(), {
+                      addSuffix: true,
+                      locale: es
+                    })}
+                  </Tooltip>
+                ) : null}
               </Box>
             </Flex>
             <Stack>
