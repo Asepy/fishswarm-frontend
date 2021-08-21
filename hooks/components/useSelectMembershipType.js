@@ -1,35 +1,21 @@
-import { useState } from "react";
-
-const MEMBERSHIP_TYPE_OPTIOINS = [
-  { value: "PLUS_PENDIENTE", label: "Pendiente Plus" },
-  { value: "PLUS", label: "Plus" },
-  { value: "NORMAL", label: "Normal" }
-];
-
-const MEMBERSHIP_TYPE_TO_VALID_OPTIONS = {
-  PLUS_PENDIENTE: [
-    { value: "PLUS", label: "Plus" },
-    { value: "NORMAL", label: "Normal" }
-  ],
-  PLUS: [
-    { value: "PLUS_PENDIENTE", label: "Pendiente Plus" },
-    { value: "NORMAL", label: "Normal" }
-  ],
-  NORMAL: [
-    { value: "PLUS", label: "Plus" },
-    { value: "PLUS_PENDIENTE", label: "Pendiente Plus" }
-  ]
-};
+import { useState, useMemo } from "react";
+import { getMembershipTypesAsOptions } from "components/members/MembershipType";
 
 export function useSelectMembershipType(initialMembership) {
+  const membershipTypes = getMembershipTypesAsOptions();
+  const membershipTypesByValue = useMemo(
+    () => getMembershipTypesAsOptions({ filterValue: initialMembership }),
+    [initialMembership]
+  );
+
   const [selectedMembershipType, setSelectedMembershipType] = useState();
   const [validMembershipOptions, setValidMembershipOptions] = useState(() => {
     if (initialMembership == null) {
-      return MEMBERSHIP_TYPE_OPTIOINS;
+      return membershipTypes;
     }
 
     return (
-      MEMBERSHIP_TYPE_TO_VALID_OPTIONS[initialMembership]?.map((option) => ({
+      membershipTypesByValue.map((option) => ({
         ...option,
         selected: false,
         onClick: makeOnClickOption(option)
@@ -46,11 +32,13 @@ export function useSelectMembershipType(initialMembership) {
   function updateMembershipType(value) {
     setSelectedMembershipType(value);
     setValidMembershipOptions(() => {
-      return MEMBERSHIP_TYPE_TO_VALID_OPTIONS[value].map((option) => ({
-        ...option,
-        selected: false,
-        onClick: makeOnClickOption(option)
-      }));
+      return membershipTypes
+        .filter((m) => m.value !== value)
+        .map((option) => ({
+          ...option,
+          selected: false,
+          onClick: makeOnClickOption(option)
+        }));
     });
   }
 

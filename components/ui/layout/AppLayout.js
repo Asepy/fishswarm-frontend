@@ -187,7 +187,7 @@ export default function AppLayout({ children }) {
       {showLoadingModal && <LoadingModal text="Cerrando sesión"></LoadingModal>}
       <style jsx global>{`
         body {
-          background-color: var(--chakra-colors-accents-1);
+          background-color: var(--chakra-colors-alabaster-500);
         }
       `}</style>
     </Box>

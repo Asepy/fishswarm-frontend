@@ -1,12 +1,12 @@
 import React from "react";
-import { Spinner, Tag, TagLabel, TagLeftIcon } from "@chakra-ui/react";
+import { Badge, Spinner, Tag, TagLabel, TagLeftIcon } from "@chakra-ui/react";
 import { CheckIcon } from "@chakra-ui/icons";
 
 const statusMap = {
   ACTIVE: { label: "Activo", color: "green" },
   INACTIVE: { label: "Inactivo", color: "gray" },
   PENDING: { label: "Pendiente", color: "cyan" },
-  CONDITIONAL: { label: "Condicional", color: "orange" }
+  CONDITIONAL: { label: "Condicional", color: "lochinvar" }
 };
 
 function getUIMemberStatus(status) {
@@ -25,5 +25,14 @@ export default function MemberStatusTag({
       {selected && !loading && <TagLeftIcon as={CheckIcon}></TagLeftIcon>}
       <TagLabel>{uiStatus.label}</TagLabel>
     </Tag>
+  );
+}
+
+export function MemberStatusBadge({ status, ...props }) {
+  const uiStatus = getUIMemberStatus(status);
+  return (
+    <Badge colorScheme={uiStatus.color} {...props}>
+      {uiStatus.label}
+    </Badge>
   );
 }

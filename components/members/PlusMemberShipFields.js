@@ -18,7 +18,7 @@ import styled from "@emotion/styled";
 import CirclesPatternSvg from "components/ui/svg/CirclesPatternSvg";
 
 const FieldsWrapper = styled.div`
-  background-color: var(--chakra-colors-accents-1);
+  background-color: var(--chakra-colors-alabaster-500);
   input,
   select,
   .chakra-checkbox__control:not([data-checked]) {
