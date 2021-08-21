@@ -43,7 +43,8 @@ import {
   useFocus,
   useTable,
   useForm,
-  useSelectMemberStatus
+  useSelectMemberStatus,
+  useSelectMembershipType
 } from "hooks/components";
 import LoadingOverlay from "components/ui/LoadingOverlay";
 import { MemberStatusBadge } from "./MemberStatusTag";
@@ -57,7 +58,8 @@ const initialSearchFormValues = {
   searchTerm: "",
   departmentId: "",
   cityId: "",
-  status: ""
+  status: "",
+  membershipType: ""
 };
 
 export default function MemberList() {
@@ -84,6 +86,7 @@ export default function MemberList() {
   const { departmentResult, citiesResult, updateDepartment } = useDepartments();
   const [searchInputRef, setSearchInputFocus] = useFocus();
   const { statusOptions } = useSelectMemberStatus();
+  const { membershipTypeOptions } = useSelectMembershipType();
 
   const handleSubmitSearch = (event) => {
     event.preventDefault();
@@ -169,13 +172,28 @@ export default function MemberList() {
               </Select>
             </HStack>
             <Divider></Divider>
-            <HStack justify="space-between">
+            <HStack>
+              <Text fontSize="sm">Membresía</Text>
               <CardRadioGroup
-                name="status"
-                value={values.status}
-                onChange={(value) => updateValueByName("status", value)}
-                options={[{ value: "", label: "Todos" }, ...statusOptions]}
+                name="membershipType"
+                value={values.membershipType}
+                onChange={(value) => updateValueByName("membershipType", value)}
+                options={[
+                  { value: "", label: "Todos" },
+                  ...membershipTypeOptions
+                ]}
               />
+            </HStack>
+            <HStack justify="space-between">
+              <HStack>
+                <Text fontSize="sm">Estado</Text>
+                <CardRadioGroup
+                  name="status"
+                  value={values.status}
+                  onChange={(value) => updateValueByName("status", value)}
+                  options={[{ value: "", label: "Todos" }, ...statusOptions]}
+                />
+              </HStack>
               <HStack>
                 <Button
                   size="sm"

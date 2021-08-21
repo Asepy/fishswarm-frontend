@@ -12,6 +12,7 @@ async function fetchFilteredMembers({
   departmentId,
   cityId,
   status,
+  membershipType,
   sortBy
 }) {
   const token = await getCurrentUserToken();
@@ -21,6 +22,7 @@ async function fetchFilteredMembers({
     departmentId,
     cityId,
     status,
+    membershipType,
     sortBy
   });
   const resp = await fetch(
@@ -51,6 +53,7 @@ export function useFilterMember({ page }) {
 
 const searchInitialState = {
   status: "",
+  membershipType: "",
   departmentId: "",
   cityId: "",
   searchTerm: "",
@@ -60,13 +63,14 @@ const searchInitialState = {
 
 function searchReducer(state, action) {
   if (action.type === "trigger") {
-    const { searchTerm, departmentId, cityId, status } = action;
+    const { searchTerm, departmentId, cityId, status, membershipType } = action;
     return {
       ...state,
       searchTerm,
       departmentId: departmentId,
       cityId: cityId,
       status: status,
+      membershipType: membershipType,
       trigger: true
     };
   }
@@ -103,7 +107,8 @@ export function useFilterMemberPaginated() {
       state.searchTerm,
       state.departmentId,
       state.cityId,
-      state.status
+      state.status,
+      state.membershipType
     ],
     () => {
       dispatch({ type: "fetching" });
@@ -113,6 +118,7 @@ export function useFilterMemberPaginated() {
         departmentId: state.departmentId,
         cityId: state.cityId,
         status: state.status,
+        membershipType: state.membershipType,
         sortBy
       });
     },
@@ -130,9 +136,9 @@ export function useFilterMemberPaginated() {
 
   const nextPage = () => setPage((old) => (hasMore ? old + 1 : old));
 
-  const onSearch = ({ searchTerm, departmentId, cityId, status }) => {
+  const onSearch = (searchValues) => {
     setPage(1);
-    dispatch({ type: "trigger", searchTerm, departmentId, cityId, status });
+    dispatch({ type: "trigger", ...searchValues });
   };
 
   const onClear = () => {
