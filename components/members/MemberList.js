@@ -375,7 +375,10 @@ function MembersTable({ data, error, onSortBy, status, isFetchingNewPage }) {
                 {formatISODate(member.startDate, "dd-MM-yyyy HH:mm")}
               </Td>
               <Td w="5%">
-                <MembershipType membershipType={member.membershipType} />
+                <MembershipType
+                  membershipType={member.membershipType}
+                  tooltipEnabled
+                />
               </Td>
               <Td textAlign="center">
                 <Menu matchWidth placement="bottom-end">

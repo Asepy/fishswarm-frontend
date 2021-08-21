@@ -45,7 +45,7 @@ export const membershipMap = {
     label: "Fundador Embajador",
     props: { colorScheme: "mule-fawn", variant: "outline" },
     tooltipLabel:
-      "Miembros de asepy, pagaron una cuota al comienzo para fundar la organización. Derecho a voto en la asamblea. Siguen pagando una cuota como el embajador. Representan a la organización.M"
+      "Miembros de asepy, pagaron una cuota al comienzo para fundar la organización. Derecho a voto en la asamblea. Siguen pagando una cuota como el embajador. Representan a la organización."
   }
 };
 
@@ -64,7 +64,7 @@ export default function MembershipType({
   membershipType,
   selected = false,
   loading = false,
-  tooltipDisabled = true,
+  tooltipEnabled = false,
   ...restProps
 }) {
   const uiMembership = getUIMembership(membershipType);
@@ -73,12 +73,12 @@ export default function MembershipType({
   }
   return (
     <Tooltip
-      isDisabled={tooltipDisabled}
+      isDisabled={!tooltipEnabled}
       aria-label="Información de membresía"
       label={uiMembership.tooltipLabel}
     >
       <Tag
-        cursor={tooltipDisabled ? null : "pointer"}
+        cursor={tooltipEnabled ? "pointer" : null}
         {...restProps}
         {...uiMembership.props}
       >
