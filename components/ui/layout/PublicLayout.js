@@ -13,6 +13,7 @@ import { CloseIcon, HamburgerIcon } from "@chakra-ui/icons";
 import Container from "components/ui/Container";
 import Logo from "components/ui/Logo";
 import InternalLink from "../InternalLink";
+import Footer from "./Footer";
 
 export default function PublicLayout({ children }) {
   const { isOpen, onToggle } = useDisclosure();
@@ -54,6 +55,7 @@ export default function PublicLayout({ children }) {
         </Container>
       </Flex>
       {children}
+      <Footer bg="alabaster.500" />
     </>
   );
 }

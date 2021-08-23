@@ -34,6 +34,7 @@ import Router, { useRouter } from "next/router";
 import Container from "components/ui/Container";
 import LoadingModal from "../LoadingModal";
 import InternalLink from "../InternalLink";
+import Footer from "./Footer";
 
 export default function AppLayout({ children }) {
   const { isOpen, onToggle } = useDisclosure();
@@ -167,6 +168,7 @@ export default function AppLayout({ children }) {
       </Box>
       <Box
         as="main"
+        pb={6}
         _before={{
           background: "white",
           content: '" "',
@@ -185,6 +187,7 @@ export default function AppLayout({ children }) {
         <Box position="relative">{children}</Box>
       </Box>
       {showLoadingModal && <LoadingModal text="Cerrando sesión"></LoadingModal>}
+      <Footer borderTop="1px solid" borderTopColor="alabaster.600" bg="white" />
       <style jsx global>{`
         body {
           background-color: var(--chakra-colors-alabaster-500);
