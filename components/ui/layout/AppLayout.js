@@ -184,7 +184,9 @@ export default function AppLayout({ children }) {
           borderColor: useColorModeValue("gray.200", "gray.900")
         }}
       >
-        <Box position="relative">{children}</Box>
+        <Box position="relative" minHeight="100vh">
+          {children}
+        </Box>
       </Box>
       {showLoadingModal && <LoadingModal text="Cerrando sesión"></LoadingModal>}
       <Footer borderTop="1px solid" borderTopColor="alabaster.600" bg="white" />
