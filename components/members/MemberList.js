@@ -43,10 +43,11 @@ import {
   useFocus,
   useTable,
   useForm,
-  useSelectMemberStatus
+  useSelectMemberStatus,
+  useSelectMembershipType
 } from "hooks/components";
 import LoadingOverlay from "components/ui/LoadingOverlay";
-import MemberStatusTag from "./MemberStatusTag";
+import { MemberStatusBadge } from "./MemberStatusTag";
 import EditStatusModal from "./EditStatusModal";
 import EmptyDataIcon from "components/ui/svg/EmptyDataIcon";
 import MembershipType from "./MembershipType";
@@ -57,7 +58,8 @@ const initialSearchFormValues = {
   searchTerm: "",
   departmentId: "",
   cityId: "",
-  status: ""
+  status: "",
+  membershipType: ""
 };
 
 export default function MemberList() {
@@ -84,6 +86,7 @@ export default function MemberList() {
   const { departmentResult, citiesResult, updateDepartment } = useDepartments();
   const [searchInputRef, setSearchInputFocus] = useFocus();
   const { statusOptions } = useSelectMemberStatus();
+  const { membershipTypeOptions } = useSelectMembershipType();
 
   const handleSubmitSearch = (event) => {
     event.preventDefault();
@@ -169,13 +172,28 @@ export default function MemberList() {
               </Select>
             </HStack>
             <Divider></Divider>
-            <HStack justify="space-between">
+            <HStack>
+              <Text fontSize="sm">Membresía</Text>
               <CardRadioGroup
-                name="status"
-                value={values.status}
-                onChange={(value) => updateValueByName("status", value)}
-                options={[{ value: "", label: "Todos" }, ...statusOptions]}
+                name="membershipType"
+                value={values.membershipType}
+                onChange={(value) => updateValueByName("membershipType", value)}
+                options={[
+                  { value: "", label: "Todos" },
+                  ...membershipTypeOptions
+                ]}
               />
+            </HStack>
+            <HStack justify="space-between">
+              <HStack>
+                <Text fontSize="sm">Estado</Text>
+                <CardRadioGroup
+                  name="status"
+                  value={values.status}
+                  onChange={(value) => updateValueByName("status", value)}
+                  options={[{ value: "", label: "Todos" }, ...statusOptions]}
+                />
+              </HStack>
               <HStack>
                 <Button
                   size="sm"
@@ -236,7 +254,11 @@ const columns = [
   { title: "RUC", accessor: "ruc", isNumeric: true, sortable: true },
   { title: "Ciudad", accessor: "cityName", sortable: true },
   { title: "Registrado El", accessor: "startDate", sortable: true },
-  { title: "Estado", accessor: "status", textAlign: "center", sortable: true },
+  {
+    title: "Membresía",
+    accessor: "membershipType",
+    textAlign: "center"
+  },
   { title: "Opciones", accessor: "options", textAlign: "center" }
 ];
 
@@ -352,11 +374,13 @@ function MembersTable({ data, error, onSortBy, status, isFetchingNewPage }) {
               <Td w="20%">
                 {formatISODate(member.startDate, "dd-MM-yyyy HH:mm")}
               </Td>
-
-              <Td w="5%" textAlign="center">
-                <MemberStatusTag status={member.status} />
+              <Td w="5%">
+                <MembershipType
+                  membershipType={member.membershipType}
+                  tooltipEnabled
+                />
               </Td>
-              <Td w="5%" textAlign="center">
+              <Td textAlign="center">
                 <Menu matchWidth placement="bottom-end">
                   <MenuButton
                     fontSize="12px"
@@ -397,20 +421,24 @@ function MembersTable({ data, error, onSortBy, status, isFetchingNewPage }) {
 }
 
 function MemberCell({ member }) {
-  const { name, surname, mail_id, membershipType } = member;
+  const { name, surname, mail_id, status } = member;
   return (
     <Stack>
-      <HStack spacing={4}>
-        <span>
-          {name} {surname}
-        </span>
-        {membershipType && (
-          <MembershipType size="sm" membershipType={membershipType} />
+      <Text fontSize="sm">
+        {name} {surname}
+      </Text>
+
+      <HStack>
+        {mail_id && (
+          <>
+            <Box as="span" fontSize="xs" color="gray.500">
+              {mail_id}
+            </Box>
+            <span>&#183;</span>
+          </>
         )}
+        <MemberStatusBadge textTransform="revert" status={status} />
       </HStack>
-      <Box as="span" fontSize="xs" color="gray.500">
-        {mail_id}
-      </Box>
     </Stack>
   );
 }

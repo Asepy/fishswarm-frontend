@@ -226,7 +226,5 @@ function Category({ membershipType }) {
       </Tooltip>
     );
   }
-  return (
-    <MembershipType tooltipDisabled={false} membershipType={membershipType} />
-  );
+  return <MembershipType tooltipEnabled membershipType={membershipType} />;
 }

@@ -1,9 +1,10 @@
 import React from "react";
 import { Button, Heading, VStack } from "@chakra-ui/react";
-import Link from "next/link";
+import { useRouter } from "next/router";
 import ErrorIcon from "components/ui/svg/ErrorIcon";
 
 export default function _error() {
+  const router = useRouter();
   return (
     <VStack
       spacing={4}
@@ -16,9 +17,9 @@ export default function _error() {
       <Heading size="lg" color="gray.500" fontWeight="semibold">
         Algo salió mal de nuestro lado.
       </Heading>
-      <Link _hover={undefined} href="/app">
-        <Button variant="primary">Volver a Intentar</Button>
-      </Link>
+      <Button onClick={() => router.back()} variant="primary">
+        Volver a Intentar
+      </Button>
     </VStack>
   );
 }

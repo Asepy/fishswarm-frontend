@@ -5,17 +5,47 @@ import { CheckIcon } from "@chakra-ui/icons";
 const PLUS_DESCRIPTION =
   "Los socios Plus aportan 100.000 Gs mensuales. Esto permite que ASEPY pueda sostener su operación y colaborar en que Paraguay sea un mejor ecosistema para emprender.";
 
-const membershipMap = {
+export const membershipMap = {
+  BASICO: {
+    value: "BASICO",
+    label: "Básico",
+    props: { colorScheme: "minsk", variant: "outline" },
+    tooltipLabel:
+      "Miembros de asepy, que reciben los beneficios, y no poseen una cuota social."
+  },
   PLUS_PENDIENTE: {
+    value: "PLUS_PENDIENTE",
     label: "Plus Pendiente",
     props: { colorScheme: "teal", variant: "outline" },
     tooltipLabel:
-      "Tu solicitud para volverte Socio Plus está en estado pendiente de aprobarse."
+      "El usuario se registró como socio plus, pero aún no fue aprobado."
   },
   PLUS: {
-    label: "Socio Plus",
+    value: "PLUS",
+    label: "Plus",
     props: { colorScheme: "teal", variant: "solid" },
     tooltipLabel: PLUS_DESCRIPTION
+  },
+  EMBAJADOR: {
+    value: "EMBAJADOR",
+    label: "Embajador",
+    props: { colorScheme: "stiletto", variant: "outline" },
+    tooltipLabel:
+      "Miembros de asepy, representan a la organización, pagan una cuota social mayor a los plus, votan en la asamblea."
+  },
+  FUNDADOR: {
+    value: "FUNDADOR",
+    label: "Fundador",
+    props: { colorScheme: "apple", variant: "outline" },
+    tooltipLabel:
+      "Miembros de asepy, pagaron una cuota al comienzo para fundar la organización. Derecho a voto en la asamblea."
+  },
+  FUNDADOR_EMBAJADOR: {
+    value: "FUNDADOR_EMBAJADOR",
+    label: "Fundador Embajador",
+    props: { colorScheme: "mule-fawn", variant: "outline" },
+    tooltipLabel:
+      "Miembros de asepy, pagaron una cuota al comienzo para fundar la organización. Derecho a voto en la asamblea. Siguen pagando una cuota como el embajador. Representan a la organización."
   }
 };
 
@@ -23,11 +53,18 @@ function getUIMembership(membership) {
   return membershipMap[membership.toUpperCase()];
 }
 
+export function getMembershipTypesAsOptions(options = {}) {
+  const { filterValue = null } = options;
+  return Object.values(membershipMap)
+    .filter((m) => m.value !== filterValue)
+    .map(({ value, label }) => ({ value, label }));
+}
+
 export default function MembershipType({
   membershipType,
   selected = false,
   loading = false,
-  tooltipDisabled = true,
+  tooltipEnabled = false,
   ...restProps
 }) {
   const uiMembership = getUIMembership(membershipType);
@@ -36,12 +73,12 @@ export default function MembershipType({
   }
   return (
     <Tooltip
-      isDisabled={tooltipDisabled}
+      isDisabled={!tooltipEnabled}
       aria-label="Información de membresía"
       label={uiMembership.tooltipLabel}
     >
       <Tag
-        cursor={tooltipDisabled ? null : "pointer"}
+        cursor={tooltipEnabled ? "pointer" : null}
         {...restProps}
         {...uiMembership.props}
       >
