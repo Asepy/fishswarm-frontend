@@ -3,7 +3,6 @@ import {
   IconButton,
   Text,
   Tooltip,
-  Select,
   NumberInput,
   NumberInputField,
   NumberInputStepper,

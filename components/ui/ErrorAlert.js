@@ -4,7 +4,7 @@ import {
   AlertTitle,
   AlertDescription,
   CloseButton,
-  VStack,
+  VStack
 } from "@chakra-ui/react";
 
 export default function ErrorAlert({ title, children, ...rest }) {
