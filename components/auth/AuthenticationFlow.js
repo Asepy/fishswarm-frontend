@@ -22,7 +22,6 @@ function AuthenticationFlow(props) {
   }, []);
 
   async function checkUser() {
-    console.log("checking user...");
     try {
       setUiState("loading");
       await Auth.currentAuthenticatedUser();

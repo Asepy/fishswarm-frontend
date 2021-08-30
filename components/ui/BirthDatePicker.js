@@ -19,7 +19,7 @@ export default function BirthDatePicker({ ...rest }) {
     "Septiembre",
     "Octubre",
     "Noviembre",
-    "Deciembre",
+    "Deciembre"
   ];
   return (
     <DatePicker
@@ -30,13 +30,13 @@ export default function BirthDatePicker({ ...rest }) {
         decreaseMonth,
         increaseMonth,
         prevMonthButtonDisabled,
-        nextMonthButtonDisabled,
+        nextMonthButtonDisabled
       }) => (
         <div
           style={{
             margin: 10,
             display: "flex",
-            justifyContent: "center",
+            justifyContent: "center"
           }}
         >
           <button onClick={decreaseMonth} disabled={prevMonthButtonDisabled}>

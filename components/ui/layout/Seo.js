@@ -15,12 +15,12 @@ export default function Seo({ title, description = DEFAULT_DESC }) {
         type: "website",
         locale: "es_ES",
         url: process.env.NEXT_PUBLIC_SITE_URL,
-        site_name: seoTitle,
+        site_name: seoTitle
       }}
       twitter={{
         handle: "@somosasepy",
         site: process.env.NEXT_PUBLIC_SITE_URL,
-        cardType: "summary_large_image",
+        cardType: "summary_large_image"
       }}
     />
   );

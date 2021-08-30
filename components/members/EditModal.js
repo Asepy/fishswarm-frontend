@@ -129,7 +129,7 @@ export default function EditModal({ closeModal, member }) {
               validationSchema={MemberEditSchema}
               onSubmit={(values) => handleSubmit(values)}
             >
-              {(props) => (
+              {() => (
                 <Form name="form">
                   <Stack spacing="24px">
                     <Heading fontSize={{ base: "lg", md: "xl" }}>
@@ -201,7 +201,7 @@ export default function EditModal({ closeModal, member }) {
                         )}
                       </Field>
                       <Field name="gender">
-                        {({ field, form }) => (
+                        {({ field }) => (
                           <FormControl id={"gender"}>
                             <FormLabel>Sexo</FormLabel>
                             <Select {...field} id="gender">

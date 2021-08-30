@@ -6,7 +6,7 @@ import {
   FormLabel,
   Input,
   Heading,
-  Text,
+  Text
 } from "@chakra-ui/react";
 import Logo from "components/ui/Logo";
 
@@ -15,7 +15,7 @@ export default function ConfirmSignUp({
   onChange,
   confirmSignUp,
   isLoading,
-  error,
+  error
 }) {
   return (
     <>

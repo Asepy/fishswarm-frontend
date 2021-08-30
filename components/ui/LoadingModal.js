@@ -7,7 +7,7 @@ import {
   useDisclosure,
   Text,
   CircularProgress,
-  VStack,
+  VStack
 } from "@chakra-ui/react";
 
 export default function LoadingModal({ speed = 300, text = "Cargando" }) {
