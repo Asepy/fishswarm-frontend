@@ -3,19 +3,18 @@ import {
   IconButton,
   Text,
   Tooltip,
-  Select,
   NumberInput,
   NumberInputField,
   NumberInputStepper,
   NumberIncrementStepper,
   NumberDecrementStepper,
-  Flex,
+  Flex
 } from "@chakra-ui/react";
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
   ArrowRightIcon,
-  ArrowLeftIcon,
+  ArrowLeftIcon
 } from "@chakra-ui/icons";
 
 export default function FullPaginator({
@@ -24,7 +23,7 @@ export default function FullPaginator({
   pageIndex = 0,
   pageTotal = 10,
   previousPage = () => {},
-  hasMore = false,
+  hasMore = false
 }) {
   return (
     <>
@@ -98,23 +97,5 @@ export default function FullPaginator({
         </Flex>
       </Flex>
     </>
-  );
-}
-
-function PageSizeSelector({ pageSize, setPageSize }) {
-  return (
-    <Select
-      w={32}
-      value={pageSize}
-      onChange={(e) => {
-        setPageSize(Number(e.target.value));
-      }}
-    >
-      {[10, 20, 30, 40, 50].map((pageSize) => (
-        <option key={pageSize} value={pageSize}>
-          Mostrar {pageSize}
-        </option>
-      ))}
-    </Select>
   );
 }
