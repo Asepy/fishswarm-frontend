@@ -1,6 +1,6 @@
 {
   "name": "asepyfishswarm",
-  "version": "0.3.5",
+  "version": "0.3.6",
   "private": true,
   "dependencies": {
     "@aws-amplify/ui-react": "^1.0.7",
