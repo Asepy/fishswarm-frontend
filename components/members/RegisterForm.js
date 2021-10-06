@@ -19,9 +19,11 @@ import {
 } from "@chakra-ui/react";
 import { Field, Form, Formik, getIn } from "formik";
 import * as Yup from "yup";
+import { config } from "react-spring";
 import { useDepartments, useCreateMember } from "hooks/api";
 import EnterOrSelectRubro from "./EnterOrSelectRubro";
 import PlusMembershipFields from "./PlusMemberShipFields";
+import EnterRucFromDocument from "./EnterRucFromDocument";
 import { PAYMENT_METHOD_OPTIONS } from "utils/constants";
 import {
   formatDateMembers,
@@ -29,7 +31,6 @@ import {
   testValidDateMember
 } from "utils/helpers/date.helpers";
 import { useScrollTo } from "hooks/components";
-import { config } from "react-spring";
 
 const FIELDS_SPACING = { base: "12px", md: "24px" };
 const FORM_SECTION_PADDING_LEFT = { md: "10" };
@@ -241,6 +242,14 @@ export default function RegisterForm(props) {
                   </FormControl>
                 )}
               </Field>
+              <FormControl id="personalRuc">
+                <FormLabel>RUC Personal (Opcional)</FormLabel>
+                <EnterRucFromDocument
+                  selectName="personalRucSelect"
+                  enterName="personalRuc"
+                  documentName="document"
+                ></EnterRucFromDocument>
+              </FormControl>
               <fieldset>
                 <FormLabel>Fecha de Nacimiento</FormLabel>
                 <InputGroup width="25%">
@@ -449,7 +458,7 @@ export default function RegisterForm(props) {
                     id="ruc"
                     isInvalid={form.errors.ruc && form.touched.ruc}
                   >
-                    <FormLabel>RUC</FormLabel>
+                    <FormLabel>RUC Emprendimiento</FormLabel>
                     <Input
                       type="text"
                       placeholder="7777777-3"
