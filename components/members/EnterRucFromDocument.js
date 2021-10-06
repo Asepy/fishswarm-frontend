@@ -39,21 +39,17 @@ export default function EnterRucFromDocument({
     if (value === "new") {
       // reset the select
       selectHelpers.setValue(undefined);
-      //   setInputValue("");
       enterHelpers.setValue("");
       setInputFocus();
     } else if (value === "sameAsDocument") {
       // reset the select
       selectHelpers.setValue(undefined);
-      console.log({ documentMeta });
-      //   setInputValue(documentMeta.value);
       const dv = getDigitoVerificador(documentMeta.value);
       enterHelpers.setValue(documentMeta.value + "-" + dv);
       setInputFocus();
     } else if (value === "") {
       selectHelpers.setValue(value);
       // reset the input
-      //   setInputValue("");
       enterHelpers.setValue("");
     }
   }
