@@ -432,7 +432,7 @@ function MembersTable({ data, error, onSortBy, status, isFetchingNewPage }) {
 }
 
 function MemberCell({ member }) {
-  const { name, surname, mail_id, status, startDate } = member;
+  const { name, surname, status, startDate } = member;
   return (
     <Stack>
       <Text fontSize="sm">
