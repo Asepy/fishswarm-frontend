@@ -191,7 +191,11 @@ export default function EditModal({ closeModal, member }) {
                             }
                           >
                             <FormLabel>RUC Personal (Opcional)</FormLabel>
-                            <Input {...field} name="personalRuc" />
+                            <Input
+                              name="personalRuc"
+                              placeholder="Ej: 777777-3"
+                              {...field}
+                            />
                             <FormErrorMessage>
                               {form.errors.personalRuc}
                             </FormErrorMessage>
