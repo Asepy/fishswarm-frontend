@@ -6,6 +6,7 @@ import {
   Text,
   Thead,
   Tbody,
+  Tooltip,
   Tr,
   Th,
   Td,
@@ -53,6 +54,8 @@ import EmptyDataIcon from "components/ui/svg/EmptyDataIcon";
 import MembershipType from "./MembershipType";
 import CardRadioGroup from "components/ui/CardRadioGroup";
 import PageSection from "components/ui/PageSection";
+import { formatDistanceStrict, parseISO } from "date-fns";
+import { es } from "date-fns/locale";
 
 const initialSearchFormValues = {
   searchTerm: "",
@@ -113,7 +116,7 @@ export default function MemberList() {
               </InputLeftElement>
               <Input
                 type={"text"}
-                placeholder="Buscar por Nombre, Apellido, Cédula o RUC"
+                placeholder="Buscar por cualquier término"
                 value={values.searchTerm}
                 name="searchTerm"
                 onChange={updateValue}
@@ -244,16 +247,20 @@ export default function MemberList() {
 const columns = [
   // Incluye nombre y apellido pero le damos relevancia al apellido
   { title: "Nombre", accessor: "surname", sortable: true },
+  { title: "Celular / Correo", accessor: "cellphone", sortable: true },
+  {
+    title: "Cédula / RUC",
+    accessor: "national_id",
+    sortable: true
+  },
 
   {
-    title: "Cédula de Identidad",
-    accessor: "national_id",
+    title: "RUC EMPRENDIMIENTO",
+    accessor: "ruc",
     isNumeric: true,
     sortable: true
   },
-  { title: "RUC", accessor: "ruc", isNumeric: true, sortable: true },
-  { title: "Ciudad", accessor: "cityName", sortable: true },
-  { title: "Registrado El", accessor: "startDate", sortable: true },
+
   {
     title: "Membresía",
     accessor: "membershipType",
@@ -316,6 +323,7 @@ function MembersTable({ data, error, onSortBy, status, isFetchingNewPage }) {
               >
                 <Flex
                   alignItems="center"
+                  fontSize=".65rem"
                   justifyContent={
                     column.getHeaderProps().isNumeric
                       ? "flex-end"
@@ -354,26 +362,29 @@ function MembersTable({ data, error, onSortBy, status, isFetchingNewPage }) {
           )}
           {data?.data.map((member) => (
             <Tr key={member.id_number}>
-              <Td w="30%">
+              <Td>
                 <MemberCell member={member} />
               </Td>
-              <Td isNumeric w="15%">
-                {member.national_id}
-              </Td>
-              <Td isNumeric w="15%">
-                {member.ruc}
-              </Td>
-              <Td w="20%">
+              <Td>
                 <Stack>
-                  <span>{member?.cityName}</span>
+                  <span>{member?.cellphone}</span>
                   <Box as="span" fontSize="xs" color="gray.500">
-                    {member?.departmentName}
+                    {member?.mail_id}
                   </Box>
                 </Stack>
               </Td>
-              <Td w="20%">
-                {formatISODate(member.startDate, "dd-MM-yyyy HH:mm")}
+
+              <Td>
+                <Stack>
+                  <span>{member?.national_id}</span>
+                  <Box as="span" fontSize="xs" color="gray.500">
+                    RUC: {member.personalRuc ? member.personalRuc : "- -"}
+                  </Box>
+                </Stack>
               </Td>
+
+              <Td isNumeric>{member.ruc}</Td>
+
               <Td w="5%">
                 <MembershipType
                   membershipType={member.membershipType}
@@ -421,22 +432,29 @@ function MembersTable({ data, error, onSortBy, status, isFetchingNewPage }) {
 }
 
 function MemberCell({ member }) {
-  const { name, surname, mail_id, status } = member;
+  const { name, surname, mail_id, status, startDate } = member;
   return (
     <Stack>
       <Text fontSize="sm">
         {name} {surname}
       </Text>
 
-      <HStack>
-        {mail_id && (
-          <>
-            <Box as="span" fontSize="xs" color="gray.500">
-              {mail_id}
+      <HStack align="flex-start">
+        {startDate && (
+          <Tooltip
+            aria-label="Fecha de registro"
+            label={formatISODate(startDate, "dd-MM-yyyy HH:mm")}
+          >
+            <Box cursor="pointer" as="span" fontSize="xs" color="gray.500">
+              Registrado: hace{" "}
+              {formatDistanceStrict(parseISO(startDate), new Date(), {
+                addSuffix: false,
+                locale: es
+              })}
             </Box>
-            <span>&#183;</span>
-          </>
+          </Tooltip>
         )}
+        <span>&#183;</span>
         <MemberStatusBadge textTransform="revert" status={status} />
       </HStack>
     </Stack>
