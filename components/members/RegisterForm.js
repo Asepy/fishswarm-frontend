@@ -64,6 +64,9 @@ export default function RegisterForm(props) {
     plusBillingAddress: "",
     plusPaymentMethod: ""
   };
+  const [personalRucKey, setPersonalRucKey] = React.useState(0);
+  const [rubroKey, setRubroKey] = React.useState(1);
+  const [plusKey, setPlusKey] = React.useState(2);
 
   const CreateMemberSchema = Yup.object().shape({
     name: Yup.string().required("El nombre es requerido"),
@@ -147,6 +150,14 @@ export default function RegisterForm(props) {
           isClosable: true
         });
         actions.resetForm();
+
+        // force clean custom components
+        // by re-render them.
+        // TODO it should be a better way
+        setPersonalRucKey((val) => val + 1);
+        setRubroKey((val) => val + 1);
+        setPlusKey((val) => val + 1);
+
         // scroll to top of form
         scrollTo();
       }
@@ -248,6 +259,7 @@ export default function RegisterForm(props) {
                   selectName="personalRucSelect"
                   enterName="personalRuc"
                   documentName="document"
+                  key={personalRucKey}
                 ></EnterRucFromDocument>
               </FormControl>
               <fieldset>
@@ -499,6 +511,7 @@ export default function RegisterForm(props) {
                   rubros={rubros}
                   selectName="rubroId"
                   enterName="memberDefinedRubro"
+                  key={rubroKey}
                 ></EnterOrSelectRubro>
               </FormControl>
               <Field name="numberEmployees">
@@ -562,7 +575,7 @@ export default function RegisterForm(props) {
               mt="8"
               pl={FORM_SECTION_PADDING_LEFT}
             >
-              <PlusMembershipFields spacing={FIELDS_SPACING}>
+              <PlusMembershipFields key={plusKey} spacing={FIELDS_SPACING}>
                 <Field name="plusPaymentMethod">
                   {({ field, form }) => (
                     <FormControl
