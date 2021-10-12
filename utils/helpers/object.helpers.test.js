@@ -1,4 +1,8 @@
-import { allEmptyValues, allNonEmptyValues } from "./object.helpers";
+import {
+  allEmptyValues,
+  allNonEmptyValues,
+  removeEmptyString
+} from "./object.helpers";
 
 describe("allEmptyValues", () => {
   it("should return true for all empty strings", () => {
@@ -21,5 +25,20 @@ describe("allNonEmptyValues", () => {
   it("should return false if at least one value is empty", () => {
     const values = { document: "123", birthdate: "" };
     expect(allNonEmptyValues(values)).toBe(false);
+  });
+});
+
+describe("removeEmptyString", () => {
+  it("should remove properties with empty strings", () => {
+    const values = { document: "123", birthdate: "" };
+    expect(removeEmptyString(values).document).toBe("123");
+    expect(removeEmptyString(values).birthdate).toBeUndefined();
+  });
+
+  it("should return same object if passed null or undefined", () => {
+    const nullObj = null;
+    const undefinedObj = undefined;
+    expect(removeEmptyString(nullObj)).toBe(null);
+    expect(removeEmptyString(undefinedObj)).toBeUndefined();
   });
 });
