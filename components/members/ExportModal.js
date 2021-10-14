@@ -61,7 +61,7 @@ export default function ExportModal({ filterValues, sortBy, ...delegated }) {
             duration: 7000,
             isClosable: true
           });
-          onClose();
+          delegated.onClose();
         }
       });
     }
