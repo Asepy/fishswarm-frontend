@@ -19,9 +19,11 @@ import {
 } from "@chakra-ui/react";
 import { Field, Form, Formik, getIn } from "formik";
 import * as Yup from "yup";
+import { config } from "react-spring";
 import { useDepartments, useCreateMember } from "hooks/api";
 import EnterOrSelectRubro from "./EnterOrSelectRubro";
 import PlusMembershipFields from "./PlusMemberShipFields";
+import EnterRucFromDocument from "./EnterRucFromDocument";
 import { PAYMENT_METHOD_OPTIONS } from "utils/constants";
 import {
   formatDateMembers,
@@ -29,7 +31,6 @@ import {
   testValidDateMember
 } from "utils/helpers/date.helpers";
 import { useScrollTo } from "hooks/components";
-import { config } from "react-spring";
 
 const FIELDS_SPACING = { base: "12px", md: "24px" };
 const FORM_SECTION_PADDING_LEFT = { md: "10" };
@@ -63,6 +64,9 @@ export default function RegisterForm(props) {
     plusBillingAddress: "",
     plusPaymentMethod: ""
   };
+  const [personalRucKey, setPersonalRucKey] = React.useState(0);
+  const [rubroKey, setRubroKey] = React.useState(1);
+  const [plusKey, setPlusKey] = React.useState(2);
 
   const CreateMemberSchema = Yup.object().shape({
     name: Yup.string().required("El nombre es requerido"),
@@ -146,6 +150,14 @@ export default function RegisterForm(props) {
           isClosable: true
         });
         actions.resetForm();
+
+        // force clean custom components
+        // by re-render them.
+        // TODO it should be a better way
+        setPersonalRucKey((val) => val + 1);
+        setRubroKey((val) => val + 1);
+        setPlusKey((val) => val + 1);
+
         // scroll to top of form
         scrollTo();
       }
@@ -241,6 +253,15 @@ export default function RegisterForm(props) {
                   </FormControl>
                 )}
               </Field>
+              <FormControl id="personalRuc">
+                <FormLabel>RUC Personal (Opcional)</FormLabel>
+                <EnterRucFromDocument
+                  selectName="personalRucSelect"
+                  enterName="personalRuc"
+                  documentName="document"
+                  key={personalRucKey}
+                ></EnterRucFromDocument>
+              </FormControl>
               <fieldset>
                 <FormLabel>Fecha de Nacimiento</FormLabel>
                 <InputGroup width="25%">
@@ -449,7 +470,7 @@ export default function RegisterForm(props) {
                     id="ruc"
                     isInvalid={form.errors.ruc && form.touched.ruc}
                   >
-                    <FormLabel>RUC</FormLabel>
+                    <FormLabel>RUC Emprendimiento</FormLabel>
                     <Input
                       type="text"
                       placeholder="7777777-3"
@@ -490,6 +511,7 @@ export default function RegisterForm(props) {
                   rubros={rubros}
                   selectName="rubroId"
                   enterName="memberDefinedRubro"
+                  key={rubroKey}
                 ></EnterOrSelectRubro>
               </FormControl>
               <Field name="numberEmployees">
@@ -553,7 +575,7 @@ export default function RegisterForm(props) {
               mt="8"
               pl={FORM_SECTION_PADDING_LEFT}
             >
-              <PlusMembershipFields spacing={FIELDS_SPACING}>
+              <PlusMembershipFields key={plusKey} spacing={FIELDS_SPACING}>
                 <Field name="plusPaymentMethod">
                   {({ field, form }) => (
                     <FormControl

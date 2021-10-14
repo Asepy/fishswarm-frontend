@@ -43,6 +43,7 @@ export default function EditModal({ closeModal, member }) {
     businessName: member?.businessName || "",
     fancyBusinessName: member?.fancyBusinessName || "",
     ruc: member?.ruc || "",
+    personalRuc: member?.personalRuc || "",
     sector: member?.sector || "",
     numberEmployees: member?.numberEmployees || 0,
     website: member?.website || "",
@@ -92,9 +93,7 @@ export default function EditModal({ closeModal, member }) {
           toast({
             position: "top",
             title: "Datos modificados correctamente",
-            description:
-              "Se ha modificado correctamente los datos del usuario " +
-              `${member.national_id}`,
+            description: `Datos de usuario actualizados correctamente.`,
             status: "success",
             duration: 7000,
             isClosable: true
@@ -178,6 +177,27 @@ export default function EditModal({ closeModal, member }) {
                             <Input {...field} id="document" />
                             <FormErrorMessage>
                               {form.errors.document}
+                            </FormErrorMessage>
+                          </FormControl>
+                        )}
+                      </Field>
+                      <Field name="personalRuc">
+                        {({ field, form }) => (
+                          <FormControl
+                            id={"ruc"}
+                            isInvalid={
+                              form.errors.personalRuc &&
+                              form.touched.personalRuc
+                            }
+                          >
+                            <FormLabel>RUC Personal (Opcional)</FormLabel>
+                            <Input
+                              name="personalRuc"
+                              placeholder="Ej: 777777-3"
+                              {...field}
+                            />
+                            <FormErrorMessage>
+                              {form.errors.personalRuc}
                             </FormErrorMessage>
                           </FormControl>
                         )}
@@ -303,12 +323,8 @@ export default function EditModal({ closeModal, member }) {
                             id={"ruc"}
                             isInvalid={form.errors.ruc && form.touched.ruc}
                           >
-                            <FormLabel>RUC</FormLabel>
+                            <FormLabel>RUC Emprendimiento</FormLabel>
                             <Input {...field} name="ruc" />
-                            <FormHelperText>
-                              El único requisito para asociarte es contar con un
-                              RUC activo.
-                            </FormHelperText>
                             <FormErrorMessage>
                               {form.errors.ruc}
                             </FormErrorMessage>

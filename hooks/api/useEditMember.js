@@ -5,10 +5,10 @@ import { removeEmptyString } from "utils/helpers/object.helpers";
 
 import { FILTER_MEMBER_PAGED_QUERY_ID } from "./useFilterMember";
 
-async function editMemberToApi(idNumber, editMember) {
+async function editMemberToApi(idNumber, updatedMember) {
   const token = await getCurrentUserToken();
-  const cleanMember = removeEmptyString(editMember);
-  const body = JSON.stringify(cleanMember);
+  const cleanValues = removeEmptyString(updatedMember);
+  const body = JSON.stringify(cleanValues);
   const resp = await fetch(
     `${process.env.NEXT_PUBLIC_API_BASE}/members/${idNumber}`,
     {

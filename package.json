@@ -1,6 +1,6 @@
 {
   "name": "asepyfishswarm",
-  "version": "0.3.5",
+  "version": "0.3.6",
   "private": true,
   "dependencies": {
     "@aws-amplify/ui-react": "^1.0.7",
@@ -16,6 +16,7 @@
     "@testing-library/user-event": "^12.7.3",
     "aws-amplify": "^3.3.27",
     "basic-auth": "^2.0.1",
+    "core-js": "^3.18.2",
     "date-fns": "^2.20.1",
     "emotion-theming": "^11.0.0",
     "formik": "^2.2.6",
