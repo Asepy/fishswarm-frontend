@@ -39,9 +39,6 @@ async function fetchFilteredMembers({
   );
   const data = await handleResponse(resp);
 
-  // eslint-disable-next-line
-  console.log("response was:", data);
-
   return data;
 }
 
@@ -143,14 +140,14 @@ export function useFilterMemberPaginated() {
 
   const onClear = () => {
     setPage(1);
-    setSortBy(null);
+    setSortBy(undefined);
     dispatch({ type: "clear" });
   };
 
   const onSortBy = (column, isSorted, isSortedDesc) => {
     if (!isSorted) {
       // resets sorting on this column
-      setSortBy(null);
+      setSortBy(undefined);
       return;
     }
     const orderBy = isSortedDesc ? "desc" : "asc";
@@ -172,6 +169,7 @@ export function useFilterMemberPaginated() {
     previousPage,
     page,
     setPage,
+    sortBy,
     ...restUseQueryResult
   };
 }

@@ -6,6 +6,10 @@ export function allNonEmptyValues(values) {
   return Object.values(values).every(Boolean);
 }
 
+export function someNonEmptyValues(values) {
+  return Object.values(values).some(Boolean);
+}
+
 export function removeEmptyString(obj) {
   if (obj == null) {
     return obj;

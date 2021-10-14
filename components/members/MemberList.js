@@ -28,6 +28,7 @@ import {
 } from "@chakra-ui/react";
 
 import { FaEllipsisV } from "react-icons/fa";
+import { ImArrowUpRight2 } from "react-icons/im";
 import {
   SearchIcon,
   CloseIcon,
@@ -56,6 +57,7 @@ import CardRadioGroup from "components/ui/CardRadioGroup";
 import PageSection from "components/ui/PageSection";
 import { formatDistanceStrict, parseISO } from "date-fns";
 import { es } from "date-fns/locale";
+import ExportModal from "./ExportModal";
 
 const initialSearchFormValues = {
   searchTerm: "",
@@ -83,6 +85,7 @@ export default function MemberList() {
     onSortBy,
     page,
     previousPage,
+    sortBy,
     status
   } = useFilterMemberPaginated();
 
@@ -90,6 +93,7 @@ export default function MemberList() {
   const [searchInputRef, setSearchInputFocus] = useFocus();
   const { statusOptions } = useSelectMemberStatus();
   const { membershipTypeOptions } = useSelectMembershipType();
+  const [showExportModal, setShowExportModal] = React.useState(false);
 
   const handleSubmitSearch = (event) => {
     event.preventDefault();
@@ -101,9 +105,12 @@ export default function MemberList() {
     onClear();
   };
 
+  const handleExport = () => {
+    setShowExportModal(true);
+  };
+
   const { data: departments, status: departmentStatus } = departmentResult;
   const { data: cities, status: citiesStatus } = citiesResult;
-
   return (
     <Box pb={8}>
       <Stack spacing={6} mt={2}>
@@ -199,13 +206,21 @@ export default function MemberList() {
               </HStack>
               <HStack>
                 <Button
+                  rightIcon={<ImArrowUpRight2 />}
                   size="sm"
-                  variant="primary"
-                  type="submit"
-                  isLoading={isSearching}
+                  onClick={handleExport}
+                  variant="outline"
+                  isDisabled={isSearching}
                 >
-                  Buscar
+                  Exportar
                 </Button>
+                {showExportModal && (
+                  <ExportModal
+                    filterValues={values}
+                    sortBy={sortBy}
+                    onClose={() => setShowExportModal(false)}
+                  />
+                )}
                 <Button
                   variant="ghost"
                   px={4}
@@ -214,6 +229,14 @@ export default function MemberList() {
                   onClick={handleClear}
                 >
                   Limpiar
+                </Button>
+                <Button
+                  size="sm"
+                  variant="primary"
+                  type="submit"
+                  isLoading={isSearching}
+                >
+                  Buscar
                 </Button>
               </HStack>
             </HStack>
