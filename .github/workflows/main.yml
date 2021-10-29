@@ -15,4 +15,4 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_KEY }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET }}
           aws-region: sa-east-1
-      - run: aws s3 rm --recursive s3://fischwarm-backendInfo/generated_reports/
+      - run: aws s3 rm --recursive s3://fischwarm-backend/generated_reports/
