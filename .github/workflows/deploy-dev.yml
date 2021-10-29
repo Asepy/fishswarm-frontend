@@ -2,6 +2,9 @@ name: CD Dev
 
 on:
   push:
+    paths-ignore:
+      - ".github/**"
+      - "*.md"
     branches: [develop]
   pull_request:
     types: [closed]
@@ -27,7 +30,6 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_KEY }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET }}
           aws-region: sa-east-1
-#       - run: aws s3 sync ./out s3://form.demo.marcosechague.com --acl public-read
-#       - run: aws s3 sync ./out s3://www.form.demo.marcosechague.com --acl public-read
-      - run: aws s3 sync ./out s3://fischwarm-frontend-dev --acl public-read
+      - name: Uploading static files to S3    
+        run: aws s3 sync ./out s3://fischwarm-frontend-dev --acl public-read
 
