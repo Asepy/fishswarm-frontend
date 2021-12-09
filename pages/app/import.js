@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import {
   Box,
   Button,
@@ -12,7 +12,6 @@ import {
   Th,
   Thead,
   Tr,
-  useToast,
   useDisclosure,
   Modal,
   ModalOverlay,
@@ -28,7 +27,6 @@ import Container from "components/ui/Container";
 import AuthenticationFlow from "components/auth/AuthenticationFlow";
 import PageSection from "components/ui/PageSection";
 import { useMembersCsv } from "hooks/components";
-import { useCreateMember } from "hooks/api";
 
 function Import() {
   return (
@@ -46,15 +44,7 @@ function CsvReader() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [csvFile, setCsvFile] = useState();
   const [sql, setSql] = useState("");
-  const {
-    csvData,
-    processCSV,
-    getRowValuesToSubmit,
-    generateSql,
-    generateAllSql
-  } = useMembersCsv();
-  const { isLoading, mutate: createMember } = useCreateMember();
-  const toast = useToast();
+  const { csvData, processCSV, generateSql, generateAllSql } = useMembersCsv();
   const [copySuccess, setCopySuccess] = useState("");
 
   const submit = () => {
@@ -67,36 +57,6 @@ function CsvReader() {
     };
 
     reader.readAsText(file);
-  };
-
-  const importRow = (row) => {
-    const values = getRowValuesToSubmit(row);
-    console.log({ values });
-
-    // return;
-    createMember(values, {
-      onError: (error) => {
-        console.error(error.message);
-        const errorMessage =
-          error.message || "Ocurrió un error durante el registro.";
-        toast({
-          position: "top",
-          title: "Error durante el registro",
-          description: errorMessage,
-          status: "error",
-          isClosable: true
-        });
-      },
-      onSuccess: () => {
-        toast({
-          position: "top",
-          title: "Registro creado",
-          description: "Hemos registrado sus datos.",
-          status: "success",
-          isClosable: true
-        });
-      }
-    });
   };
 
   const handleGenerateSql = () => {
