@@ -1,4 +1,4 @@
-import { testValidDateMember } from "./date.helpers";
+import { testValidDateMember, parseBirthdate } from "./date.helpers";
 
 describe("testValidDateMember for days", () => {
   test("1 should be a valid day", () => {
@@ -77,5 +77,17 @@ describe("testValidDateMember for years", () => {
 
   test("'foo' should be an invalid year", () => {
     expect(testValidDateMember({ year: "foo" })).toBe(false);
+  });
+});
+
+describe("parseBirthdate", () => {
+  it("should parse date to backend format", () => {
+    const date = "18/06/1989";
+    expect(parseBirthdate(date)).toBe("1989-06-18");
+  });
+
+  it("should parse date with extra numbers", () => {
+    const date = "03/024/1958";
+    expect(parseBirthdate(date)).toBe("1958-02-03");
   });
 });

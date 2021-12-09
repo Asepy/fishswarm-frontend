@@ -5,3 +5,25 @@ export function isNumeric(str) {
     !isNaN(parseFloat(str))
   ); // ...and ensure strings of whitespace fail
 }
+
+export function capitalize(str) {
+  const first = str.charAt(0).toUpperCase();
+  return `${first}${str.substr(1)}`;
+}
+
+export function parseCellphone(phone) {
+  // remove white spaces
+  let result = phone.replace(/\s/g, "");
+  if (result.startsWith("595")) {
+    result = result.substr(3);
+  }
+  if (!result.startsWith("0")) {
+    result = `0${result}`;
+  }
+
+  if (result.length > 10) {
+    result = result.substr(result.length - 10);
+  }
+
+  return result;
+}
