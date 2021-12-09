@@ -13,7 +13,8 @@ async function fetchFilteredMembers({
   cityId,
   status,
   membershipType,
-  sortBy
+  sortBy,
+  rubroId
 }) {
   const token = await getCurrentUserToken();
   const queryParams = serializeToUri({
@@ -23,7 +24,8 @@ async function fetchFilteredMembers({
     cityId,
     status,
     membershipType,
-    sortBy
+    sortBy,
+    rubroId
   });
   const resp = await fetch(
     `${process.env.NEXT_PUBLIC_API_BASE}/members/filter?${queryParams}`,
@@ -55,12 +57,20 @@ const searchInitialState = {
   cityId: "",
   searchTerm: "",
   trigger: false,
-  fetching: false
+  fetching: false,
+  rubroId: ""
 };
 
 function searchReducer(state, action) {
   if (action.type === "trigger") {
-    const { searchTerm, departmentId, cityId, status, membershipType } = action;
+    const {
+      searchTerm,
+      departmentId,
+      cityId,
+      status,
+      membershipType,
+      rubroId
+    } = action;
     return {
       ...state,
       searchTerm,
@@ -68,7 +78,8 @@ function searchReducer(state, action) {
       cityId: cityId,
       status: status,
       membershipType: membershipType,
-      trigger: true
+      trigger: true,
+      rubroId: rubroId
     };
   }
   if (action.type === "fetching") {
@@ -105,7 +116,8 @@ export function useFilterMemberPaginated() {
       state.departmentId,
       state.cityId,
       state.status,
-      state.membershipType
+      state.membershipType,
+      state.rubroId
     ],
     () => {
       dispatch({ type: "fetching" });
@@ -116,7 +128,8 @@ export function useFilterMemberPaginated() {
         cityId: state.cityId,
         status: state.status,
         membershipType: state.membershipType,
-        sortBy
+        sortBy,
+        rubroId: state.rubroId
       });
     },
     {

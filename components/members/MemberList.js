@@ -40,7 +40,7 @@ import SkeletonLines from "components/ui/SkeletonLines";
 import ErrorAlert from "components/ui/ErrorAlert";
 import EditModal from "./EditModal";
 import { formatISODate } from "utils/helpers/date.helpers";
-import { useDepartments, useFilterMemberPaginated } from "hooks/api";
+import { useDepartments, useFilterMemberPaginated, useRubros } from "hooks/api";
 import {
   useFocus,
   useTable,
@@ -58,12 +58,14 @@ import PageSection from "components/ui/PageSection";
 import { formatDistanceStrict, parseISO } from "date-fns";
 import { es } from "date-fns/locale";
 import ExportModal from "./ExportModal";
+import RubroSelect from "./RubroSelect";
 
 const initialSearchFormValues = {
   searchTerm: "",
   departmentId: "",
   cityId: "",
   status: "",
+  rubroId: "",
   membershipType: ""
 };
 
@@ -90,6 +92,7 @@ export default function MemberList() {
   } = useFilterMemberPaginated();
 
   const { departmentResult, citiesResult, updateDepartment } = useDepartments();
+  const { rubros } = useRubros();
   const [searchInputRef, setSearchInputFocus] = useFocus();
   const { statusOptions } = useSelectMemberStatus();
   const { membershipTypeOptions } = useSelectMembershipType();
@@ -111,6 +114,8 @@ export default function MemberList() {
 
   const { data: departments, status: departmentStatus } = departmentResult;
   const { data: cities, status: citiesStatus } = citiesResult;
+  // const { data: rubros, status: rubrosStatus } = rubrosResult;
+
   return (
     <Box pb={8}>
       <Stack spacing={6} mt={2}>
@@ -180,6 +185,15 @@ export default function MemberList() {
                   </option>
                 ))}
               </Select>
+              <RubroSelect
+                size="xs"
+                placeholder="Rubro: Todos"
+                name="rubroId"
+                value={values.rubroId}
+                initialRubros={rubros}
+                onChange={updateValue}
+                // isDisabled={!rubros}
+              ></RubroSelect>
             </HStack>
             <Divider></Divider>
             <HStack>
