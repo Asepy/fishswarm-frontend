@@ -40,7 +40,7 @@ import SkeletonLines from "components/ui/SkeletonLines";
 import ErrorAlert from "components/ui/ErrorAlert";
 import EditModal from "./EditModal";
 import { formatISODate } from "utils/helpers/date.helpers";
-import { useDepartments, useFilterMemberPaginated, useRubros } from "hooks/api";
+import { useDepartments, useFilterMemberPaginated } from "hooks/api";
 import {
   useFocus,
   useTable,
@@ -92,7 +92,6 @@ export default function MemberList() {
   } = useFilterMemberPaginated();
 
   const { departmentResult, citiesResult, updateDepartment } = useDepartments();
-  const { rubros } = useRubros();
   const [searchInputRef, setSearchInputFocus] = useFocus();
   const { statusOptions } = useSelectMemberStatus();
   const { membershipTypeOptions } = useSelectMembershipType();
@@ -147,53 +146,60 @@ export default function MemberList() {
                 ) : null}
               </InputRightElement>
             </InputGroup>
-            <HStack maxW="40%">
-              <Select
-                size="xs"
-                placeholder={
-                  departmentStatus === "loading"
-                    ? "Cargando..."
-                    : "Departamento: Todos"
-                }
-                isDisabled={!departments}
-                name="departmentId"
-                value={values.departmentId}
-                onChange={(e) => {
-                  updateDepartment(e);
-                  updateValue(e);
-                }}
-              >
-                {departments?.map((d) => (
-                  <option key={d.id} value={d.id}>
-                    {d.name}
-                  </option>
-                ))}
-              </Select>
-              <Select
-                size="xs"
-                placeholder={
-                  citiesStatus === "loading" ? "Cargando..." : "Ciudad: Todos"
-                }
-                name="cityId"
-                value={values.cityId}
-                onChange={updateValue}
-                isDisabled={!cities}
-              >
-                {cities?.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.name}
-                  </option>
-                ))}
-              </Select>
-              <RubroSelect
-                size="xs"
-                placeholder="Rubro: Todos"
-                name="rubroId"
-                value={values.rubroId}
-                initialRubros={rubros}
-                onChange={updateValue}
-                // isDisabled={!rubros}
-              ></RubroSelect>
+            <HStack maxW="70%">
+              <Box width="190px">
+                <Select
+                  size="xs"
+                  // maxW="160px"
+                  placeholder={
+                    departmentStatus === "loading"
+                      ? "Cargando..."
+                      : "Departamento: Todos"
+                  }
+                  isDisabled={!departments}
+                  name="departmentId"
+                  value={values.departmentId}
+                  onChange={(e) => {
+                    updateDepartment(e);
+                    updateValue(e);
+                  }}
+                >
+                  {departments?.map((d) => (
+                    <option key={d.id} value={d.id}>
+                      {d.name}
+                    </option>
+                  ))}
+                </Select>
+              </Box>
+              <Box width="280px" overflow="hidden">
+                <Select
+                  size="xs"
+                  width="auto"
+                  placeholder={
+                    citiesStatus === "loading" ? "Cargando..." : "Ciudad: Todos"
+                  }
+                  name="cityId"
+                  value={values.cityId}
+                  onChange={updateValue}
+                  isDisabled={!cities}
+                >
+                  {cities?.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.name}
+                    </option>
+                  ))}
+                </Select>
+              </Box>
+              <Box>
+                <RubroSelect
+                  size="xs"
+                  // minW="120px"
+                  placeholder="Rubro: Todos"
+                  name="rubroId"
+                  value={values.rubroId}
+                  onChange={updateValue}
+                ></RubroSelect>
+              </Box>
             </HStack>
             <Divider></Divider>
             <HStack>
