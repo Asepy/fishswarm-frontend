@@ -25,6 +25,7 @@ jobs:
           NEXT_PUBLIC_API_BASE: ${{ secrets.DEV_API_BASE }}
           NEXT_PUBLIC_API_KEY: ${{ secrets.DEV_API_KEY }}
           NEXT_PUBLIC_SITE_URL: ${{ secrets.DEV_PUBLIC_SITE_URL }}
+          PUBLIC_GOOGLE_TAG_MANAGER_KEY: ${{ secrets.PUBLIC_GOOGLE_TAG_MANAGER_KEY }}
       - uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_KEY }}

@@ -31,5 +31,6 @@ jobs:
           NEXT_PUBLIC_API_BASE: ${{ secrets.API_BASE }}
           NEXT_PUBLIC_API_KEY: ${{ secrets.API_KEY }}
           NEXT_PUBLIC_SITE_URL: ${{ secrets.PUBLIC_SITE_URL }}
+          PUBLIC_GOOGLE_TAG_MANAGER_KEY: ${{ secrets.GOOGLE_TAG_MANAGER_KEY }}
       - name: Upload `.serverless` state to S3
         run: aws s3 sync .serverless s3://fischwarm-frontend/staging/.serverless --delete
