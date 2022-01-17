@@ -2,8 +2,6 @@ name: CD PROD
 on:
   push:
     branches: [master]
-  pull_request:
-    types: [closed]
   workflow_dispatch:
 jobs:
   build:

@@ -2,14 +2,11 @@ asepyFishSwarm:
   # component: "@sls-next/serverless-component@1.19.0"
   component: "@sls-next/serverless-component@3.5.3-alpha.4"
   inputs:
-    # domain: "form.asepy.org"
     memory:
       defaultLambda: 2048
       apiLambda: 2048
     timeout:
       defaultLambda: 30
-    # cloudfront:
-    #   distributionId: ${env.CF_DISTRIBUTION_ID}
     env:
       NEXT_PUBLIC_API_BASE: ${env.NEXT_PUBLIC_API_BASE}
       NEXT_PUBLIC_API_KEY: ${env.NEXT_PUBLIC_API_KEY}
