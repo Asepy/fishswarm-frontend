@@ -1,4 +1,4 @@
-import { React, useEffect } from "react";
+import React, { useEffect } from "react";
 import Head from "next/head";
 import { ChakraProvider } from "@chakra-ui/react";
 import { QueryClient, QueryClientProvider } from "react-query";
@@ -16,7 +16,7 @@ function MyApp({ Component, pageProps }) {
     TagManager.initialize({
       gtmId: process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_KEY
     });
-  });
+  }, []);
 
   return (
     <>
