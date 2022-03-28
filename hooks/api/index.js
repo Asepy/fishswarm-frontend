@@ -1,5 +1,5 @@
 import { fetchDepartments, useDepartments } from "./useDepartments";
-import { useCitiesByDep } from "./useCitiesByDep";
+import { useCitiesByDep, useAllCities } from "./useCitiesByDep";
 import { useCreateMember } from "./useCreateMember";
 import { useEditMember } from "./useEditMember";
 import { useFilterMemberPaginated } from "./useFilterMember";
@@ -9,6 +9,7 @@ import { useUpdateMemberStatus } from "./useUpdateMemberStatus";
 import { useUpdateMembershipType } from "./useUpdateMembershipType";
 export {
   fetchDepartments,
+  useAllCities,
   useDepartments,
   useCitiesByDep,
   useCreateMember,
