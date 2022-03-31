@@ -1,6 +1,6 @@
 {
   "name": "asepyfishswarm",
-  "version": "0.3.6",
+  "version": "0.3.7",
   "private": true,
   "dependencies": {
     "@aws-amplify/ui-react": "^1.0.7",
@@ -26,11 +26,13 @@
     "next": "^11.1.1",
     "next-seo": "^4.24.0",
     "react": "^17.0.2",
+    "react-copy-to-clipboard": "^5.0.4",
     "react-datepicker": "^3.8.0",
     "react-dom": "^17.0.2",
     "react-icons": "^4.2.0",
     "react-query": "^3.13.12",
     "react-spring": "^9.2.3",
+    "uuid": "^8.3.2",
     "web-vitals": "^1.1.0",
     "yup": "^0.32.9"
   },

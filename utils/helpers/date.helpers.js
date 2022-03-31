@@ -3,6 +3,7 @@ import format from "date-fns/format";
 import isValid from "date-fns/isValid";
 import getYear from "date-fns/getYear";
 import parse from "date-fns/parse";
+import subYears from "date-fns/subYears";
 
 export function formatDate(date, formatStr = "yyyy-MM-dd") {
   var year = date.getFullYear();
@@ -39,4 +40,27 @@ export function isAdult(yearOfBirth) {
   const currentYear = getYear(new Date());
   const year = Number(yearOfBirth);
   return currentYear - year >= 18;
+}
+
+export function parseBirthdate(birthdate) {
+  if (!birthdate.includes("/")) {
+    const today = Date.now();
+    return formatDate(subYears(today, 18));
+  }
+  // remove white spaces
+  const [d, m, y] = birthdate.replace(/\s/g, "").split("/");
+  let day = d;
+  let month = m;
+  let year = y;
+  if (day.length > 2) {
+    day = day.substr(0, 2);
+  }
+  if (month.length > 2) {
+    month = month.substr(0, 2);
+  }
+  if (year.length > 4) {
+    year = year.substr(0, 4);
+  }
+
+  return formatDateMembers({ year, month, day });
 }

@@ -58,12 +58,14 @@ import PageSection from "components/ui/PageSection";
 import { formatDistanceStrict, parseISO } from "date-fns";
 import { es } from "date-fns/locale";
 import ExportModal from "./ExportModal";
+import RubroSelect from "./RubroSelect";
 
 const initialSearchFormValues = {
   searchTerm: "",
   departmentId: "",
   cityId: "",
   status: "",
+  rubroId: "",
   membershipType: ""
 };
 
@@ -111,6 +113,8 @@ export default function MemberList() {
 
   const { data: departments, status: departmentStatus } = departmentResult;
   const { data: cities, status: citiesStatus } = citiesResult;
+  // const { data: rubros, status: rubrosStatus } = rubrosResult;
+
   return (
     <Box pb={8}>
       <Stack spacing={6} mt={2}>
@@ -142,44 +146,60 @@ export default function MemberList() {
                 ) : null}
               </InputRightElement>
             </InputGroup>
-            <HStack maxW="40%">
-              <Select
-                size="xs"
-                placeholder={
-                  departmentStatus === "loading"
-                    ? "Cargando..."
-                    : "Departamento: Todos"
-                }
-                isDisabled={!departments}
-                name="departmentId"
-                value={values.departmentId}
-                onChange={(e) => {
-                  updateDepartment(e);
-                  updateValue(e);
-                }}
-              >
-                {departments?.map((d) => (
-                  <option key={d.id} value={d.id}>
-                    {d.name}
-                  </option>
-                ))}
-              </Select>
-              <Select
-                size="xs"
-                placeholder={
-                  citiesStatus === "loading" ? "Cargando..." : "Ciudad: Todos"
-                }
-                name="cityId"
-                value={values.cityId}
-                onChange={updateValue}
-                isDisabled={!cities}
-              >
-                {cities?.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.name}
-                  </option>
-                ))}
-              </Select>
+            <HStack maxW="70%">
+              <Box width="190px">
+                <Select
+                  size="xs"
+                  // maxW="160px"
+                  placeholder={
+                    departmentStatus === "loading"
+                      ? "Cargando..."
+                      : "Departamento: Todos"
+                  }
+                  isDisabled={!departments}
+                  name="departmentId"
+                  value={values.departmentId}
+                  onChange={(e) => {
+                    updateDepartment(e);
+                    updateValue(e);
+                  }}
+                >
+                  {departments?.map((d) => (
+                    <option key={d.id} value={d.id}>
+                      {d.name}
+                    </option>
+                  ))}
+                </Select>
+              </Box>
+              <Box width="280px" overflow="hidden">
+                <Select
+                  size="xs"
+                  width="auto"
+                  placeholder={
+                    citiesStatus === "loading" ? "Cargando..." : "Ciudad: Todos"
+                  }
+                  name="cityId"
+                  value={values.cityId}
+                  onChange={updateValue}
+                  isDisabled={!cities}
+                >
+                  {cities?.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.name}
+                    </option>
+                  ))}
+                </Select>
+              </Box>
+              <Box>
+                <RubroSelect
+                  size="xs"
+                  // minW="120px"
+                  placeholder="Rubro: Todos"
+                  name="rubroId"
+                  value={values.rubroId}
+                  onChange={updateValue}
+                ></RubroSelect>
+              </Box>
             </HStack>
             <Divider></Divider>
             <HStack>
