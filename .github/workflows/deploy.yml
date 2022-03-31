@@ -26,7 +26,8 @@ jobs:
         run: aws s3 sync s3://fischwarm-frontend/staging/.serverless .serverless --delete
       # end comment out this section on initial deploy   # optional: defaults to entire repository
       - name: Deploy Next.js app
-        run: npx serverless
+       #         run: npx serverless
+        run: npx serverless@2.72.2
         env:
           NEXT_PUBLIC_API_BASE: ${{ secrets.API_BASE }}
           NEXT_PUBLIC_API_KEY: ${{ secrets.API_KEY }}
