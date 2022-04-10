@@ -59,6 +59,7 @@ import { formatDistanceStrict, parseISO } from "date-fns";
 import { es } from "date-fns/locale";
 import ExportModal from "./ExportModal";
 import RubroSelect from "./RubroSelect";
+import { DateRangePicker } from "components/ui/DatePicker";
 
 const initialSearchFormValues = {
   searchTerm: "",
@@ -66,7 +67,10 @@ const initialSearchFormValues = {
   cityId: "",
   status: "",
   rubroId: "",
-  membershipType: ""
+  membershipType: "",
+  startDateRangeOption: "",
+  startDateBegin: null,
+  startDateEnd: null
 };
 
 export default function MemberList() {
@@ -111,9 +115,13 @@ export default function MemberList() {
     setShowExportModal(true);
   };
 
+  const handleStartDateChange = (ranges) => {
+    updateValueByName("startDate", ranges.startDate);
+    updateValueByName("endDate", ranges.endDate);
+  };
+
   const { data: departments, status: departmentStatus } = departmentResult;
   const { data: cities, status: citiesStatus } = citiesResult;
-  // const { data: rubros, status: rubrosStatus } = rubrosResult;
 
   return (
     <Box pb={8}>
@@ -146,62 +154,80 @@ export default function MemberList() {
                 ) : null}
               </InputRightElement>
             </InputGroup>
-            <HStack maxW="70%">
-              <Box width="190px">
-                <Select
-                  size="xs"
-                  // maxW="160px"
-                  placeholder={
-                    departmentStatus === "loading"
-                      ? "Cargando..."
-                      : "Departamento: Todos"
-                  }
-                  isDisabled={!departments}
-                  name="departmentId"
-                  value={values.departmentId}
-                  onChange={(e) => {
-                    updateDepartment(e);
-                    updateValue(e);
-                  }}
-                >
-                  {departments?.map((d) => (
-                    <option key={d.id} value={d.id}>
-                      {d.name}
-                    </option>
-                  ))}
-                </Select>
-              </Box>
-              <Box width="280px" overflow="hidden">
-                <Select
-                  size="xs"
-                  width="auto"
-                  placeholder={
-                    citiesStatus === "loading" ? "Cargando..." : "Ciudad: Todos"
-                  }
-                  name="cityId"
-                  value={values.cityId}
-                  onChange={updateValue}
-                  isDisabled={!cities}
-                >
-                  {cities?.map((c) => (
-                    <option key={c.id} value={c.id}>
-                      {c.name}
-                    </option>
-                  ))}
-                </Select>
-              </Box>
-              <Box>
+            <HStack>
+              <Text fontSize={"sm"}>Fecha de Registro</Text>
+              <DateRangePicker
+                size="xs"
+                height={6}
+                placeholder="Feacha Inscripción"
+                customRangesSelectProps={{
+                  name: "startDateRangeOption",
+                  value: values.startDateRangeOption,
+                  onChange: updateValue
+                }}
+                onDateRangeChange={handleStartDateChange}
+              ></DateRangePicker>
+            </HStack>
+            <HStack spacing={8}>
+              <HStack>
+                <Text fontSize="sm">Rubro</Text>
                 <RubroSelect
                   size="xs"
-                  // minW="120px"
                   placeholder="Rubro: Todos"
                   name="rubroId"
                   value={values.rubroId}
                   onChange={updateValue}
                 ></RubroSelect>
-              </Box>
+              </HStack>
+              <HStack>
+                <Text fontSize="sm">Localidad</Text>
+                <Box>
+                  <Select
+                    size="xs"
+                    placeholder={
+                      departmentStatus === "loading"
+                        ? "Cargando..."
+                        : "Departamento: Todos"
+                    }
+                    isDisabled={!departments}
+                    name="departmentId"
+                    value={values.departmentId}
+                    onChange={(e) => {
+                      updateDepartment(e);
+                      updateValue(e);
+                    }}
+                  >
+                    {departments?.map((d) => (
+                      <option key={d.id} value={d.id}>
+                        {d.name}
+                      </option>
+                    ))}
+                  </Select>
+                </Box>
+                <Box>
+                  <Select
+                    size="xs"
+                    placeholder={
+                      citiesStatus === "loading"
+                        ? "Cargando..."
+                        : "Ciudad: Todos"
+                    }
+                    name="cityId"
+                    value={values.cityId}
+                    onChange={updateValue}
+                    isDisabled={!cities}
+                  >
+                    {cities?.map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {c.name}
+                      </option>
+                    ))}
+                  </Select>
+                </Box>
+              </HStack>
             </HStack>
-            <Divider></Divider>
+
+            <Divider />
             <HStack>
               <Text fontSize="sm">Membresía</Text>
               <CardRadioGroup
@@ -214,6 +240,7 @@ export default function MemberList() {
                 ]}
               />
             </HStack>
+
             <HStack justify="space-between">
               <HStack>
                 <Text fontSize="sm">Estado</Text>
