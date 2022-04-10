@@ -16,8 +16,6 @@ async function fetchCities({ depId }) {
     }
   );
   const data = await handleResponse(response);
-  // eslint-disable-next-line no-console
-  console.log("Response was:", data);
   return data;
 }
 

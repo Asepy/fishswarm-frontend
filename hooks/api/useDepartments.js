@@ -13,8 +13,6 @@ export async function fetchDepartments() {
     }
   });
   const data = await handleResponse(resp);
-  // eslint-disable-next-line no-console
-  console.log("response was:", data);
   return data;
 }
 

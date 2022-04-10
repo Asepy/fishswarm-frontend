@@ -15,8 +15,6 @@ async function searchMember({ document, birthdate }) {
     }
   );
   const jsonResp = await handleResponse(resp);
-  // eslint-disable-next-line no-console
-  console.log("response was", { jsonResp });
   return jsonResp;
 }
 

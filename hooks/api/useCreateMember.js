@@ -15,8 +15,6 @@ async function postMember(newMember) {
     }
   });
   const jsonResponse = await handleResponse(response);
-  // eslint-disable-next-line no-console
-  console.log("response was", { jsonResponse });
   return jsonResponse;
 }
 
