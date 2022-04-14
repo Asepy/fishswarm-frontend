@@ -39,7 +39,6 @@ export function useCitiesByDep({ depId }, options) {
         return [];
       }
       const resp = await fetchCities({ depId });
-      // console.log({ resp });
       return resp?.data || [];
     },
     options
@@ -51,7 +50,6 @@ export function useAllCities(options) {
     [ALL_CITIES_QUERY],
     async () => {
       const resp = await fetchAllCities();
-      // console.log({ resp });
       return resp?.data || [];
     },
     options

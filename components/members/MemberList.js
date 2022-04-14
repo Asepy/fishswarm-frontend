@@ -55,11 +55,12 @@ import EmptyDataIcon from "components/ui/svg/EmptyDataIcon";
 import MembershipType from "./MembershipType";
 import CardRadioGroup from "components/ui/CardRadioGroup";
 import PageSection from "components/ui/PageSection";
-import { formatDistanceStrict, parseISO } from "date-fns";
+import { endOfDay, format, formatDistanceStrict, parseISO } from "date-fns";
 import { es } from "date-fns/locale";
 import ExportModal from "./ExportModal";
 import RubroSelect from "./RubroSelect";
 import { DateRangePicker } from "components/ui/DatePicker";
+import { DATE_TIME_SEARCH_FORMAT } from "utils/constants";
 
 const initialSearchFormValues = {
   searchTerm: "",
@@ -68,15 +69,24 @@ const initialSearchFormValues = {
   status: "",
   rubroId: "",
   membershipType: "",
-  startDateRangeOption: "",
-  startDateBegin: null,
-  startDateEnd: null
+  startDateBegin: "",
+  startDateEnd: ""
+};
+
+const initialDateValues = {
+  startDateRangeOption: ""
 };
 
 export default function MemberList() {
   const { values, updateValue, resetValues, updateValueByName } = useForm(
     initialSearchFormValues
   );
+
+  const {
+    values: dateValues,
+    updateValue: updateDateValues,
+    resetValues: resetDateValues
+  } = useForm(initialDateValues);
 
   const {
     data,
@@ -108,6 +118,7 @@ export default function MemberList() {
 
   const handleClear = () => {
     resetValues(initialSearchFormValues);
+    resetDateValues(initialDateValues);
     onClear();
   };
 
@@ -116,8 +127,21 @@ export default function MemberList() {
   };
 
   const handleStartDateChange = (ranges) => {
-    updateValueByName("startDate", ranges.startDate);
-    updateValueByName("endDate", ranges.endDate);
+    const [start, end] = ranges;
+
+    updateValueByName("startDateBegin", format(start, DATE_TIME_SEARCH_FORMAT));
+
+    if (end == null) {
+      updateValueByName(
+        "startDateEnd",
+        format(endOfDay(start), DATE_TIME_SEARCH_FORMAT)
+      );
+    } else {
+      updateValueByName(
+        "startDateEnd",
+        format(endOfDay(end), DATE_TIME_SEARCH_FORMAT)
+      );
+    }
   };
 
   const { data: departments, status: departmentStatus } = departmentResult;
@@ -162,8 +186,8 @@ export default function MemberList() {
                 placeholder="Feacha Inscripción"
                 customRangesSelectProps={{
                   name: "startDateRangeOption",
-                  value: values.startDateRangeOption,
-                  onChange: updateValue
+                  value: dateValues.startDateRangeOption,
+                  onChange: updateDateValues
                 }}
                 onDateRangeChange={handleStartDateChange}
               ></DateRangePicker>

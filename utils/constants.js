@@ -13,3 +13,5 @@ export function paymentMethodToLabel(value) {
   const method = PAYMENT_METHOD_OPTIONS.find((op) => op.value === value);
   return method?.label;
 }
+
+export const DATE_TIME_SEARCH_FORMAT = "yyyy-MM-dd HH:mm:ss";
