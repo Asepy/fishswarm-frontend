@@ -35,17 +35,21 @@ export default function DateRangePicker({
   });
 
   useEffect(() => {
-    setToggle(customRangesSelectProps.value === "new");
+    const selectValue = customRangesSelectProps.value;
+    // we handle this state from outside prop
+    setToggle(selectValue === "new");
+
+    // to reset the RangeDatepicker from outside
+    setSelectedDates((range) => (selectValue === "" ? [] : range));
   }, [customRangesSelectProps, customRangesSelectProps.value]);
 
   function handleSelectChange(event) {
     customRangesSelectProps.onChange(event);
     const { value } = event.target;
+
     if (value !== "" && value !== "new") {
       const range = RangeParserBy[value]();
       onDateRangeChange(range);
-    } else {
-      onDateRangeChange(selectedDates);
     }
   }
 
