@@ -6,26 +6,13 @@ import { serializeToUri } from "utils/helpers/object.helpers";
 export const FILTER_MEMBER_QUERY_ID = "query:filter-members";
 export const FILTER_MEMBER_PAGED_QUERY_ID = "query:filter-members-paginated";
 
-async function fetchFilteredMembers({
-  page,
-  searchTerm,
-  departmentId,
-  cityId,
-  status,
-  membershipType,
-  sortBy,
-  rubroId
-}) {
+async function fetchFilteredMembers({ page, sortBy, filters }) {
   const token = await getCurrentUserToken();
+  console.log({ filters });
   const queryParams = serializeToUri({
     page,
-    searchTerm,
-    departmentId,
-    cityId,
-    status,
-    membershipType,
     sortBy,
-    rubroId
+    ...filters
   });
   const resp = await fetch(
     `${process.env.NEXT_PUBLIC_API_BASE}/members/filter?${queryParams}`,
@@ -51,35 +38,26 @@ export function useFilterMember({ page }) {
 }
 
 const searchInitialState = {
-  status: "",
-  membershipType: "",
-  departmentId: "",
-  cityId: "",
-  searchTerm: "",
   trigger: false,
   fetching: false,
-  rubroId: ""
+  filters: {
+    status: "",
+    membershipType: "",
+    departmentId: "",
+    cityId: "",
+    searchTerm: "",
+    rubroId: "",
+    startDateBegin: "",
+    startDateEnd: ""
+  }
 };
 
 function searchReducer(state, action) {
   if (action.type === "trigger") {
-    const {
-      searchTerm,
-      departmentId,
-      cityId,
-      status,
-      membershipType,
-      rubroId
-    } = action;
     return {
       ...state,
-      searchTerm,
-      departmentId: departmentId,
-      cityId: cityId,
-      status: status,
-      membershipType: membershipType,
-      trigger: true,
-      rubroId: rubroId
+      filters: action.filters,
+      trigger: true
     };
   }
   if (action.type === "fetching") {
@@ -99,37 +77,27 @@ function searchReducer(state, action) {
   if (action.type === "clear") {
     return searchInitialState;
   }
-  throw new Error(`Not recognized action type ${action.type}`);
+  throw new Error(`Not recognized action action.type ${action.type}`);
 }
 
 export function useFilterMemberPaginated() {
   const [page, setPage] = useState(1);
   const [sortBy, setSortBy] = useState();
   const [state, dispatch] = useReducer(searchReducer, searchInitialState);
-
+  console.log({ state });
   const { data, isFetching, isPreviousData, ...restUseQueryResult } = useQuery(
     [
       FILTER_MEMBER_PAGED_QUERY_ID,
       page,
       sortBy,
-      state.searchTerm,
-      state.departmentId,
-      state.cityId,
-      state.status,
-      state.membershipType,
-      state.rubroId
+      ...Object.values(state.filters)
     ],
     () => {
       dispatch({ type: "fetching" });
       return fetchFilteredMembers({
         page,
-        searchTerm: state.searchTerm,
-        departmentId: state.departmentId,
-        cityId: state.cityId,
-        status: state.status,
-        membershipType: state.membershipType,
         sortBy,
-        rubroId: state.rubroId
+        filters: state.filters
       });
     },
     {
@@ -148,7 +116,7 @@ export function useFilterMemberPaginated() {
 
   const onSearch = (searchValues) => {
     setPage(1);
-    dispatch({ type: "trigger", ...searchValues });
+    dispatch({ type: "trigger", filters: searchValues });
   };
 
   const onClear = () => {

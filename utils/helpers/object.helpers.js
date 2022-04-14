@@ -18,11 +18,18 @@ export function removeEmptyString(obj) {
   return Object.fromEntries(Object.entries(obj).filter(([_, v]) => v !== ""));
 }
 
+export function removeEmpty(obj) {
+  if (obj == null) {
+    return obj;
+  }
+  return Object.fromEntries(
+    Object.entries(obj).filter(
+      // eslint-disable-next-line no-unused-vars
+      ([_, v]) => v !== undefined && v !== null && v !== ""
+    )
+  );
+}
+
 export function serializeToUri(obj) {
-  var str = [];
-  for (var p in obj)
-    if (obj.hasOwnProperty(p) && obj[p]) {
-      str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
-    }
-  return str.join("&");
+  return new URLSearchParams(removeEmpty(obj)).toString();
 }
