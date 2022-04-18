@@ -21,7 +21,7 @@ Esquema de ejemplo:
 # Observaciones 🔍
 
 1. Si hay features que dependen de cambios en el [backend](https://github.com/Asepy/fischwarm-backend), ejemplo; soporte filtro rubros. Se debe realizar primero el pase a producción del backend antes de realizar los pasos descritos en la sección 2) de este documento.
-2. El pase a producción del backend puede tener su propio flujo de ramas y deploy, distinto en independiente al mencionado en este documento.
+2. El pase a producción del backend puede tener su propio flujo de ramas y deploy, distinto e independiente al mencionado en este documento.
 
 # Lectura adicional
 
