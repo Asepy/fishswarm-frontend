@@ -3,11 +3,11 @@ import { useQuery } from "react-query";
 import { handleResponse } from "utils/helpers/api.helpers";
 import { useCitiesByDep } from "./useCitiesByDep";
 
-if (process.env.NEXT_PUBLIC_API_KEY) {
+if (!process.env.NEXT_PUBLIC_API_KEY) {
   throw Error("NEXT_PUBLIC_API_KEY is not present");
 }
 
-if (process.env.NEXT_PUBLIC_API_BASE) {
+if (!process.env.NEXT_PUBLIC_API_BASE) {
   throw Error("NEXT_PUBLIC_API_BASE is not present");
 }
 
